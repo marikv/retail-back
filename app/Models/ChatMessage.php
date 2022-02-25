@@ -92,13 +92,5 @@ class ChatMessage extends Model
         $ChatMessage->bid_id = $bidId;
         $ChatMessage->file_id = $fileId;
         $ChatMessage->save();
-
-        if ($toUserId) {
-            $ChatMessageRead = new ChatMessageRead();
-            $ChatMessageRead->user_id = $toUserId;
-            $ChatMessageRead->chat_message_id = $ChatMessage->id;
-            $ChatMessageRead->read = null;
-            $ChatMessageRead->save();
-        }
     }
 }

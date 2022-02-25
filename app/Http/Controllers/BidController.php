@@ -7,6 +7,7 @@ use App\Models\BidMonth;
 use App\Models\ChatMessage;
 use App\Models\Client;
 use App\Models\Dealer;
+use App\Models\Log;
 use App\Models\TypeCredit;
 use App\Models\User;
 use Carbon\Carbon;
@@ -18,10 +19,9 @@ use Illuminate\Support\Facades\DB;
 class BidController extends Controller
 {
     /**
-     * @param Request $request
-     * @return JsonResponse
+     * @return \Illuminate\Database\Query\Builder
      */
-    public function getList(Request $request): JsonResponse
+    public static function getItems(): \Illuminate\Database\Query\Builder
     {
         $items = DB::table('bids')
             ->select([
@@ -34,20 +34,36 @@ class BidController extends Controller
                 'clients.first_name as client_first_name',
                 DB::raw("DATE_FORMAT(bids.created_at, '%d.%m.%Y %H:%i') as created_at2"),
             ])
-            ->whereNull('bids.deleted')
             ->leftJoin('users', 'users.id', '=', 'bids.user_id')
             ->leftJoin('dealers', 'dealers.id', '=', 'bids.dealer_id')
             ->leftJoin('clients', 'clients.id', '=', 'bids.client_id')
             ->leftJoin('type_credits', 'type_credits.id', '=', 'bids.type_credit_id')
+            ->whereNull('bids.deleted')
+            ->whereNull('bids.contract_id')
+            ->where(function ($items) {
+                $items->where(function ($items) {
+                    $day = Carbon::parse(date('Y-m-d'))->modify('-2 days')->format('Y-m-d');
+                    $items->where('bids.created_at', '>', $day . ' 00:00:00')
+                        ->where('bids.status_id', '=', Bid::BID_STATUS_REFUSED);
+                })
+                    ->orWhere('bids.status_id', '!=', Bid::BID_STATUS_REFUSED);
+            })
             ->distinct();
 
         if (Auth::user()->role_id === User::USER_ROLE_DEALER) {
-            $items = $items
-                ->where('bids.user_id', '=', Auth::user()->id)
-                ->where('bids.dealer_id', '=', Auth::user()->dealer_id)
-                // ->where('bids.created_at', '>', date('Y-m-d') . ' 00:00:00')
-            ;
+            $items = $items->where('bids.user_id', '=', Auth::user()->id)
+                ->where('bids.dealer_id', '=', Auth::user()->dealer_id);
         }
+        return $items;
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getList(Request $request): JsonResponse
+    {
+        $items = self::getItems();
 
         $items = $this->standardOrderBy($items, $request, 'id', 'desc');
         $items = $this->standardPagination($items, $request);
@@ -70,6 +86,90 @@ class BidController extends Controller
                 'success' => true,
                 'data' => $this->getBid($id)
             ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'data' => [ 'message' => 'nu este id' ]
+        ], 200);
+    }
+
+
+    /**
+     * @param $id
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function changeSum($id, Request $request): JsonResponse
+    {
+        if ($id) {
+
+            if ((float)$request->new_sum > 0) {
+
+                $Bid = Bid::findOrFail($id);
+                $oldSum = $Bid->imprumut;
+
+                try {
+                    $calcResults = Bid::getCalcResults($Bid->type_credit_id, (float)$request->new_sum, $Bid->months, $Bid->first_pay_date, $Bid);
+                } catch (\Exception $e) {
+
+                    return response()->json([
+                        'success' => false,
+                        'data' => [ 'message' => $e->getMessage() ]
+                    ], 200);
+                }
+
+                if (!$calcResults['success']) {
+
+                    return response()->json($calcResults, 200);
+                }
+
+                if (!empty($calcResults['data']['tabelTotal']['total'])) {
+
+                    $calcResults = $calcResults['data'];
+
+                    $Bid->imprumut = (float)$request->new_sum;
+                    $Bid->total = $calcResults['tabelTotal']['total'];
+                    $Bid->total_dobinda = $calcResults['tabelTotal']['dobinda'];
+                    $Bid->total_comision = $calcResults['tabelTotal']['comision'];
+                    $Bid->total_comision_admin = $calcResults['tabelTotal']['comisionAdmin'];
+                    $Bid->apr = $calcResults['APR'];
+                    $Bid->apy = null;// todo:
+                    $Bid->coef = $calcResults['coef1PerLuna'];
+
+                    $Bid->save();
+
+                    BidMonth::where('bid_id', '=', $id)
+                        ->whereNull('deleted')
+                        ->update(['deleted' => 1]);
+
+                    foreach ($calcResults['tabel'] as $row) {
+                        $BidMonths = new BidMonth();
+                        $BidMonths->bid_id = $Bid->id;
+                        $BidMonths->date = Carbon::parse($row['data'])->format('Y-m-d');
+                        $BidMonths->imprumut_per_luna = (float)$row['imprumtPerLuna'];
+                        $BidMonths->dobinda_per_luna = (float)$row['dobindaPerLuna'];
+                        $BidMonths->comision_per_luna = (float)$row['comisionPerLuna'];
+                        $BidMonths->comision_admin_per_luna = (float)$row['comisionAdminPerLuna'];
+                        $BidMonths->total_per_luna = (float)$row['totalPerLuna'];
+                        $BidMonths->save();
+                    }
+
+                    $message = 'Suma cererii №' . $Bid->id . ' a fost schimbată din ' . $oldSum. ' în '. $Bid->imprumut;
+                    ChatMessage::sendNewMessage($Bid->user_id, $message, $Bid->id, null);
+
+                    Log::addNewLog($request, Log::MODULE_BIDS, Log::OPERATION_EDIT, $Bid->id, $message);
+
+                    return response()->json([
+                        'success' => true,
+                        'data' => $this->getBid($id)
+                    ], 200);
+                }
+            }
+            return response()->json([
+                'success' => false,
+                'data' => [ 'message' => 'verificați suma' ]
+            ], 200);
         }
 
         return response()->json([
@@ -122,6 +222,10 @@ class BidController extends Controller
             }
 
             $Bid->status_id = $request->status_id;
+
+            $message = 'Statusul cererii a fost schimbat în '.Bid::BID_STATUS_NAMES[(int)$Bid->status_id];
+            Log::addNewLog($request, Log::MODULE_BIDS, Log::OPERATION_EDIT, $Bid->id, $message);
+
             $Bid->save();
 
             return response()->json([
@@ -250,6 +354,10 @@ class BidController extends Controller
                 $BidMonths->save();
             }
 
+            $message = 'Cerere nouă';
+            // ChatMessage::sendNewMessage(null, 'Cerere nouă', $Bid->id);
+            Log::addNewLog($request, Log::MODULE_BIDS, Log::OPERATION_ADD, $Bid->id, $message);
+
             return response()->json([
                 'success' => true,
                 'data' => [
@@ -275,10 +383,13 @@ class BidController extends Controller
      */
     public function delete($id, Request $request): JsonResponse
     {
-        /* @var $Dealer Dealer */
-        $Dealer = Bid::findOrFail($id);
-        $Dealer->deleted = true;
-        $Dealer->save();
+        /* @var $Bid Bid */
+        $Bid = Bid::findOrFail($id);
+        $Bid->deleted = true;
+        $Bid->save();
+
+        $message = 'Ștergere cerere';
+        Log::addNewLog($request, Log::MODULE_BIDS, Log::OPERATION_DELETE, $Bid->id, $message);
 
         return  response()->json([
             'success' => true

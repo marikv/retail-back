@@ -61,6 +61,7 @@ class Log extends Model
     public const MODULE_FILES = 8;
     public const MODULE_PRODUCTS = 9;
     public const MODULE_SERVICES = 10;
+    public const MODULE_BIDS = 11;
     public const MODULE_NAMES = [
         self::MODULE_DEFAULT => '',
         self::MODULE_DEALERS => 'Dealeri',
@@ -71,6 +72,7 @@ class Log extends Model
         self::MODULE_FILES => 'Fișiere',
         self::MODULE_PRODUCTS => 'Producte',
         self::MODULE_SERVICES => 'Servicii',
+        self::MODULE_BIDS => 'Cereri',
     ];
 
     public function user(): BelongsTo

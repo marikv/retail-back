@@ -37,6 +37,33 @@ class ChatMessageController extends Controller
         ]);
     }
 
+    public function checkNewMessages(Request $request): JsonResponse
+    {
+        $ChatMessages = DB::table('chat_messages')
+            ->select(['chat_messages.*'])
+            ->leftJoin('chat_message_reads', static function ($join) {
+                $join->on('chat_message_reads.chat_message_id', '=', 'chat_messages.id')
+                    ->where('chat_message_reads.user_id', '=', Auth::id());
+            })
+            ->where('chat_messages.to_user_id', '=', Auth::id())
+            ->whereNull('chat_message_reads.id')
+            ->limit(100);
+        $ChatMessages = $ChatMessages->get();
+        $Bids = null;
+
+        if ($request->activeModule === 'Calculator' || $request->activeModule === 'Bids') {
+            $Bids = BidController::getItems()->get();
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'unreadMessages' => $ChatMessages,
+                'bids' => $Bids,
+            ],
+        ]);
+    }
+
     public function setChatMessagesRead(Request $request): JsonResponse
     {
         if (is_array($request->ids) && count($request->ids)) {
@@ -45,15 +72,10 @@ class ChatMessageController extends Controller
                 $ChatMessageRead = ChatMessageRead::where('chat_message_id', '=', $iValue)
                     ->where('user_id', '=', Auth::id())
                     ->first();
-                if ($ChatMessageRead && !$ChatMessageRead->read) {
-                    $ChatMessageRead->read = 1;
-                    $ChatMessageRead->save();
-                }
                 if (!$ChatMessageRead) {
                     $ChatMessageRead = new ChatMessageRead();
                     $ChatMessageRead->user_id = Auth::id();
                     $ChatMessageRead->chat_message_id = $iValue;
-                    $ChatMessageRead->read = 1;
                     $ChatMessageRead->save();
                 }
             }
@@ -79,20 +101,20 @@ class ChatMessageController extends Controller
                 'files.web_path as file_web_path',
                 'files.name as file_name',
                 'files.extension as file_extension',
-                'chat_message_reads.read',
-                DB::raw("DATE_FORMAT(chat_messages.created_at, '%d.%m.%Y %H:%i') as created_at2"),
+                DB::raw("chat_message_reads.id as `read`"),
+                DB::raw("DATE_FORMAT(chat_messages.created_at, '%d.%m.%Y %H:%i') as `created_at2`"),
             ])
             ->leftJoin('users as from_user', 'from_user.id', '=', 'chat_messages.from_user_id')
             ->leftJoin('users as to_user', 'to_user.id', '=', 'chat_messages.to_user_id')
             ->leftJoin('chat_message_reads', static function ($join) {
                 $join->on('chat_message_reads.chat_message_id', '=', 'chat_messages.id')
-                    ->where('chat_message_reads.user_id', '=', Auth::id())
-                    ->where('chat_message_reads.read', '=', 1);
+                    ->where('chat_message_reads.user_id', '=', Auth::id());
             })
             ->leftJoin('files', 'files.id', '=', 'chat_messages.file_id')
             ->whereNull('chat_messages.deleted')
             ->where('chat_messages.bid_id', '=', $request->bid_id)
             ->distinct();
+        // dd($ChatMessages->toSql());
         $ChatMessages = self::standardOrderByStatic($ChatMessages, $request, 'id', 'desc');
         $ChatMessages = self::standardPaginationStatic($ChatMessages, $request);
 
@@ -101,16 +123,11 @@ class ChatMessageController extends Controller
             if (!$v->read) {
                 $ChatMessageRead = ChatMessageRead::where('chat_message_id', '=', $v->id)
                 ->where('user_id', '=', Auth::id())
-                ->whereNull('read')
                 ->first();
-                if ($ChatMessageRead && !$ChatMessageRead->read) {
-                    $ChatMessageRead->read = 1;
-                    $ChatMessageRead->save();
-                } else if (!$ChatMessageRead) {
+                if (!$ChatMessageRead) {
                     $ChatMessageRead = new ChatMessageRead();
                     $ChatMessageRead->user_id = Auth::id();
                     $ChatMessageRead->chat_message_id = $v->id;
-                    $ChatMessageRead->read = 1;
                     $ChatMessageRead->save();
                 }
             }

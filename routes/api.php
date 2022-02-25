@@ -68,10 +68,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::delete('/bids/{id}', [BidController::class, 'delete']);
     Route::get('/bids/get-data-by-id/{id}', [BidController::class, 'getDataById']);
     Route::post('/bids/set-bid-status/{id}', [BidController::class, 'setBidStatus']);
+    Route::post('/bid-change-sum/{id}', [BidController::class, 'changeSum']);
 
     Route::post('/send-chat-message', [ChatMessageController::class, 'sendChatMessage']);
     Route::post('/get-chat-messages', [ChatMessageController::class, 'getChatMessage']);
     Route::post('/set-chat-messages-read', [ChatMessageController::class, 'setChatMessagesRead']);
+    Route::post('/checkNewMessages', [ChatMessageController::class, 'checkNewMessages']);
 
 
     Route::get('print/pre-contract/{id}', [PdfController::class, 'preContract']);

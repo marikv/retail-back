@@ -23,7 +23,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property integer $id
  * @property integer|null $user_id
  * @property integer $chat_message_id
- * @property boolean|null $read
  * @property string $created_at
  * @property string $updated_at
  *

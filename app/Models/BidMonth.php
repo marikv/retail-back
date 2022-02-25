@@ -28,6 +28,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property float $comision_per_luna
  * @property float $comision_admin_per_luna
  * @property float $total_per_luna
+ * @property boolean|null $deleted
  * @property string $created_at
  * @property string $updated_at
  *

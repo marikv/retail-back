@@ -24,6 +24,7 @@ use JetBrains\PhpStorm\ArrayShape;
  *
  *
  * @property integer $id
+ * @property integer $contract_id
  * @property integer $status_id
  * @property integer $user_id
  * @property integer $dealer_id
@@ -87,6 +88,21 @@ class Bid extends Model
     const BID_STATUS_APPROVED = 2;
     const BID_STATUS_REFUSED = 3;
 
+    public const BID_STATUS_NAMES = [
+        self::BID_STATUS_NEW => 'Cerere nouă',
+        self::BID_STATUS_IN_WORK => 'Cerere în lucru',
+        self::BID_STATUS_APPROVED => 'Cerere aprobată',
+        self::BID_STATUS_REFUSED => 'Cerere refuzată',
+    ];
+
+    /**
+     * @return BelongsTo
+     */
+    public function contract(): BelongsTo
+    {
+        return $this->belongsTo(Contract::class);
+    }
+
     /**
      * @return BelongsTo
      */
@@ -148,7 +164,7 @@ class Bid extends Model
      */
     public function bid_months(): HasMany
     {
-        return $this->hasMany(BidMonth::class);
+        return $this->hasMany(BidMonth::class)->whereNull('deleted');
     }
 
     /**
@@ -156,10 +172,11 @@ class Bid extends Model
      * @param float $sum
      * @param int $months
      * @param string $date
+     * @param Bid|null $Bid
      * @return array
      */
     #[ArrayShape(['success' => "bool", 'data' => "array"])]
-    public static function getCalcResults(int $type, float $sum, int $months, string $date): array
+    public static function getCalcResults(int $type, float $sum, int $months, string $date, Bid $Bid = null): array
     {
         try {
             if (!$type) {
@@ -177,7 +194,24 @@ class Bid extends Model
 
             $TypeCredit = TypeCredit::findOrFail($type);
 
-            if ($sum > (float)$TypeCredit->sum_max) {
+            if ($Bid) {
+                if ((float)$Bid->sum_max_permis > 0) {
+                    if ($sum > (float)$Bid->sum_max_permis) {
+                        throw new \RuntimeException('Suma este mai mare de ' . $Bid->sum_max_permis . ' lei');
+                    }
+                }
+                else if ((float)$Bid->sum_max > 0) {
+                    if ($sum > (float)$Bid->sum_max) {
+                        throw new \RuntimeException('Suma este mai mare de ' . $Bid->sum_max . ' lei');
+                    }
+                }
+                else if ((float)$TypeCredit->sum_max > 0) {
+                    if ($sum > (float)$TypeCredit->sum_max) {
+                        throw new \RuntimeException('Suma este mai mare de ' . $TypeCredit->sum_max . ' lei');
+                    }
+                }
+            }
+            else if ((float)$TypeCredit->sum_max > 0 && $sum > (float)$TypeCredit->sum_max) {
                 throw new \RuntimeException('Suma este mai mare de ' . $TypeCredit->sum_max . ' lei');
             }
             if ($sum < (float)$TypeCredit->sum_min) {
@@ -228,6 +262,7 @@ class Bid extends Model
             $dobindaTotal = 0;
             $comisionTotal = 0;
             $comisionAdminTotal = 0;
+            $totalPerToateLunile = 0;
             for ($i = 0; $i < $months; $i++) {
                 $CarbonDateNew = self::getNextFreeDate(Carbon::parse($date)->addMonths($i));
                 $tabel[$i] = [
@@ -241,13 +276,14 @@ class Bid extends Model
                 $dobindaTotal += $dobindaPerLuna;
                 $comisionTotal += $comisionPerLuna;
                 $comisionAdminTotal += $comisionAdminPerLuna;
+                $totalPerToateLunile += $totalPerLuna;
             }
-            $total = [
+            $tabelTotal = [
                 'imprumut' => round($sum, 2),
                 'dobinda' => round($dobindaTotal, 2),
                 'comision' => round($comisionTotal, 2),
                 'comisionAdmin' => round($comisionAdminTotal, 2),
-                'total' => round($sum + $dobindaTotal + $comisionTotal + $comisionAdminTotal, 2),
+                'total' => round($totalPerToateLunile, 2),
             ];
 
             $calcResults = [
@@ -261,7 +297,7 @@ class Bid extends Model
                     'APR' => round(($totalPerLuna / $imprumtPerLuna - 1) * 100, 2),
                     'coef1PerLuna' => round(($totalPerLuna - $imprumtPerLuna) / $totalPerLuna, 6),
                     'tabel' => $tabel,
-                    'tabelTotal' => $total,
+                    'tabelTotal' => $tabelTotal,
                 ],
             ];
         } catch (\Exception $e) {
