@@ -9,6 +9,17 @@ class PdfController extends Controller
 {
 
 
+    public function contract(int $bidId, Request $request)
+    {
+        $data = [];
+        $data['data'] = [];
+
+        $data = self::setHeaderData($data);
+
+        return self::getPDF('pdf.contract', $data, true)->stream();
+    }
+
+
     public function preContract(int $id, Request $request)
     {
         $data = [];

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BidController;
 use App\Http\Controllers\ChatMessageController;
+use App\Http\Controllers\ContractController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DealerController;
@@ -77,5 +78,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 
     Route::get('print/pre-contract/{id}', [PdfController::class, 'preContract']);
+    Route::get('print/contract/{bidId}', [PdfController::class, 'contract']);
 
 });

@@ -117,6 +117,8 @@ class FileController extends Controller
                 'data' => [
                     'web_path' => $fileModel->web_path,
                     'id' => $fileModel->id,
+                    'name' => $fileModel->name,
+                    'type_id' => $fileModel->type_id,
                 ],
             ]);
         }
@@ -218,9 +220,6 @@ class FileController extends Controller
         if (!empty($request->dealer_id)) {
             $files = $files->where('dealer_id', '=', $request->dealer_id);
         }
-        if (!empty($request->contract_id)) {
-            $files = $files->where('contract_id', '=', $request->contract_id);
-        }
         if (!empty($request->payment_id)) {
             $files = $files->where('payment_id', '=', $request->payment_id);
         }
@@ -269,6 +268,9 @@ class FileController extends Controller
     {
         try{
             $fileModel = File::findOrFail($request->file_id);
+            if (!empty($request->type_id)) {
+                $fileModel->type_id = $request->type_id;
+            }
 
             if (!empty($request->user_id)) {
                 $fileModel->user_id = $request->user_id;
@@ -284,9 +286,6 @@ class FileController extends Controller
             }
             if (!empty($request->client_id)) {
                 $fileModel->client_id = $request->client_id;
-            }
-            if (!empty($request->contract_id)) {
-                $fileModel->contract_id = $request->contract_id;
             }
             if (!empty($request->dealer_id)) {
                 $fileModel->dealer_id = $request->dealer_id;
@@ -307,8 +306,11 @@ class FileController extends Controller
             if (!empty($request->bid_id)) {
                 $fileModel->bid_id = $request->bid_id;
             }
-            if (!empty($request->add_to_chat)) {
+            if (!empty($request->add_to_chat) && !empty($request->bid_id)) {
                 ChatMessage::sendNewMessage(null, null, $request->bid_id, $fileModel->id);
+            }
+            else if (!empty($request->add_to_chat) && !empty($request->user_id)) {
+                ChatMessage::sendNewMessage($request->user_id, null, null, $fileModel->id);
             }
             $fileModel->save();
         }catch (\Exception $e) {}
@@ -360,9 +362,6 @@ class FileController extends Controller
                     }
                     if (!empty($linkFileTo['bid_id'])) {
                         $fileModel->bid_id = $linkFileTo['bid_id'];
-                    }
-                    if (!empty($linkFileTo['contract_id'])) {
-                        $fileModel->contract_id = $linkFileTo['contract_id'];
                     }
                     $fileModel->save();
                 }catch (\Exception $e) {}

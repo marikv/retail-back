@@ -11,6 +11,7 @@ use App\Models\Log;
 use App\Models\TypeCredit;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,9 +20,10 @@ use Illuminate\Support\Facades\DB;
 class BidController extends Controller
 {
     /**
-     * @return \Illuminate\Database\Query\Builder
+     * @param Request $request
+     * @return Builder
      */
-    public static function getItems(): \Illuminate\Database\Query\Builder
+    public static function getItems(Request $request): Builder
     {
         $items = DB::table('bids')
             ->select([
@@ -39,21 +41,36 @@ class BidController extends Controller
             ->leftJoin('clients', 'clients.id', '=', 'bids.client_id')
             ->leftJoin('type_credits', 'type_credits.id', '=', 'bids.type_credit_id')
             ->whereNull('bids.deleted')
-            ->whereNull('bids.contract_id')
-            ->where(function ($items) {
-                $items->where(function ($items) {
-                    $day = Carbon::parse(date('Y-m-d'))->modify('-2 days')->format('Y-m-d');
-                    $items->where('bids.created_at', '>', $day . ' 00:00:00')
-                        ->where('bids.status_id', '=', Bid::BID_STATUS_REFUSED);
-                })
-                    ->orWhere('bids.status_id', '!=', Bid::BID_STATUS_REFUSED);
-            })
             ->distinct();
 
-        if (Auth::user()->role_id === User::USER_ROLE_DEALER) {
-            $items = $items->where('bids.user_id', '=', Auth::user()->id)
-                ->where('bids.dealer_id', '=', Auth::user()->dealer_id);
+        if ($request->activeModule === 'Contracts') {
+            $items = $items->where('bids.status_id', '=', Bid::BID_STATUS_SIGNED_CONTRACT);
+
+            if (Auth::user()->role_id === User::USER_ROLE_DEALER) {
+                $items = $items
+                    // ->where('bids.user_id', '=', Auth::user()->id)
+                    ->where('bids.dealer_id', '=', Auth::user()->dealer_id);
+            }
+        } else {
+            $items = $items
+                ->where('bids.status_id', '!=', Bid::BID_STATUS_SIGNED_CONTRACT)
+                ->where(function ($items) {
+                    $items->where(function ($items) {
+                        $day = Carbon::parse(date('Y-m-d'))->modify('-2 days')->format('Y-m-d');
+                        $items
+                            ->where('bids.created_at', '>', $day . ' 00:00:00')
+                            ->where('bids.status_id', '=', Bid::BID_STATUS_REFUSED);
+                    })
+                        ->orWhere('bids.status_id', '!=', Bid::BID_STATUS_REFUSED);
+                });
+
+            if (Auth::user()->role_id === User::USER_ROLE_DEALER) {
+                $items = $items
+                    ->where('bids.user_id', '=', Auth::user()->id)
+                    ->where('bids.dealer_id', '=', Auth::user()->dealer_id);
+            }
         }
+
         return $items;
     }
 
@@ -63,7 +80,7 @@ class BidController extends Controller
      */
     public function getList(Request $request): JsonResponse
     {
-        $items = self::getItems();
+        $items = self::getItems($request);
 
         $items = $this->standardOrderBy($items, $request, 'id', 'desc');
         $items = $this->standardPagination($items, $request);
@@ -202,6 +219,12 @@ class BidController extends Controller
                 $Bid->approved_date_time = date('Y-m-d H:i:s');
                 ChatMessage::sendNewMessage($Bid->user_id, 'Cerere aprobată', $Bid->id);
 
+            } else if ((int)$Bid->status_id === Bid::BID_STATUS_APPROVED && (int)$request->status_id === Bid::BID_STATUS_SIGNED_CONTRACT) {
+
+                $Bid->signed_user_id = Auth::id();
+                $Bid->signed_date_time = date('Y-m-d H:i:s');
+                ChatMessage::sendNewMessage($Bid->user_id, 'Contract semnat', $Bid->id);
+
             } else if ((int)$Bid->status_id === Bid::BID_STATUS_IN_WORK && (int)$request->status_id === Bid::BID_STATUS_REFUSED) {
 
                 $Bid->refused_user_id = Auth::id();
@@ -253,6 +276,7 @@ class BidController extends Controller
             ->with('user')
             ->with('execute_user')
             ->with('bid_months')
+            ->with('files')
             ->first();
     }
 
@@ -287,6 +311,8 @@ class BidController extends Controller
             $Client->buletin_idnp = $request->buletin_idnp;
             $Client->localitate = $request->localitate;
             $Client->street = $request->street;
+            $Client->house = $request->house;
+            $Client->flat = $request->flat;
             $Client->save();
 
             if (!$id) {
@@ -335,11 +361,11 @@ class BidController extends Controller
             $Bid->buletin_idnp = $request->buletin_idnp;
             $Bid->localitate = $request->localitate;
             $Bid->street = $request->street;
+            $Bid->house = $request->house;
+            $Bid->flat = $request->flat;
             $Bid->buletin_date_till = $request->buletin_date_till;
             $Bid->buletin_office = $request->buletin_office;
             $Bid->region = $request->region;
-            $Bid->flat = $request->flat;
-            $Bid->house = $request->house;
             $Bid->save();
 
             foreach ($request->calc_results['tabel'] as $row) {

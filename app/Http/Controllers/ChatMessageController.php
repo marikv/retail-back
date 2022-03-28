@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Bid;
 use App\Models\ChatMessage;
 use App\Models\ChatMessageRead;
-use App\Models\ProductInvoice;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -47,18 +46,57 @@ class ChatMessageController extends Controller
             })
             ->where('chat_messages.to_user_id', '=', Auth::id())
             ->whereNull('chat_message_reads.id')
-            ->limit(100);
-        $ChatMessages = $ChatMessages->get();
+            ->limit(100)
+            ->get();
+        $ChatMessagesArray = $ChatMessages->toArray();
         $Bids = null;
 
         if ($request->activeModule === 'Calculator' || $request->activeModule === 'Bids') {
-            $Bids = BidController::getItems()->get();
+
+            $Bids = BidController::getItems($request)->get();
+            $BidsIdArray = $Bids->map(function ($bid) { return $bid->id; })->toArray();
+
+            if (count($BidsIdArray)) {
+
+                $BidChatMessages = DB::table('chat_messages')
+                    ->select(['chat_messages.*'])
+                    ->leftJoin('chat_message_reads', static function ($join) {
+                        $join->on('chat_message_reads.chat_message_id', '=', 'chat_messages.id')
+                            ->where('chat_message_reads.user_id', '=', Auth::id());
+                    })
+                    ->whereIn('chat_messages.bid_id', $BidsIdArray)
+                    ->whereNull('chat_message_reads.id')
+                    ->limit(100)
+                    ->get();
+
+                if (count($BidChatMessages)) {
+
+                    foreach ($BidChatMessages as $BidChatMessage) {
+
+                        if (count($ChatMessagesArray)) {
+
+                            $ChatMessagesIdArray = array_map(static function ($ChatMessage) {
+                                return $ChatMessage->id;
+                            },$ChatMessagesArray);
+                        }
+                        else {
+                            $ChatMessagesIdArray = [];
+                            $ChatMessages = [];
+                        }
+
+                        if (!in_array($BidChatMessage->id, $ChatMessagesIdArray, true)) {
+
+                            $ChatMessagesArray = [...$ChatMessagesArray, $BidChatMessage];
+                        }
+                    }
+                }
+            }
         }
 
         return response()->json([
             'success' => true,
             'data' => [
-                'unreadMessages' => $ChatMessages,
+                'unreadMessages' => $ChatMessagesArray,
                 'bids' => $Bids,
             ],
         ]);
