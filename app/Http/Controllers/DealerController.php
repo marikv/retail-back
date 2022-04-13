@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Dealer;
+use App\Models\DealerTypeCredit;
 use App\Models\Log;
+use App\Models\TypeCredit;
 use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -14,11 +17,44 @@ use Illuminate\Support\Facades\DB;
 
 class DealerController extends Controller
 {
+    /**
+     * @param int $id
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function dealerTypeCredit(int $id, Request $request): JsonResponse
+    {
+        $DealerTypeCredits = null;
 
-    public function getDataById($id, Request $request)
+        if ($id > 0) {
+            $DealerTypeCredits = DealerTypeCredit::where('dealer_id', '=', $id)
+                ->whereNull('deleted')
+                ->orderBy('id', 'desc')
+                ->get();
+        }
+        $TypeCredits = TypeCredit::whereNull('deleted')
+            ->orderBy('id', 'desc')
+            ->get();
+
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'DealerTypeCredits' => $DealerTypeCredits,
+                'TypeCredits' => $TypeCredits,
+            ]
+        ], 200);
+    }
+
+    /**
+     * @param $id
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getDataById($id, Request $request): JsonResponse
     {
         if ($id) {
-            return response([
+            return response()->json([
                 'success' => true,
                 'data' => $this->getDealer($id)
             ]);
@@ -30,7 +66,12 @@ class DealerController extends Controller
         ], 200);
     }
 
-    public function addOrEdit($id, Request $request)
+    /**
+     * @param $id
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function addOrEdit($id, Request $request): JsonResponse
     {
         if ((int)$id > 0) {
             $Dealer = Dealer::findOrFail($id);
@@ -54,13 +95,26 @@ class DealerController extends Controller
         $Dealer->bank_valuta = $request->bank_valuta;
         $Dealer->save();
 
+        DealerTypeCredit::where('dealer_id', '=', $Dealer->id)
+            ->whereNull('deleted')
+            ->update(['deleted' => 1]);
+        if ($request->type_credits) {
+           foreach ($request->type_credits as $type_credit_id) {
+               $DealerTypeCredit = new DealerTypeCredit();
+               $DealerTypeCredit->dealer_id = $Dealer->id;
+               $DealerTypeCredit->type_credit_id = $type_credit_id;
+               $DealerTypeCredit->deleted = null;
+               $DealerTypeCredit->save();
+           }
+        }
+
         return response()->json([
             'success' => true,
             'data' => $this->getDealer($Dealer->id)
         ], 200);
     }
 
-    public function dealersList(Request $request)
+    public function dealersList(Request $request): JsonResponse
     {
         $dealers = DB::table('dealers')
             ->select([
@@ -83,7 +137,7 @@ class DealerController extends Controller
         $dealers = $this->standardOrderBy($dealers, $request, 'id', 'desc');
         $dealers = $this->standardPagination($dealers, $request);
 
-        return response([
+        return response()->json([
             'success' => true,
             'data' => $dealers
         ]);
@@ -93,17 +147,21 @@ class DealerController extends Controller
      * @param $id
      * @return mixed
      */
-    protected function getDealer($id)
+    protected function getDealer($id): mixed
     {
-        return Dealer::findOrFail($id);
+        return Dealer::where('id', '=', $id)
+            ->with('dealer_type_credits')
+            ->first()
+            ;
     }
+
 
     /**
      * @param $id
      * @param Request $request
-     * @return Application|Response|ResponseFactory
+     * @return JsonResponse
      */
-    public function deleteDealer($id, Request $request)
+    public function deleteDealer($id, Request $request): JsonResponse
     {
         /* @var $Dealer Dealer */
         $Dealer = Dealer::findOrFail($id);
@@ -111,7 +169,7 @@ class DealerController extends Controller
         $Dealer->save();
         User::where('dealer_id', '=', $Dealer->id)->update(['deleted' => 1]);
 
-        return  response([
+        return  response()->json([
             'success' => true
         ]);
     }

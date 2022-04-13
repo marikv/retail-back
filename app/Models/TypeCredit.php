@@ -35,6 +35,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property boolean|null $comision_admin_is_percent
  * @property float|null $percent_comision_magazin
  * @property float|null $percent_bonus_magazin
+ * @property boolean $is_shop_fee
  * @property boolean $deleted
  * @property string $description_mini
  * @property string $description

@@ -6,6 +6,7 @@ use App\Models\Bid;
 use App\Models\Dealer;
 use App\Models\TypeCredit;
 use App\Models\User;
+use App\Services\CalculatorService;
 use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -29,7 +30,7 @@ class TypeCreditController extends Controller
         $sum = (float)str_replace(array(',', ' '), array('.', ''), $request->sum);
         $months = (int)$request->months;
 
-        $calcResults = Bid::getCalcResults($type, $sum, $months, $date);
+        $calcResults = CalculatorService::getCalcResults($type, $sum, $months, $date);
 
         return response()->json($calcResults, 200);
     }
@@ -82,6 +83,7 @@ class TypeCreditController extends Controller
             $TypeCredit->comision_admin = $request->comision_admin;
             $TypeCredit->comision_admin_is_percent = $request->comision_admin_is_percent;
             $TypeCredit->percent_bonus_magazin = $request->percent_bonus_magazin;
+            $TypeCredit->is_shop_fee = $request->is_shop_fee;
             $TypeCredit->percent_comision_magazin = $request->percent_comision_magazin;
             $TypeCredit->save();
         }

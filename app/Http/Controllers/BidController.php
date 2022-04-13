@@ -10,6 +10,7 @@ use App\Models\Dealer;
 use App\Models\Log;
 use App\Models\TypeCredit;
 use App\Models\User;
+use App\Services\CalculatorService;
 use Carbon\Carbon;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Http\JsonResponse;
@@ -127,7 +128,7 @@ class BidController extends Controller
                 $oldSum = $Bid->imprumut;
 
                 try {
-                    $calcResults = Bid::getCalcResults($Bid->type_credit_id, (float)$request->new_sum, $Bid->months, $Bid->first_pay_date, $Bid);
+                    $calcResults = CalculatorService::getCalcResults($Bid->type_credit_id, (float)$request->new_sum, $Bid->months, $Bid->first_pay_date, $Bid);
                 } catch (\Exception $e) {
 
                     return response()->json([
@@ -151,6 +152,7 @@ class BidController extends Controller
                     $Bid->total_comision = $calcResults['tabelTotal']['comision'];
                     $Bid->total_comision_admin = $calcResults['tabelTotal']['comisionAdmin'];
                     $Bid->apr = $calcResults['APR'];
+                    $Bid->dae = $calcResults['DAE'];
                     $Bid->apy = null;// todo:
                     $Bid->coef = $calcResults['coef1PerLuna'];
 
@@ -289,13 +291,13 @@ class BidController extends Controller
     {
         try {
             $Client = null;
-            if (!empty($request->client_id)) {
+            if ($request->client_id) {
                 $Client = Client::where('id', '=', $request->client_id)->orderBy('id', 'desc')->first();
             }
-            if (!$Client && !empty($request->buletin_sn) && strlen($request->buletin_sn) === 9) {
+            if (!$Client && $request->buletin_sn && strlen($request->buletin_sn) === 9) {
                 $Client = Client::where('buletin_sn', '=', $request->buletin_sn)->orderBy('id', 'desc')->first();
             }
-            if (!$Client && !empty($request->buletin_idnp) && strlen($request->buletin_idnp) === 13) {
+            if (!$Client && $request->buletin_idnp && strlen($request->buletin_idnp) === 13) {
                 $Client = Client::where('buletin_idnp', '=', $request->buletin_idnp)->orderBy('id', 'desc')->first();
             }
             if (!$Client) {
@@ -321,9 +323,10 @@ class BidController extends Controller
             } else {
                 $Bid = Bid::findOrFail($id);
             }
+            /* @var $Bid Bid */
 
             $Bid->user_id = Auth::id();
-            $Bid->dealer_id = Auth::user()->dealer_id;
+            $Bid->dealer_id = Auth::user()->role_id === User::USER_ROLE_DEALER ? Auth::user()->dealer_id : $request->dealer;
             $Bid->client_id = $Client->id;
             $Bid->type_credit_id = $TypeCredit->id;
             $Bid->type_credit_name = $TypeCredit->name;
@@ -336,6 +339,7 @@ class BidController extends Controller
             $Bid->total_comision = $request->total_comision;
             $Bid->total_comision_admin = $request->total_comision_admin;
             $Bid->apr = $request->calc_results['APR'];
+            $Bid->dae = $request->calc_results['DAE'];
             $Bid->apy = null;// todo:
             $Bid->coef = $request->calc_results['coef1PerLuna'];
 
@@ -352,6 +356,7 @@ class BidController extends Controller
             $Bid->comision_admin_is_percent = $TypeCredit->comision_admin_is_percent;
             $Bid->percent_comision_magazin = $TypeCredit->percent_comision_magazin;
             $Bid->percent_bonus_magazin = $TypeCredit->percent_bonus_magazin;
+            $Bid->is_shop_fee = $TypeCredit->is_shop_fee;
 
             $Bid->first_name = $request->first_name;
             $Bid->last_name = $request->last_name;
@@ -366,6 +371,10 @@ class BidController extends Controller
             $Bid->buletin_date_till = $request->buletin_date_till;
             $Bid->buletin_office = $request->buletin_office;
             $Bid->region = $request->region;
+            $Bid->who_is_cont_pers1 = $request->who_is_cont_pers1;
+            $Bid->first_name_cont_pers1 = $request->first_name_cont_pers1;
+            $Bid->last_name_cont_pers1 = $request->last_name_cont_pers1;
+            $Bid->phone_cont_pers1 = $request->phone_cont_pers1;
             $Bid->save();
 
             foreach ($request->calc_results['tabel'] as $row) {

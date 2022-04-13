@@ -2,11 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Dealer;
 use Illuminate\Http\Request;
 use PDF;
 
 class PdfController extends Controller
 {
+
+
+    public function contractDealer(Dealer $dealer, Request $request)
+    {
+        $data = [];
+        $data['data'] = [];
+
+        $data = self::setHeaderData($data);
+
+        return self::getPDF('pdf.contractDealer', $data, true)->stream();
+    }
 
 
     public function contract(int $bidId, Request $request)

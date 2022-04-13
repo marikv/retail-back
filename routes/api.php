@@ -43,6 +43,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/dealer-add-or-edit/{id}', [DealerController::class, 'addOrEdit']);
     Route::get('/dealers/get-data-by-id/{id}', [DealerController::class, 'getDataById']);
     Route::delete('/dealers/{id}', [DealerController::class, 'deleteDealer']);
+    Route::get('/dealer-type-credits/{id}', [DealerController::class, 'dealerTypeCredit']);
 
     Route::post('/users-list', [UserController::class, 'usersList']);
     Route::post('/user-add-or-edit/{id}', [UserController::class, 'addOrEdit']);
@@ -79,5 +80,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::get('print/pre-contract/{id}', [PdfController::class, 'preContract']);
     Route::get('print/contract/{bidId}', [PdfController::class, 'contract']);
+    Route::get('print/contractDealer/{id}', [PdfController::class, 'contractDealer']);
 
 });

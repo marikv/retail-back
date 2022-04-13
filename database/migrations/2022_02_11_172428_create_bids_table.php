@@ -27,6 +27,7 @@ return new class extends Migration
             $table->float('imprumut', 10, 2)->nullable()->default(0);
             $table->float('total', 10, 2)->nullable()->default(0);
             $table->float('apr', 10, 2)->nullable()->default(0);
+            $table->float('dae', 10, 2)->nullable()->default(0);
             $table->float('apy', 10, 2)->nullable()->default(0);
             $table->float('coef', 8, 2)->nullable()->default(0);
 
@@ -43,7 +44,7 @@ return new class extends Migration
             $table->boolean('comision_admin_is_percent')->nullable();
             $table->float('percent_comision_magazin', 8, 4)->unsigned()->nullable()->default(0);
             $table->float('percent_bonus_magazin', 8, 4)->unsigned()->nullable()->default(0);
-
+            $table->boolean('is_shop_fee')->nullable();
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
             $table->string('phone1')->nullable();

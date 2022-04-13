@@ -29,6 +29,7 @@ class CreateTypeCreditsTable extends Migration
             $table->boolean('comision_admin_is_percent')->nullable();
             $table->float('percent_comision_magazin', 8, 4)->nullable()->default(0);
             $table->float('percent_bonus_magazin', 8, 4)->nullable()->default(0);
+            $table->boolean('is_shop_fee')->nullable();
             $table->text('description')->nullable();
             $table->text('description_mini')->nullable();
             $table->boolean('deleted')->nullable();
