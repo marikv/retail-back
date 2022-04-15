@@ -152,7 +152,7 @@ class CalculatorService
                 $totalPerToateLunile += $totalPerLuna;
                 $arrayForDae[] = array(
                     'date' => $CarbonDateNew->format('Y-m-d'),
-                    'sum' => $totalPerLuna,
+                    'sum' => round($totalPerLuna, 2),
                 );
             }
 
