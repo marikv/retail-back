@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Nyholm\EffectiveInterest\Calculator as CalculatorDAE;
 use App\Models\Bid;
 use App\Models\TypeCredit;
 use Carbon\Carbon;
@@ -130,12 +131,7 @@ class CalculatorService
             $comisionTotal = 0;
             $comisionAdminTotal = 0;
             $totalPerToateLunile = 0;
-            $arrayForDae = array(
-                array(
-                    'date' => Carbon::parse($date)->format('Y-m-d'),
-                    'sum' => (-1) * $sum,
-                )
-            );
+            $payments = [];
             for ($i = 1; $i <= $months; $i++) {
                 $CarbonDateNew = self::getNextFreeDate(Carbon::parse($date)->addMonths($i));
                 $tabel[$i] = [
@@ -150,27 +146,12 @@ class CalculatorService
                 $comisionTotal += $comisionPerLuna;
                 $comisionAdminTotal += $comisionAdminPerLuna;
                 $totalPerToateLunile += $totalPerLuna;
-                $arrayForDae[] = array(
-                    'date' => $CarbonDateNew->format('Y-m-d'),
-                    'sum' => round($totalPerLuna, 2),
-                );
+                $payments[$CarbonDateNew->format('Y-m-d')] = round($totalPerLuna, 2);
             }
 
-            $FinFuncService = new FinFuncService();
-
-            $xirrSums = collect($arrayForDae)->map(static function ($arr) {
-                return $arr['sum'];
-            })->toArray();
-
-            $xirrTimestamps = collect($arrayForDae)->map(static function ($arr) {
-                return Carbon::parse($arr['date'])->timestamp;
-            })->toArray();
-
-            $xirrDates = collect($arrayForDae)->map(static function ($arr) {
-                return Carbon::parse($arr['date'])->format('d.m.Y');
-            })->toArray();
-
-            $DAE = $FinFuncService->XIRR($xirrSums, $xirrTimestamps, 0.1);
+            // js version https://github.com/Nyholm/effective-interest-rate-js
+            $CalculatorDAE = new CalculatorDAE();
+            $DAE = $CalculatorDAE->withSpecifiedPayments($sum, Carbon::parse($date)->format('Y-m-d'), $payments, 0.01);// XIRR
 
             $tabelTotal = [
                 'imprumut' => round($sum, 2),
@@ -190,9 +171,6 @@ class CalculatorService
                     'totalPerLuna' => round($totalPerLuna, 2),
                     'APR' => round(($totalPerLuna / $imprumtPerLuna - 1) * 100, 2),
                     'DAE' => round($DAE * 100, 2),
-                    'xirrSums' => $xirrSums,
-                    'xirrTimestamps' => $xirrTimestamps,
-                    'xirrDates' => $xirrDates,
                     'coef1PerLuna' => round(($totalPerLuna - $imprumtPerLuna) / $totalPerLuna, 6),
                     'tabel' => $tabel,
                     'tabelTotal' => $tabelTotal,
