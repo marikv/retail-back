@@ -152,6 +152,8 @@ class CalculatorService
             // js version https://github.com/Nyholm/effective-interest-rate-js
             $CalculatorDAE = new CalculatorDAE();
             $DAE = $CalculatorDAE->withSpecifiedPayments($sum, Carbon::parse($date)->format('Y-m-d'), $payments, 0.01);// XIRR
+            //$CalculatorDAE = new CalculatorDAE();
+            //$APR = $CalculatorDAE->withEqualPayments($sum, $totalPerLuna, $months, 0.03);
 
             $tabelTotal = [
                 'imprumut' => round($sum, 2),
@@ -164,12 +166,15 @@ class CalculatorService
             $calcResults = [
                 'success' => true,
                 'data' => [
+                    'months' => round($months, 2),
+                    'sum' => round($sum, 2),
                     'imprumtPerLuna' => round($imprumtPerLuna, 2),
                     'dobindaPerLuna' => round($dobindaPerLuna, 2),
                     'comisionPerLuna' => round($comisionPerLuna, 2),
                     'comisionAdminPerLuna' => round($comisionAdminPerLuna, 2),
                     'totalPerLuna' => round($totalPerLuna, 2),
-                    'APR' => round(($totalPerLuna / $imprumtPerLuna - 1) * 100, 2),
+                    //'APR_old' => round(($totalPerLuna / $imprumtPerLuna - 1) * 100, 2),
+                    //'APR' => round($APR * 100, 2),
                     'DAE' => round($DAE * 100, 2),
                     'coef1PerLuna' => round(($totalPerLuna - $imprumtPerLuna) / $totalPerLuna, 6),
                     'tabel' => $tabel,

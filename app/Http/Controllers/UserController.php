@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Log;
+use App\Repositories\UserRepository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\JsonResponse;
@@ -15,12 +16,12 @@ use Illuminate\Support\Facades\DB;
 class UserController extends Controller
 {
 
-    public function getDataById($id, Request $request)
+    public function getDataById($id, Request $request, UserRepository $userRepository)
     {
         if ($id) {
             return response([
                 'success' => true,
-                'data' => $this->getUser($id)
+                'data' => $userRepository->getUser($id)
             ]);
         }
 
@@ -30,7 +31,7 @@ class UserController extends Controller
         ], 200);
     }
 
-    public function addOrEdit($id, Request $request)
+    public function addOrEdit($id, Request $request, UserRepository $userRepository)
     {
         if ((int)$id > 0) {
             $User = User::findOrFail($id);
@@ -48,43 +49,19 @@ class UserController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $this->getUser($User->id)
+            'data' => $userRepository->getUser($User->id)
         ], 200);
     }
 
-    public function UsersList(Request $request)
+    public function UsersList(Request $request, UserRepository $userRepository): JsonResponse
     {
-        $Users = DB::table('users')
-            ->select([
-                'users.*',
-                DB::raw("DATE_FORMAT(users.created_at, '%d.%m.%Y %H:%i') as created_at2"),
-            ])
-            ->whereNull('users.deleted')
-            ->distinct();
-        if ($request->filter) {
-            $Users = $Users
-                ->where('users.name', 'like', $request->filter . '%')
-                ->orWhere('users.phone1', 'like', $request->filter . '%')
-                ->orWhere('users.email', 'like', $request->filter . '%')
-            ;
-        }
+        $filter = $request->filter;
+        $pagination = $request->pagination;
 
-        $Users = $this->standardOrderBy($Users, $request, 'id', 'desc');
-        $Users = $this->standardPagination($Users, $request);
-
-        return response([
+        return response()->json([
             'success' => true,
-            'data' => $Users
+            'data' => $userRepository->list($filter, $pagination)
         ]);
-    }
-
-    /**
-     * @param $id
-     * @return mixed
-     */
-    protected function getUser($id)
-    {
-        return User::findOrFail($id);
     }
 
     /**

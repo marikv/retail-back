@@ -6,6 +6,7 @@ use App\Models\Bid;
 use App\Models\ChatMessage;
 use App\Models\ChatMessageRead;
 use App\Models\User;
+use App\Repositories\BidRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -36,8 +37,10 @@ class ChatMessageController extends Controller
         ]);
     }
 
-    public function checkNewMessages(Request $request): JsonResponse
+    public function checkNewMessages(Request $request, BidRepository $bidRepository): JsonResponse
     {
+        $activeModule = isset($request->activeModule) ? $request->activeModule : '';
+
         $ChatMessages = DB::table('chat_messages')
             ->select(['chat_messages.*'])
             ->leftJoin('chat_message_reads', static function ($join) {
@@ -51,10 +54,13 @@ class ChatMessageController extends Controller
         $ChatMessagesArray = $ChatMessages->toArray();
         $Bids = null;
 
-        if ($request->activeModule === 'Calculator' || $request->activeModule === 'Bids') {
+        if ($activeModule === 'Calculator' || $activeModule === 'Bids') {
 
-            $Bids = BidController::getItems($request)->get();
-            $BidsIdArray = $Bids->map(function ($bid) { return $bid->id; })->toArray();
+            // $Bids = BidController::getItems($request)->get();
+            //$BidsIdArray = $Bids->map(function ($bid) { return $bid->id; })->toArray();
+            //todo:
+            $Bids = $bidRepository->list(null, null, $activeModule)->items();
+            $BidsIdArray = collect($Bids)->map(function ($bid) { return $bid->id; })->toArray();
 
             if (count($BidsIdArray)) {
 

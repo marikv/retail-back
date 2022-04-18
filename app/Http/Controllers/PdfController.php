@@ -13,7 +13,9 @@ class PdfController extends Controller
     public function contractDealer(Dealer $dealer, Request $request)
     {
         $data = [];
-        $data['data'] = [];
+        $data['data'] = [
+            'dealer' => $dealer
+        ];
 
         $data = self::setHeaderData($data);
 

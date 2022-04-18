@@ -6,13 +6,11 @@ use Carbon\Carbon;
     @page { margin: 20px; }
     body { margin: 20px; }
 </style>
-<div class="text-right" style="line-height: 0.9;">
-        <?=date('d.m.Y')?><br>
-</div>
 
 <div class="text-center title">
-    CONTRACT<br>
+    CONTRACT DE COLABORARE Nr.<?=$data['dealer']->id?> din data de <?=$data['dealer']->contract_date?>
 </div>
+<? print_r($data['dealer']); ?>
 
 <table border="0" style="border: none;width: 100%;">
     <tr>

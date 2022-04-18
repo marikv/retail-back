@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @package App\Models
  *
  * @property int $id
+ * @property string $contract_number
+ * @property string $contract_date
  * @property string $name
  * @property string $full_name
  * @property string $address_fiz

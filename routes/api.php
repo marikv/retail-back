@@ -80,6 +80,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::get('print/pre-contract/{id}', [PdfController::class, 'preContract']);
     Route::get('print/contract/{bidId}', [PdfController::class, 'contract']);
-    Route::get('print/contractDealer/{id}', [PdfController::class, 'contractDealer']);
+    Route::get('print/contractDealer/{dealer}', [PdfController::class, 'contractDealer']);
 
 });

@@ -91,14 +91,14 @@
 </head>
 <body>
 <div style="text-align: center;">
-    <div class="logo"></div>
-    <div style="margin-top: 5px;font-size: 9px; color: #5a7c92; line-height: 8px;">
-        juridical_name
-        <div>
-            addresa c/f idno
-        </div>
-        <div>
-            tel: 0231494949, 0231494949;
-        </div>
-    </div>
+{{--    <div class="logo"></div>--}}
+{{--    <div style="margin-top: 5px;font-size: 9px; color: #5a7c92; line-height: 8px;">--}}
+{{--        juridical_name--}}
+{{--        <div>--}}
+{{--            addresa c/f idno--}}
+{{--        </div>--}}
+{{--        <div>--}}
+{{--            tel: 0231494949, 0231494949;--}}
+{{--        </div>--}}
+{{--    </div>--}}
 </div>

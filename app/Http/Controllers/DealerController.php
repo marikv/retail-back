@@ -7,6 +7,8 @@ use App\Models\DealerTypeCredit;
 use App\Models\Log;
 use App\Models\TypeCredit;
 use App\Models\User;
+use App\Repositories\DealerRepository;
+use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\JsonResponse;
@@ -51,12 +53,12 @@ class DealerController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function getDataById($id, Request $request): JsonResponse
+    public function getDataById($id, Request $request, DealerRepository $dealerRepository): JsonResponse
     {
         if ($id) {
             return response()->json([
                 'success' => true,
-                'data' => $this->getDealer($id)
+                'data' => $dealerRepository->getDealer($id),
             ]);
         }
 
@@ -71,7 +73,7 @@ class DealerController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function addOrEdit($id, Request $request): JsonResponse
+    public function addOrEdit($id, Request $request, DealerRepository $dealerRepository): JsonResponse
     {
         if ((int)$id > 0) {
             $Dealer = Dealer::findOrFail($id);
@@ -93,6 +95,7 @@ class DealerController extends Controller
         $Dealer->bank_cb = $request->bank_cb;
         $Dealer->bank_iban = $request->bank_iban;
         $Dealer->bank_valuta = $request->bank_valuta;
+        $Dealer->contract_date = Carbon::parse($request->contract_date)->format('Y-m-d');
         $Dealer->save();
 
         DealerTypeCredit::where('dealer_id', '=', $Dealer->id)
@@ -110,49 +113,19 @@ class DealerController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $this->getDealer($Dealer->id)
+            'data' => $dealerRepository->getDealer($Dealer->id)
         ], 200);
     }
 
-    public function dealersList(Request $request): JsonResponse
+    public function dealersList(Request $request, DealerRepository $dealerRepository): JsonResponse
     {
-        $dealers = DB::table('dealers')
-            ->select([
-                'dealers.*',
-                DB::raw("DATE_FORMAT(dealers.created_at, '%d.%m.%Y %H:%i') as created_at2"),
-            ])
-            ->whereNull('dealers.deleted')
-            ->distinct();
-        if ($request->filter) {
-            $dealers = $dealers
-                ->where('dealers.name', 'like', $request->filter . '%')
-                ->orWhere('dealers.full_name', 'like', $request->filter . '%')
-                ->orWhere('dealers.phone1', 'like', $request->filter . '%')
-                ->orWhere('dealers.phone2', 'like', $request->filter . '%')
-                ->orWhere('dealers.email', 'like', $request->filter . '%')
-                ->orWhere('dealers.description', 'like', $request->filter . '%')
-            ;
-        }
-
-        $dealers = $this->standardOrderBy($dealers, $request, 'id', 'desc');
-        $dealers = $this->standardPagination($dealers, $request);
+        $filter = $request->filter;
+        $pagination = $request->pagination;
 
         return response()->json([
             'success' => true,
-            'data' => $dealers
+            'data' => $dealerRepository->list($filter, $pagination)
         ]);
-    }
-
-    /**
-     * @param $id
-     * @return mixed
-     */
-    protected function getDealer($id): mixed
-    {
-        return Dealer::where('id', '=', $id)
-            ->with('dealer_type_credits')
-            ->first()
-            ;
     }
 
 
