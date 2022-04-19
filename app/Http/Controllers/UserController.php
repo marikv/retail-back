@@ -21,7 +21,7 @@ class UserController extends Controller
         if ($id) {
             return response([
                 'success' => true,
-                'data' => $userRepository->getUser($id)
+                'data' => $userRepository->getById($id)
             ]);
         }
 
@@ -49,7 +49,7 @@ class UserController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $userRepository->getUser($User->id)
+            'data' => $userRepository->getById($User->id)
         ], 200);
     }
 

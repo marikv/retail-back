@@ -17,10 +17,10 @@ class UserRepository extends AbstractCoreRepository
     }
 
     /**
-     * @param $id
+     * @param int $id
      * @return mixed
      */
-    public function getUser($id): mixed
+    public function getById(int $id = 0): mixed
     {
         return $this->startConditions()
             ->where('id', '=', $id)

@@ -46,8 +46,8 @@ class Dealer extends Model
     /**
      * @return HasMany
      */
-    public function dealer_type_credits(): HasMany
+    public function dealer_products(): HasMany
     {
-        return $this->hasMany(DealerTypeCredit::class)->whereNull('deleted');
+        return $this->hasMany(DealerProduct::class)->whereNull('deleted');
     }
 }

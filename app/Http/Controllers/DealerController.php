@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Dealer;
-use App\Models\DealerTypeCredit;
+use App\Models\DealerProduct;
 use App\Models\Log;
+use App\Models\Product;
 use App\Models\TypeCredit;
 use App\Models\User;
 use App\Repositories\DealerRepository;
@@ -24,17 +25,17 @@ class DealerController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function dealerTypeCredit(int $id, Request $request): JsonResponse
+    public function dealerProducts(int $id, Request $request): JsonResponse
     {
-        $DealerTypeCredits = null;
+        $DealerProducts = null;
 
         if ($id > 0) {
-            $DealerTypeCredits = DealerTypeCredit::where('dealer_id', '=', $id)
+            $DealerProducts = DealerProduct::where('dealer_id', '=', $id)
                 ->whereNull('deleted')
                 ->orderBy('id', 'desc')
                 ->get();
         }
-        $TypeCredits = TypeCredit::whereNull('deleted')
+        $Products = Product::whereNull('deleted')
             ->orderBy('id', 'desc')
             ->get();
 
@@ -42,8 +43,8 @@ class DealerController extends Controller
         return response()->json([
             'success' => true,
             'data' => [
-                'DealerTypeCredits' => $DealerTypeCredits,
-                'TypeCredits' => $TypeCredits,
+                'DealerProducts' => $DealerProducts,
+                'Products' => $Products,
             ]
         ], 200);
     }
@@ -58,7 +59,7 @@ class DealerController extends Controller
         if ($id) {
             return response()->json([
                 'success' => true,
-                'data' => $dealerRepository->getDealer($id),
+                'data' => $dealerRepository->getById($id),
             ]);
         }
 
@@ -98,22 +99,22 @@ class DealerController extends Controller
         $Dealer->contract_date = Carbon::parse($request->contract_date)->format('Y-m-d');
         $Dealer->save();
 
-        DealerTypeCredit::where('dealer_id', '=', $Dealer->id)
+        DealerProduct::where('dealer_id', '=', $Dealer->id)
             ->whereNull('deleted')
             ->update(['deleted' => 1]);
-        if ($request->type_credits) {
-           foreach ($request->type_credits as $type_credit_id) {
-               $DealerTypeCredit = new DealerTypeCredit();
-               $DealerTypeCredit->dealer_id = $Dealer->id;
-               $DealerTypeCredit->type_credit_id = $type_credit_id;
-               $DealerTypeCredit->deleted = null;
-               $DealerTypeCredit->save();
+        if ($request->products) {
+           foreach ($request->products as $product_id) {
+               $DealerProduct = new DealerProduct();
+               $DealerProduct->dealer_id = $Dealer->id;
+               $DealerProduct->product_id = $product_id;
+               $DealerProduct->deleted = null;
+               $DealerProduct->save();
            }
         }
 
         return response()->json([
             'success' => true,
-            'data' => $dealerRepository->getDealer($Dealer->id)
+            'data' => $dealerRepository->getById($Dealer->id)
         ], 200);
     }
 
@@ -134,13 +135,10 @@ class DealerController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function deleteDealer($id, Request $request): JsonResponse
+    public function deleteDealer($id, Request $request, DealerRepository $dealerRepository): JsonResponse
     {
-        /* @var $Dealer Dealer */
-        $Dealer = Dealer::findOrFail($id);
-        $Dealer->deleted = true;
-        $Dealer->save();
-        User::where('dealer_id', '=', $Dealer->id)->update(['deleted' => 1]);
+        User::where('dealer_id', '=', $id)->update(['deleted' => 1]);
+        $dealerRepository->delete($id);
 
         return  response()->json([
             'success' => true

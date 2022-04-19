@@ -18,6 +18,23 @@ class BidRepository extends AbstractCoreRepository
     {
         return Model::class;
     }
+    /**
+     * @param int $id
+     * @return mixed
+     */
+    public function getById(int $id = 0): mixed
+    {
+        return $this->startConditions()
+            ->where('id', '=', $id)
+            ->with('client')
+            ->with('type_credit')
+            ->with('dealer')
+            ->with('user')
+            ->with('execute_user')
+            ->with('bid_months')
+            ->with('files')
+            ->first();
+    }
 
     /**
      * @param $filter

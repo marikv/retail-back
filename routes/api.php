@@ -43,7 +43,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/dealer-add-or-edit/{id}', [DealerController::class, 'addOrEdit']);
     Route::get('/dealers/get-data-by-id/{id}', [DealerController::class, 'getDataById']);
     Route::delete('/dealers/{id}', [DealerController::class, 'deleteDealer']);
-    Route::get('/dealer-type-credits/{id}', [DealerController::class, 'dealerTypeCredit']);
+    Route::get('/dealer-products/{id}', [DealerController::class, 'dealerProducts']);
 
     Route::post('/users-list', [UserController::class, 'usersList']);
     Route::post('/user-add-or-edit/{id}', [UserController::class, 'addOrEdit']);
@@ -58,6 +58,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/files/getFiles', [FileController::class, 'getFiles']);
     Route::post('/files/linkFileTo', [FileController::class, 'linkFileTo']);
     Route::post('/files/deleteFile', [FileController::class, 'deleteFile']);
+
+    Route::post('/products/add-or-edit/{id}', [TypeCreditController::class, 'addOrEditProduct']);
+    Route::post('/products-list', [TypeCreditController::class, 'productsList']);
+    Route::get('/products/get-data-by-id/{id}', [TypeCreditController::class, 'productsGetDataById']);
+    Route::delete('/products/{id}', [TypeCreditController::class, 'productDelete']);
 
     Route::post('/type-credits/add-or-edit/{id}', [TypeCreditController::class, 'addOrEdit']);
     Route::post('/type-credits-list', [TypeCreditController::class, 'typeCreditsList']);

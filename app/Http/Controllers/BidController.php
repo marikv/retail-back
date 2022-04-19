@@ -23,6 +23,7 @@ class BidController extends Controller
 {
     /**
      * @param Request $request
+     * @param BidRepository $bidRepository
      * @return JsonResponse
      */
     public function getList(Request $request, BidRepository $bidRepository): JsonResponse
@@ -40,14 +41,15 @@ class BidController extends Controller
     /**
      * @param $id
      * @param Request $request
+     * @param BidRepository $bidRepository
      * @return JsonResponse
      */
-    public function getDataById($id, Request $request): JsonResponse
+    public function getDataById($id, Request $request, BidRepository $bidRepository): JsonResponse
     {
         if ($id) {
             return response()->json([
                 'success' => true,
-                'data' => $this->getBid($id)
+                'data' => $bidRepository->getById($id)
             ]);
         }
 
@@ -61,9 +63,10 @@ class BidController extends Controller
     /**
      * @param $id
      * @param Request $request
+     * @param BidRepository $bidRepository
      * @return JsonResponse
      */
-    public function changeSum($id, Request $request): JsonResponse
+    public function changeSum($id, Request $request, BidRepository $bidRepository): JsonResponse
     {
         if ($id) {
 
@@ -126,7 +129,7 @@ class BidController extends Controller
 
                     return response()->json([
                         'success' => true,
-                        'data' => $this->getBid($id)
+                        'data' => $bidRepository->getById($id)
                     ], 200);
                 }
             }
@@ -147,7 +150,7 @@ class BidController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function setBidStatus($id, Request $request): JsonResponse
+    public function setBidStatus($id, Request $request, BidRepository $bidRepository): JsonResponse
     {
         if ($id) {
 
@@ -200,7 +203,7 @@ class BidController extends Controller
 
             return response()->json([
                 'success' => true,
-                'data' => $this->getBid($id)
+                'data' => $bidRepository->getById($id)
             ]);
         }
 
@@ -211,28 +214,11 @@ class BidController extends Controller
     }
 
     /**
-     * @param $id
-     * @return mixed
-     */
-    protected function getBid($id): mixed
-    {
-        return Bid::where('id', '=', $id)
-            ->with('client')
-            ->with('type_credit')
-            ->with('dealer')
-            ->with('user')
-            ->with('execute_user')
-            ->with('bid_months')
-            ->with('files')
-            ->first();
-    }
-
-    /**
      * @param int $id
      * @param Request $request
      * @return JsonResponse
      */
-    public function addOrEdit(int $id, Request $request): JsonResponse
+    public function addOrEdit(int $id, Request $request, BidRepository $bidRepository): JsonResponse
     {
         try {
             $Client = null;
@@ -341,7 +327,7 @@ class BidController extends Controller
             return response()->json([
                 'success' => true,
                 'data' => [
-                    'bid' => $this->getBid($Bid->id),
+                    'bid' => $bidRepository->getById($Bid->id),
                 ]
             ]);
         }catch (\Exception $e) {

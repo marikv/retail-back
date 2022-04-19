@@ -17,14 +17,14 @@ class DealerRepository extends AbstractCoreRepository
     }
 
     /**
-     * @param $id
+     * @param int $id
      * @return mixed
      */
-    public function getDealer($id): mixed
+    public function getById(int $id = 0): mixed
     {
         return $this->startConditions()
             ->where('id', '=', $id)
-            ->with('dealer_type_credits')
+            ->with('dealer_products')
             ->first()
             ->toArray();
     }

@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Bid;
 use App\Models\Dealer;
+use App\Models\Product;
 use App\Models\TypeCredit;
 use App\Models\User;
+use App\Repositories\ProductRepository;
+use App\Repositories\TypeCreditRepository;
 use App\Services\CalculatorService;
 use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;
@@ -40,12 +43,12 @@ class TypeCreditController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function getDataById($id, Request $request): JsonResponse
+    public function getDataById($id, Request $request, TypeCreditRepository $typeCreditRepository): JsonResponse
     {
         if ($id) {
             return response()->json([
                 'success' => true,
-                'data' => TypeCredit::findOrFail($id),
+                'data' => $typeCreditRepository->getById($id),
             ]);
         }
 
@@ -60,7 +63,27 @@ class TypeCreditController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function addOrEdit($id, Request $request): JsonResponse
+    public function productsGetDataById($id, Request $request, ProductRepository $productRepository): JsonResponse
+    {
+        if ($id) {
+            return response()->json([
+                'success' => true,
+                'data' => $productRepository->getById($id),
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'data' => [ 'message' => 'nu este id' ]
+        ], 200);
+    }
+
+    /**
+     * @param $id
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function addOrEdit($id, Request $request, ProductRepository $productRepository): JsonResponse
     {
         if (Auth::user()->role_id === User::USER_ROLE_ADMIN) {
             if ((int)$id > 0) {
@@ -68,7 +91,14 @@ class TypeCreditController extends Controller
             } else {
                 $TypeCredit = new TypeCredit();
             }
-            $TypeCredit->name = $request->name;
+            $name = $request->name;
+            if ($request->product_id) {
+                /* @var $Product Product */
+                $Product = $productRepository->getById($request->product_id);
+                $luni = (int)$request->months_fix === 1 ? 'luna' : 'luni';
+                $name = $Product->name. ' - ' . (int)$request->months_fix . ' ' . $luni;
+            }
+            $TypeCredit->name = $name;
             $TypeCredit->description_mini = $request->description_mini;
             $TypeCredit->description = $request->description;
             $TypeCredit->months_fix = $request->months_fix;
@@ -85,6 +115,7 @@ class TypeCreditController extends Controller
             $TypeCredit->percent_bonus_magazin = $request->percent_bonus_magazin;
             $TypeCredit->is_shop_fee = $request->is_shop_fee;
             $TypeCredit->percent_comision_magazin = $request->percent_comision_magazin;
+            $TypeCredit->product_id = $request->product_id;
             $TypeCredit->save();
         }
 
@@ -95,31 +126,57 @@ class TypeCreditController extends Controller
     }
 
     /**
+     * @param $id
      * @param Request $request
      * @return JsonResponse
      */
-    public function typeCreditsList(Request $request): JsonResponse
+    public function addOrEditProduct($id, Request $request): JsonResponse
     {
-        $dealers = DB::table('type_credits')
-            ->select([
-                'type_credits.*',
-                DB::raw("DATE_FORMAT(type_credits.created_at, '%d.%m.%Y %H:%i') as created_at2"),
-            ])
-            ->whereNull('type_credits.deleted')
-            ->distinct();
-        if ($request->filter) {
-            $dealers = $dealers
-                ->where('type_credits.name', 'like', $request->filter . '%')
-                ->orWhere('dealers.description', 'like', $request->filter . '%')
-            ;
+        if (Auth::user()->role_id === User::USER_ROLE_ADMIN) {
+            if ((int)$id > 0) {
+                $Product = Product::findOrFail($id);
+            } else {
+                $Product = new Product();
+            }
+            $Product->name = $request->name;
+            $Product->save();
         }
-
-        $dealers = $this->standardOrderBy($dealers, $request, 'id', 'desc');
-        $dealers = $this->standardPagination($dealers, $request);
 
         return response()->json([
             'success' => true,
-            'data' => $dealers
+            'data' => []
+        ], 200);
+    }
+
+    /**
+     * @param Request $request
+     * @param TypeCreditRepository $typeCreditRepository
+     * @return JsonResponse
+     */
+    public function typeCreditsList(Request $request, TypeCreditRepository $typeCreditRepository): JsonResponse
+    {
+        $filter = $request->filter;
+        $pagination = $request->pagination;
+
+        return response()->json([
+            'success' => true,
+            'data' => $typeCreditRepository->list($filter, $pagination)
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param ProductRepository $productRepository
+     * @return JsonResponse
+     */
+    public function productsList(Request $request, ProductRepository $productRepository): JsonResponse
+    {
+        $filter = $request->filter;
+        $pagination = $request->pagination;
+
+        return response()->json([
+            'success' => true,
+            'data' => $productRepository->list($filter, $pagination)
         ]);
     }
 
@@ -128,13 +185,26 @@ class TypeCreditController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function delete($id, Request $request): JsonResponse
+    public function delete($id, Request $request, TypeCreditRepository $typeCreditRepository): JsonResponse
     {
         if (Auth::user()->role_id === User::USER_ROLE_ADMIN) {
+            $typeCreditRepository->delete($id);
+        }
 
-            $TypeCredit = TypeCredit::findOrFail($id);
-            $TypeCredit->deleted = true;
-            $TypeCredit->save();
+        return  response()->json([
+            'success' => true
+        ], 200);
+    }
+
+    /**
+     * @param $id
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function productDelete($id, Request $request, ProductRepository $productRepository): JsonResponse
+    {
+        if (Auth::user()->role_id === User::USER_ROLE_ADMIN) {
+            $productRepository->delete($id);
         }
 
         return  response()->json([

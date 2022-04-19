@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  *
@@ -21,6 +23,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  *
  * @property int $id
+ * @property int $product_id
  * @property string $name
  * @property int|null $months_fix
  * @property int|null $months_min
@@ -45,4 +48,12 @@ use Illuminate\Database\Eloquent\Model;
 class TypeCredit extends Model
 {
     use HasFactory;
+
+    /**
+     * @return BelongsTo
+     */
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class);
+    }
 }

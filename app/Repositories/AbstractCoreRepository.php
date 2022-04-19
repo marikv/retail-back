@@ -24,7 +24,8 @@ abstract  class AbstractCoreRepository
     /**
      * @return mixed
      */
-    abstract protected function getModelClass();
+    abstract protected function getModelClass(): mixed;
+
 
     /**
      * @return \#M#C\App\Repositories\AbstractCoreRepository.getModelClass|\Illuminate\Contracts\Foundation\Application|mixed
@@ -32,6 +33,26 @@ abstract  class AbstractCoreRepository
     protected function startConditions()
     {
         return clone $this->model;
+    }
+
+    /**
+     * @param int $id
+     * @return mixed
+     */
+    abstract public function getById(int $id = 0);
+
+
+    /**
+     * @param int $id
+     * @return mixed
+     */
+    public function delete(int $id = 0): mixed
+    {
+        $model = $this->startConditions()
+            ->where('id', '=', $id)
+            ->first();
+        $model->deleted = true;
+        return $model->save();
     }
 
 
