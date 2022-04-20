@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Dealer;
+use App\Repositories\DealerRepository;
 use Illuminate\Http\Request;
 use PDF;
 
@@ -20,6 +21,30 @@ class PdfController extends Controller
         $data = self::setHeaderData($data);
 
         return self::getPDF('pdf.contractDealer', $data, true)->stream();
+    }
+
+    public function contractDealerAcord(Dealer $dealer, Request $request, DealerRepository $dealerRepository)
+    {
+        $data = [];
+        $data['data'] = [
+            'dealer' => $dealerRepository->getById($dealer->id)
+        ];
+
+        $data = self::setHeaderData($data);
+
+        return self::getPDF('pdf.contractDealerAcord', $data, true)->stream();
+    }
+
+    public function contractDealerConsimtamant(Dealer $dealer, Request $request, DealerRepository $dealerRepository)
+    {
+        $data = [];
+        $data['data'] = [
+            'dealer' => $dealerRepository->getById($dealer->id)
+        ];
+
+        $data = self::setHeaderData($data);
+
+        return self::getPDF('pdf.contractDealerConsimtamant', $data, true)->stream();
     }
 
 
