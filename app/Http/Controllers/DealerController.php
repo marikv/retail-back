@@ -91,10 +91,13 @@ class DealerController extends Controller
         $Dealer->fax = $request->fax;
         $Dealer->email = $request->email;
         $Dealer->website = $request->website;
+        $Dealer->director_general = $request->director_general;
         $Dealer->description = $request->description;
         $Dealer->bank_name = $request->bank_name;
         $Dealer->bank_cb = $request->bank_cb;
         $Dealer->bank_iban = $request->bank_iban;
+        $Dealer->bank_swift = $request->bank_swift;
+        $Dealer->bank_tva = $request->bank_tva;
         $Dealer->bank_valuta = $request->bank_valuta;
         $Dealer->contract_date = Carbon::parse($request->contract_date)->format('Y-m-d');
         $Dealer->save();

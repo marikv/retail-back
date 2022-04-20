@@ -48,6 +48,7 @@ class PdfController extends Controller
     private static function setHeaderData(array $data): array
     {
         $data['data']['logo_base64'] = base64_encode(file_get_contents(public_path('img/logo.png')));
+        $data['data']['stampila-semnatura'] = base64_encode(file_get_contents(public_path('img/stampila-semnatura.png')));
         return $data;
     }
 
