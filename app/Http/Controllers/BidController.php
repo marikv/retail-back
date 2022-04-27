@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Bid;
 use App\Models\BidMonth;
+use App\Models\BidScoring;
 use App\Models\ChatMessage;
 use App\Models\Client;
 use App\Models\Dealer;
@@ -217,6 +218,43 @@ class BidController extends Controller
      * @param int $id
      * @param Request $request
      * @return JsonResponse
+     * @throws \JsonException
+     */
+    public function addOrEditScoring(int $id, Request $request): JsonResponse
+    {
+
+        if ($id) {
+            $BidScoring = BidScoring::where('bid_id', '=', $id)->orderBy('id', 'desc')->first();
+            if (!$BidScoring) {
+                $BidScoring = new BidScoring();
+                $BidScoring->bid_id = $id;
+            }
+            $BidScoring->json_date = json_encode((array)$request->post(), JSON_THROW_ON_ERROR);
+            $BidScoring->save();
+        }
+        return response()->json([
+            'success' => true,
+            'data' => []
+        ], 200);
+    }
+    /**
+     * @param int $id
+     * @param Request $request
+     * @return JsonResponse
+     * @throws \JsonException
+     */
+    public function getScoring(int $id, Request $request): JsonResponse
+    {
+        $BidScoring = BidScoring::where('bid_id', '=', $id)->orderBy('id', 'desc')->first();
+        return response()->json([
+            'success' => true,
+            'data' => $BidScoring
+        ], 200);
+    }
+    /**
+     * @param int $id
+     * @param Request $request
+     * @return JsonResponse
      */
     public function addOrEdit(int $id, Request $request, BidRepository $bidRepository): JsonResponse
     {
@@ -306,6 +344,10 @@ class BidController extends Controller
             $Bid->first_name_cont_pers1 = $request->first_name_cont_pers1;
             $Bid->last_name_cont_pers1 = $request->last_name_cont_pers1;
             $Bid->phone_cont_pers1 = $request->phone_cont_pers1;
+            $Bid->who_is_cont_pers2 = $request->who_is_cont_pers2;
+            $Bid->first_name_cont_pers2 = $request->first_name_cont_pers2;
+            $Bid->last_name_cont_pers2 = $request->last_name_cont_per21;
+            $Bid->phone_cont_pers2 = $request->phone_cont_pers2;
             $Bid->save();
 
             foreach ($request->calc_results['tabel'] as $row) {

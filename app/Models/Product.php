@@ -22,7 +22,7 @@ class Product extends Model
     /**
      * @return HasMany
      */
-    public function bids(): HasMany
+    public function type_credits(): HasMany
     {
         return $this->hasMany(TypeCredit::class);
     }

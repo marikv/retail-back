@@ -3,7 +3,9 @@
 namespace App\Repositories;
 
 use App\Models\Dealer as Model;
+use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class DealerRepository extends AbstractCoreRepository
@@ -25,6 +27,8 @@ class DealerRepository extends AbstractCoreRepository
         return $this->startConditions()
             ->where('id', '=', $id)
             ->with('dealer_products')
+            ->with('dealer_products.product')
+            ->with('dealer_products.product.type_credits')
             ->first()
             ->toArray();
     }
@@ -32,11 +36,10 @@ class DealerRepository extends AbstractCoreRepository
     /**
      * @param $filter
      * @param array|null $pagination
-     * @return LengthAwarePaginator
      */
-    public function list($filter, array $pagination = null): LengthAwarePaginator
+    public function list($filter, array $pagination = null)
     {
-        $dealers = DB::table('dealers')
+        $items = DB::table('dealers')
             ->select([
                 'dealers.*',
                 DB::raw("DATE_FORMAT(dealers.created_at, '%d.%m.%Y %H:%i') as created_at2"),
@@ -44,7 +47,7 @@ class DealerRepository extends AbstractCoreRepository
             ->whereNull('dealers.deleted')
             ->distinct();
         if (!empty($filter)) {
-            $dealers = $dealers
+            $items = $items
                 ->where('dealers.name', 'like', $filter . '%')
                 ->orWhere('dealers.full_name', 'like', $filter . '%')
                 ->orWhere('dealers.phone1', 'like', $filter . '%')
@@ -54,7 +57,21 @@ class DealerRepository extends AbstractCoreRepository
             ;
         }
 
-        $dealers = $this->standardOrderBy($dealers, $pagination, 'id', 'desc');
-        return $this->standardPagination($dealers, $pagination);
+        if (Auth::user()->role_id === User::USER_ROLE_DEALER) {
+            $items = $items->where('dealers.id', '=', Auth::user()->dealer_id);
+        }
+
+        $items = $this->standardOrderBy($items, $pagination, 'id', 'desc');
+        $items = $this->standardPagination($items, $pagination);
+        return $items;
+
+//        $rows = $items->items();
+//        $tmp = [];
+//        foreach ($items as $k=>$v) {
+//            $tmp[$k] = (array)$v;
+//            $tmp[$k]['model'] = $this->getById($tmp[$k]['id']);
+//        }
+//        $items = $this->forcePagination($items, $tmp);
+//        return $items;
     }
 }

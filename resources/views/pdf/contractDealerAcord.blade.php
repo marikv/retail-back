@@ -2,6 +2,44 @@
 use Carbon\Carbon;
 ?>
 @include('pdf.header', $data)
+@php
+    $hasStandardProduct = false;
+    $hasAvanteProduct = false;
+    $has1percentProduct = false;
+    $has0percentProduct = false;
+    $tva = 0;
+@endphp
+@foreach ($data['dealer']['dealer_products'] as $dealer_product)
+    @if (isset($dealer_product['product']['type_credits'][0]))
+        @foreach ($dealer_product['product']['type_credits'] as $type_credit)
+            @if (isset($type_credit['percent_bonus_magazin']) && (double)$type_credit['percent_bonus_magazin'] > (double)$tva)
+                @php
+                    $tva = $type_credit['percent_bonus_magazin'];
+                @endphp
+            @endif
+        @endforeach
+    @endif
+    @if ($dealer_product['product_id'] === 1)
+        @php
+            $hasStandardProduct = true;
+        @endphp
+    @endif
+    @if ($dealer_product['product_id'] === 2)
+        @php
+            $hasAvanteProduct = true;
+        @endphp
+    @endif
+    @if ($dealer_product['product_id'] === 3)
+        @php
+            $has1percentProduct = true;
+        @endphp
+    @endif
+    @if ($dealer_product['product_id'] === 4)
+        @php
+            $has0percentProduct = true;
+        @endphp
+    @endif
+@endforeach
 <style>
     @page { margin: 0; }
     body { margin: 30px 20px 20px 60px; }
@@ -39,35 +77,6 @@ use Carbon\Carbon;
 
     1.	În scopul îndeplinirii obligațiilor sale contractuale Prestatorul va oferi Clienților Beneficiarului împrumuturi în următoarele condiții:
     <br>
-    @php
-        $hasStandardProduct = false;
-        $hasAvanteProduct = false;
-        $has1percentProduct = false;
-        $has0percentProduct = false;
-    @endphp
-    @foreach ($data['dealer']['dealer_products'] as $dealer_product)
-        @if ($dealer_product['product_id'] === 1)
-            @php
-                $hasStandardProduct = true;
-            @endphp
-        @endif
-        @if ($dealer_product['product_id'] === 2)
-            @php
-                $hasAvanteProduct = true;
-            @endphp
-        @endif
-        @if ($dealer_product['product_id'] === 3)
-            @php
-                $has1percentProduct = true;
-            @endphp
-        @endif
-        @if ($dealer_product['product_id'] === 4)
-            @php
-                $has0percentProduct = true;
-            @endphp
-        @endif
-    @endforeach
-
     @if($hasStandardProduct)
         <br>Împrumut: Retail Standart<br>
         <table style="width: 100%; border-collapse: collapse; border: none;" border="1" cellspacing="0" cellpadding="0">
@@ -244,7 +253,7 @@ use Carbon\Carbon;
     @endif
 
     <div>
-        <br>2.	În scopul stimulării promovării serviciilor de microfinanțare ale Prestatorului clienților Beneficiarului, Prestatorul va achita Benerficiarului o remunerare care reprezinta ___% (cu TVA) din valoarea împrumutului Retail Standart eliberat de catre Prestator Împrumutatului cu asistarea Beneficiarului.
+        <br>2.	În scopul stimulării promovării serviciilor de creditare nebancara  ale Creditorului  clienților Beneficiarului, Creditorul va achita Benerficiarului o remunerare care reprezinta {{$tva}}% (cu TVA) din valoarea împrumutului Retail Standart eliberat de catre Prestator Împrumutatului cu asistarea Beneficiarului.
         <br>3.	Dupa achitarea impozitelor, stabilite de legislatia in vigoare, Beneficiarul este obligat sa achite suma ramasa, indicata in p.1 pentru remunerarea suplimentara a angajatilor sai.
         <br>4.	Plata remunerării devine exigibila de îndata ce Prestatorul a transferat suma împrumutului Împrumutatului în baza contractul încheiat prin intermediul/cu asistarea Beneficiarului.
         <br>5.	Plata remunerării va fi făcuta lunar, prin transfer în contul Beneficiarului, nu mai târziu de data de 15 a lunii următoare cele de referinţă.

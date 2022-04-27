@@ -81,6 +81,10 @@ use JetBrains\PhpStorm\ArrayShape;
  * @property string $phone_cont_pers1
  * @property string $last_name_cont_pers1
  * @property string $first_name_cont_pers1
+ * @property string $who_is_cont_pers2
+ * @property string $phone_cont_pers2
+ * @property string $last_name_cont_pers2
+ * @property string $first_name_cont_pers2
  * @property boolean $deleted
  * @property string $created_at
  * @property string $updated_at
@@ -173,6 +177,14 @@ class Bid extends Model
     public function bid_months(): HasMany
     {
         return $this->hasMany(BidMonth::class)->whereNull('deleted');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function bid_scorings(): HasMany
+    {
+        return $this->hasMany(BidScoring::class);
     }
 
     /**

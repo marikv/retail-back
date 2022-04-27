@@ -76,6 +76,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/bids/get-data-by-id/{id}', [BidController::class, 'getDataById']);
     Route::post('/bids/set-bid-status/{id}', [BidController::class, 'setBidStatus']);
     Route::post('/bid-change-sum/{id}', [BidController::class, 'changeSum']);
+    Route::post('/update-scoring/{id}', [BidController::class, 'addOrEditScoring']);
+    Route::get('/get-scoring/{id}', [BidController::class, 'getScoring']);
 
     Route::post('/send-chat-message', [ChatMessageController::class, 'sendChatMessage']);
     Route::post('/get-chat-messages', [ChatMessageController::class, 'getChatMessage']);

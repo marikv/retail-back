@@ -32,6 +32,7 @@ class BidRepository extends AbstractCoreRepository
             ->with('user')
             ->with('execute_user')
             ->with('bid_months')
+            ->with('bid_scorings')
             ->with('files')
             ->first();
     }

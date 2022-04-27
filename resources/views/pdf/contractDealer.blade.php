@@ -38,13 +38,13 @@ use Carbon\Carbon;
         <span class="strong">OCN „CREDIT BOX” SRL</span>, c/f 1019602000472, cu sediul în mun. Bălți, str. Ștefan cel Mare, 57 în persoana directorului
         <span class="strong">GRUMEZA Sergiu</span>,
         care acționează în temeiul Statutului, denumit în continuare
-        <span class="strong">„CREDITOR”</span>, pe de o parte, și
+        <span class="strong">„CREDITOR”</span>, pe de o parte, și<br>
         <span class="strong">{{$data['dealer']->full_name}}</span>, c/f {{$data['dealer']->idno}}, cu sediul {{$data['dealer']->address_jju}},
-        reprezentată de {{$data['dealer']->director_general}} în calitatede administrator care acționează în baza statutului,
+        reprezentată de {{$data['dealer']->director_general}} în calitate de administrator care acționează în baza Statutului,
         denumit în continuare  <span class="strong">„BENEFICIAR”</span>, pe de altă parte, și-au exprimat intenția să semneze acest contract conform clauzelor după cum urmează:
     </div>
 
-    <div class="text-center title-contract">
+    <div class="title-contract">
         <span class="title2"><span class="strong">I. CONCEPTE GENERALE</span></span>
     </div>
 
@@ -67,7 +67,7 @@ use Carbon\Carbon;
         <br>1.14 CALCULUL TERMENILOR - la calcularea termenilor, în conformitate cu Contractul de credit nebancar, cuvântul „zi” înseamnă „zi calendaristică”, dacă nu se prevede altfel.
     </div>
 
-    <div class="text-center title-contract">
+    <div class="title-contract">
         <span class="title2"><span class="strong">II. OBIECTUL CONTRACTULUI</span></span>
     </div>
     <div>
@@ -75,7 +75,7 @@ use Carbon\Carbon;
         <br>2.2 Părțile se angajează să respecte cu bună-credință prevederile prezentului Contract.
     </div>
 
-    <div class="text-center title-contract">
+    <div class="title-contract">
         <span class="title2"><span class="strong">III. PERIOADA CONTRACTULUI</span></span>
     </div>
     <div>
@@ -84,7 +84,7 @@ use Carbon\Carbon;
     </div>
 
 
-    <div class="text-center title-contract">
+    <div class="title-contract">
         <span class="title2"><span class="strong">IV. DREPTURILE ȘI OBLIGAȚIILE CREDITORULUI</span></span>
     </div>
     <div>
@@ -97,22 +97,22 @@ use Carbon\Carbon;
         <br>4.7 CREDITORUL  este obligat să informeze BENEFICIARUL  și Clientul despre decizia luată pe marginea cererii de credit.
         <br>4.8 După semnarea Contractului de Credit Nebancar cu Clientul, CREDITORUL transferă suma împrumutului în contul BENEFICIARULUI  într-un termen care nu depășește (două) zile lucrătoare de la data semnării Contractului de Credit Nebancar  cu Clientul .
         <br>4.9 În cazul în care, după semnarea Contractului de Credit Nebancar cu CREDITORUL, clientul nu ridică bunurile solicitate de la BENEFICIAR în termen de 14 zile de la data semnării contractului, CREDITORULare dreptul de a cere restituirea sumei de bani transferate în conformitate cu Contractul de credit semnat cu Clientul.
-        <br>4.10 În cazul rezilierii contractului dintre CREDITOR și BENEFICIAR, CREDITORUL își rezervă dreptul de a utiliza toate măsurile prevăzute de lege, precum și Contractul de Credit Nebancar , în vederea recuperării pierderilor de la partea vinovată. CREDITORULva anunța clientul despre acest lucru.
+        <br>4.10 În cazul rezilierii contractului dintre Creditor  și Beneficiar, Creditorul își rezervă dreptul de a utiliza toate măsurile prevăzute de lege, precum și Contractul de Credit Nebancar, în vederea recuperării pierderilor de la partea vinovată. Creditorul va anunța clientul despre acest lucru.
         <br>4.11 CREDITORUL nu este responsabil pentru calitatea bunurilor si serviciilor oferite de BENEFICIAR.
         <br>4.12 CREDITORULare dreptul de a modifica unilateral condițiile de acordare a împrumuturilor menționate în clauza 4.2, sub rezerva notificării cu cel puțin 15 (cincisprezece) zile lucrătoare înainte de intrarea în vigoare a acestora.
     </div>
 
-    <div class="text-center title-contract">
+    <div class="title-contract">
         <span class="title2"><span class="strong">V. DREPTURILE ŞI OBLIGAŢIILE BENEFICIARULUI</span></span>
     </div>
     <div>
         5.1. BENEFICIARUL se obligă să ofere și să promoveze serviciile de creditare oferite deCREDITOR, în termenii și condițiile convenite în cadrul prezentului Contract și în conformitate cu cerințele interne aleCREDITORULUI, în vederea achiziționării de bunuri de la BENEFICIAR de către Client.
         <br>5.2. BENEFICIARULeste obligat să informeze clientul cu privire la termenii contractului de credit oferit de CREDITOR, care poate fi solicitat de client sau oferit acestuia în vederea achiziționării de bunuri.
         <br>5.3. BENEFICIARUL se obligă să asiste clientul în completarea cererii de împrumut prin intermediul site-ului https://retail.creditbox.md/ și transmiterea cererii către CREDITOR folosind modulul de trimitere al site-ului https://retail.creditbox.md/, acesta înţelegându-se că clientul furnizează acte de certificare.
-        <br>5.4. Ca urmare a acceptării pozitive a creditului de către CREDITOR, acesta invită clientul la biroul BENEFICIARULUI pentru a semna Contractul de Credit cu toate anexele corespunzatoare.  Contractul de Credit trebuie să fie însoțit de copiile actelor de identitate a Clientului și Declarația de Consimțământ a Clientului privind verificarea dateIlor cu caracter personal.
+        <br>5.4. Ca urmare a acceptării pozitive a creditului de către CREDITOR, acesta invită clientul la biroul BENEFICIARULUI pentru a semna Contractul de Credit cu toate anexele corespunzatoare.  Contractul de Credit trebuie să fie însoțit de copiile actelor de identitate a Clientului și Declarația de Consimțământ a Clientului privind verificarea datelor cu caracter personal, actul de primate-predare a bunului.
         <br>5.5. Imediat după semnarea Contractului de Credit cu clientul, BENEFICIARUL poate transfera bunurile solicitate în proprietatea clientului, în acest sens fiind semnat si actul de primire-predare a bunului.
         <br>5.6. Imediat după semnarea Contractului de Credit  cu clientul, BENEFICIARULUl trimite CREDITORULUI prin intermediul site-ului https://retail.creditbox.md/  copii electronice (scanate) ale documentelor specificate în clauza 5.4.
-        <br>5.7. În cazul în care CREDITORUL descoperă că BENEFICIARULUa făcut una sau mai multe abateri de la procedura de întocmire a contractelor decredit, ceea ce face imposibilă prelucrarea datelor cuprinse în contract pentru transferul ulterior al sumei împrumutului în contul BENEFICIARULUI, CREDITORUL  va anunta imediat BENEFICIARUL despre situatie prin trimiterea unui mesaj la adresa de e-mail la adresa creditboxmd@gmail.com, indicând numele și prenumele clientului, numărul contractului de credit nebancar  și o descriere a abaterii, astfel încât BENEFICIARUL să elimine, pe cont propriu și pe cheltuiala proprie, consecințele abaterii, în limita 3 (trei) zile lucrătoare de la data primirii alertelor relevante.
+        <br>5.7. În cazul în care Creditorul descoperă că Beneficiarul a omis  una sau mai multe abateri de la procedura de întocmire a contractului  de credit, ceea ce face imposibilă prelucrarea datelor cuprinse în contract pentru transferul ulterior al sumei împrumutului în contul Beneficiarului, Creditorul  va anunta imediat Beneficiarul despre pretinsa neconformitate prin trimiterea unui mesaj la adresa de e-mail la adresa creditboxmd@gmail.com, indicând numele și prenumele clientului, numărul contractului de credit nebancar  și o descriere a abaterii, astfel încât Beneficiarul  să elimine, pe cont propriu și pe cheltuiala proprie, consecințele abaterii, în limita 3 (trei) zile lucrătoare de la data primirii alertelor relevante.
         <br>5.8. BENEFICIARUL este singurul responsabil pentru eliminarea consecintelor abaterilor de la procedura de încheiere a contractelor de împrumut intervenite din vina sa.
         <br>5.9 BENEFICIARUL are obligația imperativa de a transmite catre  CREDITOR a  Contractele de credit nebancar cu toate anexele și acordurile adiționale contractate cu Clientii, cel putin o data la 14 zile.
         <br>5.10. CREDITORUL are dreptul de a cere, iar BENEFICIARUL  are dreptul de a accepta plata în numele și în favoarea Clientului, plata corespunzătoare pentru procesarea cererii sau a unei părți a acesteia, în conformitate cu condițiile de acordare a creditelor prevăzute în Anexa la Contractul de cooperare. Plata de către Beneficiar a plății pentru procesarea cererii sau a unei părți a acesteia se va face în contul CREDITORULUI într-un termen care nu depășește 2 (două) zile lucrătoare din momentul în care CREDITORUL  transferă suma împrumutului în contul BENEFICIARULUI.
@@ -123,7 +123,7 @@ use Carbon\Carbon;
         <br>5.15. BENEFICIARUL este singurul responsabil pentru daunele produse de produsul neconform pe toată perioada specificată de funcționare sau valabilitate, sub rezerva respectării de către consumator a regulilor de transport, depozitare, utilizare și consum.
     </div>
 
-    <div class="text-center title-contract">
+    <div class="title-contract">
         <span class="title2"><span class="strong">VI. CERINȚE DE CONFIDENTIALITATE</span></span>
     </div>
     <div>
@@ -132,7 +132,7 @@ use Carbon\Carbon;
         <br>6.3 Pentru încălcarea prevederii de confidențialitate, CREDITORUL va putea pretinde de la  BENEFICIAR  dreptul la despagubiri  calculate în raport cu prejudiciul material și/sau moral cauzat.
     </div>
 
-    <div class="text-center title-contract">
+    <div class="title-contract">
         <span class="title2"><span class="strong">VII. TERMENI DE MODIFICARE, ÎNCETARE</span></span>
     </div>
     <div>
@@ -144,7 +144,7 @@ use Carbon\Carbon;
         <br>7.3 Neîndeplinirea parțială sau totală a termenilor și/sau condițiilor specificate în contract, executarea necorespunzătoare a cel puțin unei prevederi din contract poate atrage răspunderea părții răspunzătoare de pagubă.
     </div>
 
-    <div class="text-center title-contract">
+    <div class="title-contract">
         <span class="title2"><span class="strong">VII. NOTIFICARI</span></span>
     </div>
     <div>
@@ -152,7 +152,7 @@ use Carbon\Carbon;
         <br>7.2 Notificările pot fi trimise prin e-mail de confirmare, fax de confirmare, poștă recomandată sau curier, cu efect numai după confirmarea de către destinatar.
     </div>
 
-    <div class="text-center title-contract">
+    <div class="title-contract">
         <span class="title2"><span class="strong">VIII. SOLUȚIONAREA LITIGIILOR</span></span>
     </div>
     <div>
@@ -160,14 +160,14 @@ use Carbon\Carbon;
         <br>8.2 Aspectele care nu au fost reglementate prin prezentul acord vor respecta prevederile legii aplicabile.
     </div>
 
-    <div class="text-center title-contract">
+    <div class="title-contract">
         <span class="title2"><span class="strong">IX. FORȚĂ MAJORĂ</span></span>
     </div>
     <div>
         9.1 Circumstanțele de forță majoră, așa cum sunt definite de sistemul juridic al Republicii Moldova, exonerează de răspundere partea care se referă la acestea în condițiile legii. Partea care invocă forța majoră va notifica celeilalte părți situația în termen de 15 zile de la apariția forței majore.
     </div>
 
-    <div class="text-center title-contract">
+    <div class="title-contract">
         <span class="title2"><span class="strong">X. DISPOZIȚII FINALE ȘI TRANZITORII</span></span>
     </div>
     <div>
