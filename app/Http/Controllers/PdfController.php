@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Dealer;
+use App\Repositories\BidRepository;
 use App\Repositories\DealerRepository;
 use Illuminate\Http\Request;
 use PDF;
@@ -48,14 +49,20 @@ class PdfController extends Controller
     }
 
 
-    public function contract(int $bidId, Request $request)
+    public function contract(int $bidId, Request $request, BidRepository $bidRepository, DealerRepository $dealerRepository)
     {
         $data = [];
-        $data['data'] = [];
+        $bid = $bidRepository->getById($bidId);
+        $dealer = $dealerRepository->getById($bid->dealer_id);
+
+        $data['data'] = [
+            'bid' => $bid,
+            'dealer' => $dealer,
+        ];
 
         $data = self::setHeaderData($data);
 
-        return self::getPDF('pdf.contract', $data, true)->stream();
+        return self::getPDF('pdf.contractClient', $data, true)->stream();
     }
 
 

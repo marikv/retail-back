@@ -7,6 +7,7 @@ use App\Models\ChatMessage;
 use App\Models\ChatMessageRead;
 use App\Models\User;
 use App\Repositories\BidRepository;
+use App\Repositories\ChatMessageRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -39,7 +40,7 @@ class ChatMessageController extends Controller
 
     public function checkNewMessages(Request $request, BidRepository $bidRepository): JsonResponse
     {
-        $activeModule = isset($request->activeModule) ? $request->activeModule : '';
+        $activeModule = $request->activeModule ?: '';
 
         $ChatMessages = DB::table('chat_messages')
             ->select(['chat_messages.*'])
@@ -59,7 +60,7 @@ class ChatMessageController extends Controller
             // $Bids = BidController::getItems($request)->get();
             //$BidsIdArray = $Bids->map(function ($bid) { return $bid->id; })->toArray();
             //todo:
-            $Bids = $bidRepository->list(null, null, $activeModule)->items();
+            $Bids = $bidRepository->list(null, null, ['activeModule' => $activeModule])->items();
             $BidsIdArray = collect($Bids)->map(function ($bid) { return $bid->id; })->toArray();
 
             if (count($BidsIdArray)) {
@@ -133,53 +134,16 @@ class ChatMessageController extends Controller
     }
 
 
-    public function getChatMessage(Request $request): JsonResponse
+    public function getChatMessage(Request $request, ChatMessageRepository $chatMessageRepository): JsonResponse
     {
-        $ChatMessages = DB::table('chat_messages')
-            ->select([
-                'chat_messages.*',
-                'from_user.avatar as from_user_avatar',
-                'from_user.name as from_user_name',
-                'to_user.avatar as to_user_avatar',
-                'to_user.name as to_user_name',
-                'files.web_path as file_web_path',
-                'files.name as file_name',
-                'files.extension as file_extension',
-                DB::raw("chat_message_reads.id as `read`"),
-                DB::raw("DATE_FORMAT(chat_messages.created_at, '%d.%m.%Y %H:%i') as `created_at2`"),
-            ])
-            ->leftJoin('users as from_user', 'from_user.id', '=', 'chat_messages.from_user_id')
-            ->leftJoin('users as to_user', 'to_user.id', '=', 'chat_messages.to_user_id')
-            ->leftJoin('chat_message_reads', static function ($join) {
-                $join->on('chat_message_reads.chat_message_id', '=', 'chat_messages.id')
-                    ->where('chat_message_reads.user_id', '=', Auth::id());
-            })
-            ->leftJoin('files', 'files.id', '=', 'chat_messages.file_id')
-            ->whereNull('chat_messages.deleted')
-            ->where('chat_messages.bid_id', '=', $request->bid_id)
-            ->distinct();
-        // dd($ChatMessages->toSql());
-        $ChatMessages = self::standardOrderByStatic($ChatMessages, $request, 'id', 'desc');
-        $ChatMessages = self::standardPaginationStatic($ChatMessages, $request);
-
-        $ChatMessagesForLoop = $ChatMessages->items();
-        foreach ($ChatMessagesForLoop as $k => $v) {
-            if (!$v->read) {
-                $ChatMessageRead = ChatMessageRead::where('chat_message_id', '=', $v->id)
-                ->where('user_id', '=', Auth::id())
-                ->first();
-                if (!$ChatMessageRead) {
-                    $ChatMessageRead = new ChatMessageRead();
-                    $ChatMessageRead->user_id = Auth::id();
-                    $ChatMessageRead->chat_message_id = $v->id;
-                    $ChatMessageRead->save();
-                }
-            }
-        }
+        $filter = $request->filter;
+        $pagination = $request->pagination;
+        $activeModule = $request->activeModule;
+        $bid_id = $request->bid_id;
 
         return response()->json([
             'success' => true,
-            'data' => $ChatMessages
+            'data' => $chatMessageRepository->list($filter, $pagination, ['bid_id' => $bid_id, 'activeModule' => $activeModule])
         ]);
     }
 }

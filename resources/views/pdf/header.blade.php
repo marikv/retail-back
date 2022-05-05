@@ -78,14 +78,38 @@
         .bb {
             border-bottom: 1px solid #000000;
         }
+        .bt {
+            border-top: 1px solid #000000;
+        }
+        .bl {
+            border-left: 1px solid #000000;
+        }
+        .br {
+            border-right: 1px solid #000000;
+        }
+        .ba {
+            border: 1px solid #000000;
+        }
         .mt-20 {
             margin-top: 20px !important;
         }
         .mt-32 {
             margin-top: 32px;
         }
+        .mr-10 {
+            margin-right: 10px !important;
+        }
+        .ml-10 {
+            margin-left: 10px !important;
+        }
+        .pr-10 {
+            padding-right: 10px !important;
+        }
+        .pl-10 {
+            padding-left: 10px !important;
+        }
         .mb-10 {
-            margin-bottom:10px !important;
+            margin-bottom: 10px !important;
         }
         .mb-15 {
             margin-bottom:15px !important;

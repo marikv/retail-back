@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Query\Builder;
 
@@ -12,6 +13,7 @@ abstract  class AbstractCoreRepository
      * @var
      */
     protected mixed $model;
+    protected mixed $authUser;
 
     /**
      *
@@ -19,6 +21,15 @@ abstract  class AbstractCoreRepository
     public function __construct()
     {
         $this->model = app($this->getModelClass());
+
+        if (!Auth::guest()) {
+            $this->authUser = Auth::user();
+        } else {
+            $this->authUser = new \stdClass();
+            $this->authUser->role_id = null;
+            $this->authUser->dealer_id = null;
+            $this->authUser->id = null;
+        }
     }
 
     /**
@@ -40,6 +51,26 @@ abstract  class AbstractCoreRepository
      * @return mixed
      */
     abstract public function getById(int $id = 0);
+
+    /**
+     * @param array $data
+     * @return mixed
+     */
+    abstract public function create(array $data = []);
+
+    /**
+     * @param int $id
+     * @param array $data
+     * @return mixed
+     */
+    abstract public function update(int $id = 0, array $data = []);
+
+    /**
+     * @param string|null $filter
+     * @param array|null $pagination
+     * @param array $options
+     */
+    abstract public function list(string $filter = null, array $pagination = null, array $options = []);
 
 
     /**

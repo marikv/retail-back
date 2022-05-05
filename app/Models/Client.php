@@ -51,4 +51,12 @@ class Client extends Model
     {
         return $this->hasMany(Bid::class);
     }
+
+    /**
+     * @return HasMany
+     */
+    public function files(): HasMany
+    {
+        return $this->hasMany(File::class);
+    }
 }

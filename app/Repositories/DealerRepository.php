@@ -34,10 +34,12 @@ class DealerRepository extends AbstractCoreRepository
     }
 
     /**
-     * @param $filter
+     * @param string|null $filter
      * @param array|null $pagination
+     * @param array $options
+     * @return LengthAwarePaginator
      */
-    public function list($filter, array $pagination = null)
+    public function list(string $filter = null, array $pagination = null, array $options = []): LengthAwarePaginator
     {
         $items = DB::table('dealers')
             ->select([
@@ -57,8 +59,8 @@ class DealerRepository extends AbstractCoreRepository
             ;
         }
 
-        if (Auth::user()->role_id === User::USER_ROLE_DEALER) {
-            $items = $items->where('dealers.id', '=', Auth::user()->dealer_id);
+        if ($this->authUser->role_id === User::USER_ROLE_DEALER) {
+            $items = $items->where('dealers.id', '=', $this->authUser->dealer_id);
         }
 
         $items = $this->standardOrderBy($items, $pagination, 'id', 'desc');
@@ -73,5 +75,24 @@ class DealerRepository extends AbstractCoreRepository
 //        }
 //        $items = $this->forcePagination($items, $tmp);
 //        return $items;
+    }
+
+    /**
+     * @param array $data
+     * @return mixed
+     */
+    public function create(array $data = [])
+    {
+        // TODO: Implement create() method.
+    }
+
+    /**
+     * @param int $id
+     * @param array $data
+     * @return mixed
+     */
+    public function update(int $id = 0, array $data = [])
+    {
+        // TODO: Implement update() method.
     }
 }

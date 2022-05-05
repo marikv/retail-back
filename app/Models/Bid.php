@@ -38,7 +38,7 @@ use JetBrains\PhpStorm\ArrayShape;
  * @property integer $client_id
  * @property integer $type_credit_id
  * @property string $type_credit_name
- * @property string $first_pay_date
+ * @property string $bid_date
  * @property integer $months
  * @property float $imprumut
  * @property float $sum_max_permis

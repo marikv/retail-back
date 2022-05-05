@@ -35,7 +35,7 @@ class BidController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $bidRepository->list($filter, $pagination, $activeModule)
+            'data' => $bidRepository->list($filter, $pagination, ['activeModule' => $activeModule])
         ]);
     }
 
@@ -77,7 +77,7 @@ class BidController extends Controller
                 $oldSum = $Bid->imprumut;
 
                 try {
-                    $calcResults = CalculatorService::getCalcResults($Bid->type_credit_id, (float)$request->new_sum, $Bid->months, $Bid->first_pay_date, $Bid);
+                    $calcResults = CalculatorService::getCalcResults($Bid->type_credit_id, (float)$request->new_sum, $Bid->months, $Bid->bid_date, $Bid);
                 } catch (\Exception $e) {
 
                     return response()->json([
@@ -237,6 +237,30 @@ class BidController extends Controller
             'data' => []
         ], 200);
     }
+
+    /**
+     * @param int $id
+     * @param Request $request
+     * @return JsonResponse
+     * @throws \JsonException
+     */
+    public function bidSaveClientData(int $id, Request $request): JsonResponse
+    {
+
+        if ($id) {
+            $BidScoring = BidScoring::where('bid_id', '=', $id)->orderBy('id', 'desc')->first();
+            if (!$BidScoring) {
+                $BidScoring = new BidScoring();
+                $BidScoring->bid_id = $id;
+            }
+            $BidScoring->json_date = json_encode((array)$request->post(), JSON_THROW_ON_ERROR);
+            $BidScoring->save();
+        }
+        return response()->json([
+            'success' => true,
+            'data' => []
+        ], 200);
+    }
     /**
      * @param int $id
      * @param Request $request
@@ -299,7 +323,7 @@ class BidController extends Controller
             $Bid->client_id = $Client->id;
             $Bid->type_credit_id = $TypeCredit->id;
             $Bid->type_credit_name = $TypeCredit->name;
-            $Bid->first_pay_date = strlen($request->first_pay_date) === 10 ? Carbon::parse($request->first_pay_date)->format('Y-m-d') : '';
+            $Bid->bid_date = strlen($request->bid_date) === 10 ? Carbon::parse($request->bid_date)->format('Y-m-d') : '';
             $Bid->months = $request->months;
             $Bid->imprumut = $request->imprumut;
 

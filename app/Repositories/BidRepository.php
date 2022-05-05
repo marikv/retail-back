@@ -38,13 +38,15 @@ class BidRepository extends AbstractCoreRepository
     }
 
     /**
-     * @param $filter
+     * @param string|null $filter
      * @param array|null $pagination
-     * @param string $activeModule
+     * @param array $options
      * @return LengthAwarePaginator
      */
-    public function list($filter, array $pagination = null, string $activeModule = ''): LengthAwarePaginator
+    public function list(string $filter = null, array $pagination = null, array $options = []): LengthAwarePaginator
     {
+        $activeModule = $options['activeModule'] ?? '';
+
         $items = DB::table('bids')
             ->select([
                 'bids.*',
@@ -65,8 +67,8 @@ class BidRepository extends AbstractCoreRepository
 
         if ($activeModule === 'Contracts') {
             $items = $items->where('bids.status_id', '=', Model::BID_STATUS_SIGNED_CONTRACT);
-            if (Auth::user()->role_id === User::USER_ROLE_DEALER) {
-                $items = $items->where('bids.dealer_id', '=', Auth::user()->dealer_id);
+            if ($this->authUser->role_id === User::USER_ROLE_DEALER) {
+                $items = $items->where('bids.dealer_id', '=', $this->authUser->dealer_id);
             }
         } else {
             $items = $items
@@ -80,13 +82,32 @@ class BidRepository extends AbstractCoreRepository
                         ->orWhere('bids.status_id', '!=', Model::BID_STATUS_REFUSED);
                 });
 
-            if (Auth::user()->role_id === User::USER_ROLE_DEALER) {
-                $items = $items->where('bids.user_id', '=', Auth::user()->id)
-                    ->where('bids.dealer_id', '=', Auth::user()->dealer_id);
+            if ($this->authUser->role_id === User::USER_ROLE_DEALER) {
+                $items = $items->where('bids.user_id', '=', $this->authUser->id)
+                    ->where('bids.dealer_id', '=', $this->authUser->dealer_id);
             }
         }
 
         $items = $this->standardOrderBy($items, $pagination, 'id', 'desc');
         return $this->standardPagination($items, $pagination);
+    }
+
+    /**
+     * @param array $data
+     * @return mixed
+     */
+    public function create(array $data = [])
+    {
+        // TODO: Implement create() method.
+    }
+
+    /**
+     * @param int $id
+     * @param array $data
+     * @return mixed
+     */
+    public function update(int $id = 0, array $data = [])
+    {
+        // TODO: Implement update() method.
     }
 }

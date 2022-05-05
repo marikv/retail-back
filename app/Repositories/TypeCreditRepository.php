@@ -25,12 +25,12 @@ class TypeCreditRepository extends AbstractCoreRepository
     }
 
     /**
-     * @param $filter
+     * @param string|null $filter
      * @param array|null $pagination
-     * @param string $activeModule
+     * @param array $options
      * @return LengthAwarePaginator
      */
-    public function list($filter, array $pagination = null, string $activeModule = ''): LengthAwarePaginator
+    public function list(string $filter = null, array $pagination = null, array $options = []): LengthAwarePaginator
     {
         $items = DB::table('type_credits')
             ->select([
@@ -45,9 +45,9 @@ class TypeCreditRepository extends AbstractCoreRepository
                 ->orWhere('dealers.description', 'like', $filter . '%')
             ;
         }
-        if (Auth::user()->role_id === User::USER_ROLE_DEALER && Auth::user()->dealer_id) {
+        if ($this->authUser->role_id === User::USER_ROLE_DEALER && $this->authUser->dealer_id) {
             $DealerProducts = DealerProduct::whereNull('deleted')
-                ->where('dealer_id', '=', Auth::user()->dealer_id)
+                ->where('dealer_id', '=', $this->authUser->dealer_id)
                 ->get();
             $DealerProductsArray = $DealerProducts->map(function ($p) { return $p->product_id; })->toArray();
             $items = $items->whereIn('type_credits.product_id', $DealerProductsArray);
@@ -55,5 +55,24 @@ class TypeCreditRepository extends AbstractCoreRepository
 
         $items = $this->standardOrderBy($items, $pagination, 'id', 'desc');
         return $this->standardPagination($items, $pagination);
+    }
+
+    /**
+     * @param array $data
+     * @return mixed
+     */
+    public function create(array $data = [])
+    {
+        // TODO: Implement create() method.
+    }
+
+    /**
+     * @param int $id
+     * @param array $data
+     * @return mixed
+     */
+    public function update(int $id = 0, array $data = [])
+    {
+        // TODO: Implement update() method.
     }
 }

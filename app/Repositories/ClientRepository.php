@@ -2,11 +2,14 @@
 
 namespace App\Repositories;
 
-use App\Models\User as Model;
+use App\Models\Client as Model;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
-class UserRepository extends AbstractCoreRepository
+class ClientRepository extends AbstractCoreRepository
 {
     /**
      * @return string
@@ -15,7 +18,6 @@ class UserRepository extends AbstractCoreRepository
     {
         return Model::class;
     }
-
     /**
      * @param int $id
      * @return mixed
@@ -24,8 +26,9 @@ class UserRepository extends AbstractCoreRepository
     {
         return $this->startConditions()
             ->where('id', '=', $id)
-            ->first()
-            ->toArray();
+            ->with('bids')
+            ->with('files')
+            ->first();
     }
 
     /**
@@ -36,24 +39,16 @@ class UserRepository extends AbstractCoreRepository
      */
     public function list(string $filter = null, array $pagination = null, array $options = []): LengthAwarePaginator
     {
-        $Users = DB::table('users')
+        $items = DB::table('clients')
             ->select([
-                'users.*',
-                DB::raw("DATE_FORMAT(users.created_at, '%d.%m.%Y %H:%i') as created_at2"),
+                'clients.*',
+                DB::raw("DATE_FORMAT(clients.created_at, '%d.%m.%Y %H:%i') as created_at2"),
             ])
-            ->whereNull('users.deleted')
+            ->whereNull('clients.deleted')
             ->distinct();
 
-        if (!empty($filter)) {
-            $Users = $Users
-                ->where('users.name', 'like', $filter . '%')
-                ->orWhere('users.phone1', 'like', $filter . '%')
-                ->orWhere('users.email', 'like', $filter . '%')
-            ;
-        }
-
-        $Users = $this->standardOrderBy($Users, $pagination, 'id', 'desc');
-        return $this->standardPagination($Users, $pagination);
+        $items = $this->standardOrderBy($items, $pagination, 'id', 'desc');
+        return $this->standardPagination($items, $pagination);
     }
 
     /**
