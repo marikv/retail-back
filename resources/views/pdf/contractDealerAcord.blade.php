@@ -283,18 +283,30 @@ use Carbon\Carbon;
                 </table>
             @endif
         </li>
-        @if ($tvaRetailStandard > 0 || $tvaRetailAvante > 0)
+        @if ($tvaRetailStandard > 0 || $tvaRetailAvante > 0 || $tvaRetail1 > 0 || $tvaRetail0 > 0)
             <li>
                 În scopul stimulării promovării serviciiilor de creditare nebancara ale Creditorului clienților Beneficiarului,
                 Creditorul va achita Benerficiarului
                 @if ($tvaRetailStandard > 0)
-                un discount care reprezinta <strong>{{$tvaRetailStandard}}% (cu TVA)</strong> din valoarea <strong>creditului Retail Standart</strong>
+                    un discount care reprezinta <strong>{{$tvaRetailStandard}}% (cu TVA)</strong> din valoarea <strong>creditului Retail Standart</strong>
                 @endif
-                @if ($tvaRetailStandard > 0 && $tvaRetailAvante > 0)
-                si
+                @if ($tvaRetailStandard > 0 && ($tvaRetailAvante > 0 || $tvaRetail1 > 0 || $tvaRetail0 > 0))
+                    și
                 @endif
                 @if ($tvaRetailAvante > 0)
-                un discount care reprezinta <strong>{{$tvaRetailAvante}}% (cu TVA)</strong> din valoarea <strong>creditului Retail Avante</strong>
+                    un discount care reprezinta <strong>{{$tvaRetailAvante}}% (cu TVA)</strong> din valoarea <strong>creditului Retail Avante</strong>
+                @endif
+                @if (($tvaRetailStandard > 0 || $tvaRetailAvante > 0) && ($tvaRetail1 > 0 || $tvaRetail0 > 0))
+                    și
+                @endif
+                @if ($tvaRetail1 > 0)
+                    un discount care reprezinta <strong>{{$tvaRetail1}}% (cu TVA)</strong> din valoarea <strong>creditului Retail 1%</strong>
+                @endif
+                @if (($tvaRetailStandard > 0 || $tvaRetailAvante > 0 || $tvaRetail1) && $tvaRetail0 > 0)
+                    și
+                @endif
+                @if ($tvaRetail0 > 0)
+                    un discount care reprezinta <strong>{{$tvaRetail0}}% (cu TVA)</strong> din valoarea <strong>creditului Retail 0%</strong>
                 @endif
                 eliberat de catre Creditor Clientului cu asistarea Beneficiarului.
             </li>
