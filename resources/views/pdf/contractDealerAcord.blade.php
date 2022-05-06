@@ -8,6 +8,10 @@ use Carbon\Carbon;
     $has1percentProduct = false;
     $has0percentProduct = false;
     $tva = 0;
+    $tvaRetailStandard = 0;
+    $tvaRetailAvante = 0;
+    $tvaRetail1 = 0;
+    $tvaRetail0 = 0;
 @endphp
 @foreach ($data['dealer']['dealer_products'] as $dealer_product)
     @if (isset($dealer_product['product']['type_credits'][0]))
@@ -15,6 +19,26 @@ use Carbon\Carbon;
             @if (isset($type_credit['percent_bonus_magazin']) && (double)$type_credit['percent_bonus_magazin'] > (double)$tva)
                 @php
                     $tva = $type_credit['percent_bonus_magazin'];
+                @endphp
+            @endif
+            @if ($dealer_product['product_id'] === 1)
+                @php
+                    $tvaRetailStandard = $type_credit['percent_bonus_magazin'];
+                @endphp
+            @endif
+            @if ($dealer_product['product_id'] === 2)
+                @php
+                    $tvaRetailAvante = $type_credit['percent_bonus_magazin'];
+                @endphp
+            @endif
+            @if ($dealer_product['product_id'] === 3)
+                @php
+                    $tvaRetail1 = $type_credit['percent_bonus_magazin'];
+                @endphp
+            @endif
+            @if ($dealer_product['product_id'] === 4)
+                @php
+                    $tvaRetail0 = $type_credit['percent_bonus_magazin'];
                 @endphp
             @endif
         @endforeach
@@ -73,193 +97,227 @@ use Carbon\Carbon;
         pe de altă parte, au exprimat intenţia de a semna prezentul acord adițional cu privire la următoarele:
     </div>
 
-
-    1. În scopul îndeplinirii obligațiilor sale contractuale Creditorul va oferi Clienților Beneficiarului credite nebancare în urmatoarele condiții:
-    <br>
-    @if($hasStandardProduct)
-        <br>Credit: Retail Standart<br>
-        <table style="width: 100%; border-collapse: collapse; border: none;" border="1" cellspacing="0" cellpadding="0">
-            <tbody>
-            <tr style="height: 20.95pt;">
-                <td style="width: 80px; border: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;" rowspan="2">
-                    <p style="text-align: center; line-height: 100%;"><strong><span style="font-size: 8.0pt; line-height: 100%;">Suma creditului nebancar</span></strong></p>
-                </td>
-                <td style="width: 80px; border: solid #000000 1px; border-left: none; padding: 0cm 5.4pt 0cm 5.4pt;" rowspan="2">
-                    <p style="text-align: center; line-height: 100%;"><strong><span style="font-size: 8.0pt; line-height: 100%;">Durata creditului nebancar</span></strong></p>
-                </td>
-                <td style="width: 70px; border: solid #000000 1px; border-left: none; padding: 0cm 5.4pt 0cm 5.4pt;" rowspan="2">
-                    <p style="text-align: center; line-height: 100%;"><strong><span style="font-size: 8.0pt; line-height: 100%;">Dob&icirc;nda anuala</span></strong></p>
-                </td>
-                <td style="width: 70px; border: solid #000000 1px; border-left: none; padding: 0cm 5.4pt 0cm 5.4pt;" rowspan="2">
-                    <p style="text-align: center; line-height: 100%;"><strong><span style="font-size: 8.0pt; line-height: 100%;">Avans de la client</span></strong></p>
-                </td>
-                <td style="border: solid #000000 1px; border-left: none; padding: 0cm 5.4pt 0cm 5.4pt;">
-                    <p style="text-align: center; line-height: 100%;"><strong><span style="font-size: 8.0pt; line-height: 100%;">Taxa aferenta contractului de credit nebancar</span></strong></p>
-                </td>
-            </tr>
-            <tr style="height: 12.65pt;">
-                <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
-                    <p style="text-align: center; line-height: 100%;"><span style="font-size: 8.0pt; line-height: 100%;">De la Client</span></p>
-                </td>
-            </tr>
-            <tr style="height: 12.65pt;">
-                <td style="border: solid #000000 1px; border-top: none; padding: 0cm 5.4pt 5pt 5.4pt;">
-                    <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">500-50000<br>Oficial angajat</span></p>
-                </td>
-                <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
-                    <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">6, 8, 10, 12, 18, 24 luni</span></p>
-                </td>
-                <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
-                    <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">0%</span></p>
-                </td>
-                <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
-                    <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">0%</span></p>
-                </td>
-                <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
-                    <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">Variaza de la 2,08% pina la 2,16% lunar din soldul initial</span></p>
-                </td>
-            </tr>
-            <tr style="height: 12.65pt;">
-                <td style="border: solid #000000 1px; border-top: none; padding: 0cm 5.4pt 5pt 5.4pt;">
-                    <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">500-25000<br>Neoficial angajat</span></p>
-                </td>
-                <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
-                    <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">6, 8, 10, 12, 18, 24 luni</span></p>
-                </td>
-                <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
-                    <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">0%</span></p>
-                </td>
-                <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
-                    <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">0%</span></p>
-                </td>
-                <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
-                    <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">Variaza de la 2,08% pina la 2,16% lunar din soldul initial</span></p>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    @endif
-
-    @if($hasAvanteProduct || $has1percentProduct || $has0percentProduct)
-        <br>Credit promoțional:
-        @if($hasAvanteProduct)
-            Retail Avante
-            @if($has1percentProduct || $has0percentProduct)
-                ,
+    <ol>
+        <li>
+            În scopul îndeplinirii obligațiilor sale contractuale Creditorul va oferi Clienților Beneficiarului credite nebancare în urmatoarele condiții:
+            <br>
+            @if($hasStandardProduct)
+                <br>Credit: Retail Standart<br>
+                <table style="width: 100%; border-collapse: collapse; border: none;" border="1" cellspacing="0" cellpadding="0">
+                    <tbody>
+                    <tr style="height: 20.95pt;">
+                        <td style="width: 80px; border: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;" rowspan="2">
+                            <p style="text-align: center; line-height: 100%;"><strong><span style="font-size: 8.0pt; line-height: 100%;">Suma creditului nebancar</span></strong></p>
+                        </td>
+                        <td style="width: 80px; border: solid #000000 1px; border-left: none; padding: 0cm 5.4pt 0cm 5.4pt;" rowspan="2">
+                            <p style="text-align: center; line-height: 100%;"><strong><span style="font-size: 8.0pt; line-height: 100%;">Durata creditului nebancar</span></strong></p>
+                        </td>
+                        <td style="width: 70px; border: solid #000000 1px; border-left: none; padding: 0cm 5.4pt 0cm 5.4pt;" rowspan="2">
+                            <p style="text-align: center; line-height: 100%;"><strong><span style="font-size: 8.0pt; line-height: 100%;">Dob&icirc;nda anuala</span></strong></p>
+                        </td>
+                        <td style="width: 70px; border: solid #000000 1px; border-left: none; padding: 0cm 5.4pt 0cm 5.4pt;" rowspan="2">
+                            <p style="text-align: center; line-height: 100%;"><strong><span style="font-size: 8.0pt; line-height: 100%;">Avans de la client</span></strong></p>
+                        </td>
+                        <td style="border: solid #000000 1px; border-left: none; padding: 0cm 5.4pt 0cm 5.4pt;">
+                            <p style="text-align: center; line-height: 100%;"><strong><span style="font-size: 8.0pt; line-height: 100%;">Taxa aferenta contractului de credit nebancar</span></strong></p>
+                        </td>
+                    </tr>
+                    <tr style="height: 12.65pt;">
+                        <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
+                            <p style="text-align: center; line-height: 100%;"><span style="font-size: 8.0pt; line-height: 100%;">De la Client</span></p>
+                        </td>
+                    </tr>
+                    <tr style="height: 12.65pt;">
+                        <td style="border: solid #000000 1px; border-top: none; padding: 0cm 5.4pt 5pt 5.4pt;">
+                            <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">500-50000<br>Oficial angajat</span></p>
+                        </td>
+                        <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
+                            <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">6, 8, 10, 12, 18, 24 luni</span></p>
+                        </td>
+                        <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
+                            <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">0%</span></p>
+                        </td>
+                        <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
+                            <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">0%</span></p>
+                        </td>
+                        <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
+                            <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">Variaza de la 2,08% pina la 2,16% lunar din soldul initial</span></p>
+                        </td>
+                    </tr>
+                    <tr style="height: 12.65pt;">
+                        <td style="border: solid #000000 1px; border-top: none; padding: 0cm 5.4pt 5pt 5.4pt;">
+                            <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">500-25000<br>Neoficial angajat</span></p>
+                        </td>
+                        <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
+                            <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">6, 8, 10, 12, 18, 24 luni</span></p>
+                        </td>
+                        <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
+                            <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">0%</span></p>
+                        </td>
+                        <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
+                            <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">0%</span></p>
+                        </td>
+                        <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
+                            <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">Variaza de la 2,08% pina la 2,16% lunar din soldul initial</span></p>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
             @endif
-        @endif
-        @if($has1percentProduct)
-            Retail 1%
-            @if($has0percentProduct)
-                ,
-            @endif
-        @endif
-        @if($has0percentProduct)
-            Retail 0%
-        @endif
-        <br>
-        <table  style="width: 100%; border-collapse: collapse; border: none;" border="1" cellspacing="0" cellpadding="0">
-            <tbody>
-            <tr style="height: 24.45pt;">
-                <td style="width: 80px; border: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;" rowspan="2">
-                    <p  style="text-align: center; line-height: 100%;"><strong><span style="font-size: 8.0pt; line-height: 100%;">Suma creditului nebancar</span></strong></p>
-                </td>
-                <td style="width: 80px;border: solid #000000 1px; border-left: none; padding: 0cm 5.4pt 0cm 5.4pt;" rowspan="2">
-                    <p style="text-align: center; line-height: 100%;"><strong><span style="font-size: 8.0pt; line-height: 100%;">Durata creditului nebancar</span></strong></p>
-                </td>
-                <td style="width: 70px;border: solid #000000 1px; border-left: none; padding: 0cm 5.4pt 0cm 5.4pt;" rowspan="2">
-                    <p style="text-align: center; line-height: 100%;"><strong><span style="font-size: 8.0pt; line-height: 100%;">Dob&icirc;nda anuala</span></strong></p>
-                </td>
-                <td style="width: 70px;border: solid #000000 1px; border-left: none; padding: 0cm 5.4pt 0cm 5.4pt;" rowspan="2">
-                    <p style="text-align: center; line-height: 100%;"><strong><span style="font-size: 8.0pt; line-height: 100%;">Avans de la client</span></strong></p>
-                </td>
-                <td style="border: solid #000000 1px; border-left: none; padding: 0cm 5.4pt 0cm 5.4pt;" colspan="2">
-                    <p style="text-align: center; line-height: 100%;"><strong><span style="font-size: 8.0pt; line-height: 100%;">Taxa aferenta contractului de credit nebancar</span></strong></p>
-                </td>
-            </tr>
-            <tr style="height: 14.75pt;">
-                <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
-                    <p style="text-align: center; line-height: 100%;"><span style="font-size: 8.0pt; line-height: 100%;">De la Client</span></p>
-                </td>
-                <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
-                    <p style="text-align: center; line-height: 100%;"><span style="font-size: 8.0pt; line-height: 100%;">De la Beneficiar</span></p>
-                </td>
-            </tr>
-            <tr style="height: 15.75pt;">
-                <td style="border: solid #000000 1px; border-top: none; padding: 0cm 5.4pt 5pt 5.4pt;">
-                    <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">500-50000<br>Oficial angajat</span></p>
-                </td>
-                <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
-                    <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">6, 8, 10, 12, 18, 24 luni</span></p>
-                </td>
-                <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
-                    <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">0%</span></p>
-                </td>
-                <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
-                    <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">0%</span></p>
-                </td>
-                <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
-                    <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">1,9% lunar din soldul initial</span></p>
-                </td>
-                <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
-                    <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">0%</span></p>
-                </td>
-            </tr>
-            <tr style="height: 15.75pt;">
-                <td style="border: solid #000000 1px; border-top: none; padding: 0cm 5.4pt 5pt 5.4pt;">
-                    <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">500-50000<br>Oficial angajat</span></p>
-                </td>
-                <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
-                    <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">6, 8, 10, 12 luni</span></p>
-                </td>
-                <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
-                    <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">0%</span></p>
-                </td>
-                <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
-                    <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">0%</span></p>
-                </td>
-                <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
-                    <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">1% lunar</span></p>
-                </td>
-                <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
-                    <p style="line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">6 luni- 6%,&nbsp; 8 luni-8%, </span></p>
-                    <p style="line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">10 luni- 10%, </span></p>
-                    <p style="line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">12 luni &ndash; 12%, taxa unica</span></p>
-                </td>
-            </tr>
-            <tr style="height: 15.75pt;">
-                <td style="border: solid #000000 1px; border-top: none; padding: 0cm 5.4pt 5pt 5.4pt;">
-                    <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">500-50000<br>Oficial angajat</span></p>
-                </td>
-                <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
-                    <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">4, 6, 8, 10, 12 luni</span></p>
-                </td>
-                <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
-                    <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">0%</span></p>
-                </td>
-                <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
-                    <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">0%</span></p>
-                </td>
-                <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
-                    <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">0%</span></p>
-                </td>
-                <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
-                    <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">8%, 11%, 14%, 17%, 19% taxa unica</span></p>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    @endif
 
-    <div>
-        <br>2.	În scopul stimulării promovării serviciiilor de creditare nebancara ale Creditorului clienților Beneficiarului, Creditorul va achita Benerficiarului un discount care reprezinta <strong>{{$tva}}% (cu TVA)</strong> din valoarea <strong>creditului</strong> Retail Standart eliberat de catre Creditor Clientului cu asistarea Beneficiarului.
-        <br>3.	Plata discountului devine exigibila de îndata ce Creditorul a transferat suma creditului în baza contractului de credit nebancar încheiat prin intermediul/cu asistarea Beneficiarului
-        <br>4.	Plata discountului va fi făcuta lunar, prin transfer în contul Beneficiarului, nu mai târziu de data de 15 a lunii următoare celei de referinţă.
-        <br>5.	reditorul va furniza lunar Beneficiarului informaţia despre contractele de credit nebancar semnate şi executate în partea ce ţine de acordarea creditelor.
-        <br>6.	Celalte puncte ale Contractului rămân neschimbate.
-        <br>7.	Prezentul acord este încheiat în limba română, în două exemplare, câte una pentru fiecare parte, ambele având aceeași putere juridică, fiind parte integrantă a contractului de colaborare.
-        <br>8.	Prezentul acord intră în vigoare la data semnării lui de către părți și produce efecte juridice din momentul semnării.
-    </div>
+            @if($hasAvanteProduct || $has1percentProduct || $has0percentProduct)
+                <br>Credit promoțional:
+                @if($hasAvanteProduct)
+                    Retail Avante
+                    @if($has1percentProduct || $has0percentProduct)
+                        ,
+                    @endif
+                @endif
+                @if($has1percentProduct)
+                    Retail 1%
+                    @if($has0percentProduct)
+                        ,
+                    @endif
+                @endif
+                @if($has0percentProduct)
+                    Retail 0%
+                @endif
+                <br>
+                <table  style="width: 100%; border-collapse: collapse; border: none;" border="1" cellspacing="0" cellpadding="0">
+                    <tbody>
+                    <tr style="height: 24.45pt;">
+                        <td style="width: 80px; border: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;" rowspan="2">
+                            <p  style="text-align: center; line-height: 100%;"><strong><span style="font-size: 8.0pt; line-height: 100%;">Suma creditului nebancar</span></strong></p>
+                        </td>
+                        <td style="width: 80px;border: solid #000000 1px; border-left: none; padding: 0cm 5.4pt 0cm 5.4pt;" rowspan="2">
+                            <p style="text-align: center; line-height: 100%;"><strong><span style="font-size: 8.0pt; line-height: 100%;">Durata creditului nebancar</span></strong></p>
+                        </td>
+                        <td style="width: 70px;border: solid #000000 1px; border-left: none; padding: 0cm 5.4pt 0cm 5.4pt;" rowspan="2">
+                            <p style="text-align: center; line-height: 100%;"><strong><span style="font-size: 8.0pt; line-height: 100%;">Dob&icirc;nda anuala</span></strong></p>
+                        </td>
+                        <td style="width: 70px;border: solid #000000 1px; border-left: none; padding: 0cm 5.4pt 0cm 5.4pt;" rowspan="2">
+                            <p style="text-align: center; line-height: 100%;"><strong><span style="font-size: 8.0pt; line-height: 100%;">Avans de la client</span></strong></p>
+                        </td>
+                        <td style="border: solid #000000 1px; border-left: none; padding: 0cm 5.4pt 0cm 5.4pt;" colspan="2">
+                            <p style="text-align: center; line-height: 100%;"><strong><span style="font-size: 8.0pt; line-height: 100%;">Taxa aferenta contractului de credit nebancar</span></strong></p>
+                        </td>
+                    </tr>
+                    <tr style="height: 14.75pt;">
+                        <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
+                            <p style="text-align: center; line-height: 100%;"><span style="font-size: 8.0pt; line-height: 100%;">De la Client</span></p>
+                        </td>
+                        <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
+                            <p style="text-align: center; line-height: 100%;"><span style="font-size: 8.0pt; line-height: 100%;">De la Beneficiar</span></p>
+                        </td>
+                    </tr>
+                    @if($hasAvanteProduct)
+                        <tr style="height: 15.75pt;">
+                            <td style="border: solid #000000 1px; border-top: none; padding: 0cm 5.4pt 5pt 5.4pt;">
+                                <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">500-50000<br>Oficial angajat</span></p>
+                            </td>
+                            <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
+                                <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">6, 8, 10, 12, 18, 24 luni</span></p>
+                            </td>
+                            <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
+                                <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">0%</span></p>
+                            </td>
+                            <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
+                                <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">0%</span></p>
+                            </td>
+                            <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
+                                <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">1,9% lunar din soldul initial</span></p>
+                            </td>
+                            <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
+                                <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">0%</span></p>
+                            </td>
+                        </tr>
+                    @endif
+
+                    @if($has1percentProduct)
+                        <tr style="height: 15.75pt;">
+                            <td style="border: solid #000000 1px; border-top: none; padding: 0cm 5.4pt 5pt 5.4pt;">
+                                <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">500-50000<br>Oficial angajat</span></p>
+                            </td>
+                            <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
+                                <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">6, 8, 10, 12 luni</span></p>
+                            </td>
+                            <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
+                                <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">0%</span></p>
+                            </td>
+                            <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
+                                <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">0%</span></p>
+                            </td>
+                            <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
+                                <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">1% lunar</span></p>
+                            </td>
+                            <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
+                                <p style="line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">6 luni- 6%,&nbsp; 8 luni-8%, </span></p>
+                                <p style="line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">10 luni- 10%, </span></p>
+                                <p style="line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">12 luni &ndash; 12%, taxa unica</span></p>
+                            </td>
+                        </tr>
+                    @endif
+                    @if($has0percentProduct)
+                        <tr style="height: 15.75pt;">
+                            <td style="border: solid #000000 1px; border-top: none; padding: 0cm 5.4pt 5pt 5.4pt;">
+                                <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">500-50000<br>Oficial angajat</span></p>
+                            </td>
+                            <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
+                                <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">4, 6, 8, 10, 12 luni</span></p>
+                            </td>
+                            <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
+                                <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">0%</span></p>
+                            </td>
+                            <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
+                                <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">0%</span></p>
+                            </td>
+                            <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
+                                <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">0%</span></p>
+                            </td>
+                            <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
+                                <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">8%, 11%, 14%, 17%, 19% taxa unica</span></p>
+                            </td>
+                        </tr>
+                    @endif
+                    </tbody>
+                </table>
+            @endif
+        </li>
+        @if ($tvaRetailStandard > 0 || $tvaRetailAvante > 0)
+            <li>
+                În scopul stimulării promovării serviciiilor de creditare nebancara ale Creditorului clienților Beneficiarului,
+                Creditorul va achita Benerficiarului
+                @if ($tvaRetailStandard > 0)
+                un discount care reprezinta <strong>{{$tvaRetailStandard}}% (cu TVA)</strong> din valoarea <strong>creditului Retail Standart</strong>
+                @endif
+                @if ($tvaRetailStandard > 0 && $tvaRetailAvante > 0)
+                si
+                @endif
+                @if ($tvaRetailAvante > 0)
+                un discount care reprezinta <strong>{{$tvaRetailAvante}}% (cu TVA)</strong> din valoarea <strong>creditului Retail Avante</strong>
+                eliberat de catre Creditor Clientului cu asistarea Beneficiarului.
+                @endif
+            </li>
+            <li>
+                Plata discountului devine exigibila de îndata ce Creditorul a transferat suma creditului în baza contractului de credit nebancar încheiat prin intermediul/cu asistarea Beneficiarului.
+            </li>
+            <li>
+                Plata discountului va fi făcuta lunar, prin transfer în contul Beneficiarului, nu mai târziu de data de 15 a lunii următoare celei de referinţă.
+            </li>
+        @endif
+        <li>
+            Creditorul va furniza lunar Beneficiarului informaţia despre contractele de credit nebancar semnate şi executate în partea ce ţine de acordarea creditelor.
+        </li>
+        <li>
+            Celalte puncte ale Contractului rămân neschimbate.
+        </li>
+        <li>
+            Prezentul acord este încheiat în limba română, în două exemplare, câte una pentru fiecare parte, ambele având aceeași putere juridică, fiind parte integrantă a contractului de colaborare.
+        </li>
+        <li>
+            Prezentul acord intră în vigoare la data semnării lui de către părți și produce efecte juridice din momentul semnării.
+        </li>
+    </ol>
 
     <table style="width: 100%; border: none;" cellspacing="0" cellpadding="0">
             <tr>
