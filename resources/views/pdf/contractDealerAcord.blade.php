@@ -295,8 +295,8 @@ use Carbon\Carbon;
                 @endif
                 @if ($tvaRetailAvante > 0)
                 un discount care reprezinta <strong>{{$tvaRetailAvante}}% (cu TVA)</strong> din valoarea <strong>creditului Retail Avante</strong>
-                eliberat de catre Creditor Clientului cu asistarea Beneficiarului.
                 @endif
+                eliberat de catre Creditor Clientului cu asistarea Beneficiarului.
             </li>
             <li>
                 Plata discountului devine exigibila de îndata ce Creditorul a transferat suma creditului în baza contractului de credit nebancar încheiat prin intermediul/cu asistarea Beneficiarului.
