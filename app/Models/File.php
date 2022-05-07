@@ -50,12 +50,14 @@ class File extends Model
     public const FILE_TYPE_BULETIN_2 = 6;
     public const FILE_TYPE_OTHERS_1 = 7;
     public const FILE_TYPE_OTHERS_2 = 8;
+    public const FILE_TYPE_ANEXA = 9;
 
     public const FILE_TYPES = [
         self::FILE_TYPE_LOGO => 'Logo',
         self::FILE_TYPE_AVATAR => 'Avatar',
         self::FILE_TYPE_UNSIGN_CONTRACT => 'Contract ne semnat',
         self::FILE_TYPE_SIGN_CONTRACT => 'Contract semnat',
+        self::FILE_TYPE_ANEXA => 'Anexa',
         self::FILE_TYPE_BULETIN_1 => 'Copia actului de identitate 1',
         self::FILE_TYPE_BULETIN_2 => 'Copia actului de identitate 2',
         self::FILE_TYPE_OTHERS_1 => 'Alte fișiere 1',

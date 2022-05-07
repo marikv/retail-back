@@ -67,6 +67,24 @@ class PdfController extends Controller
         return self::getPDF('pdf.contractClient', $data, true)->stream();
     }
 
+    public function anexa(int $bidId, Request $request, BidRepository $bidRepository, DealerRepository $dealerRepository)
+    {
+        $data = [];
+        $bid = $bidRepository->getById($bidId);
+        $dealer = $dealerRepository->getById($bid->dealer_id);
+
+        $data['data'] = [
+            'bid' => $bid,
+            'dealer' => $dealer,
+        ];
+        $data['data']['bid']['address'] = $bidRepository->getAddress($bid);
+        $data['data']['dae-formula_base64'] = base64_encode(file_get_contents(public_path('img/dae-formula.jpg')));
+
+        $data = self::setHeaderData($data);
+
+        return self::getPDF('pdf.anexaClient', $data, true)->stream();
+    }
+
 
     public function preContract(int $id, Request $request)
     {
