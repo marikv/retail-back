@@ -87,10 +87,10 @@ use Carbon\Carbon;
             Adresa de e-mail*
         </td>
         <td class="w-50 br bb pl-10">
-            <span class="strong"><?=($data['bid']['last_name'] ?? '')?> <?=($data['bid']['first_name'] ?? '')?> <?=($data['bid']['patronymic'] ?? '')?></span><br>
-            <?=($data['bid']['address'] ?? '')?><br>
-            <?=($data['bid']['phone1'] ?? '')?><br>
-            <?=($data['bid']['email'] ?? '')?>
+            <span class="strong">{{($data['bid']['last_name'] ?? '')}} {{($data['bid']['first_name'] ?? '')}} {{($data['bid']['patronymic'] ?? '')}}</span><br>
+            {{($data['bid']['address'] ?? '')}}<br>
+            {{($data['bid']['phone1'] ?? '')}}<br>
+            {{($data['bid']['email'] ?? '')}}
         </td>
     </tr>
     <tr>
