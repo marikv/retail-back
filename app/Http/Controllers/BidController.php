@@ -149,6 +149,7 @@ class BidController extends Controller
     /**
      * @param $id
      * @param Request $request
+     * @param BidRepository $bidRepository
      * @return JsonResponse
      */
     public function setBidStatus($id, Request $request, BidRepository $bidRepository): JsonResponse
@@ -256,6 +257,8 @@ class BidController extends Controller
                 $Bid->email = $request->email;
                 $Bid->buletin_sn = $request->buletin_sn;
                 $Bid->buletin_idnp = $request->buletin_idnp;
+                $Bid->buletin_date_till = strlen($request->buletin_date_till) === 10 ? Carbon::parse($request->buletin_date_till)->format('Y-m-d') : '';
+                $Bid->buletin_office = $request->buletin_office;
                 $Bid->birth_date = Carbon::parse($request->birth_date)->format('Y-m-d');
                 $Bid->region = $request->region;
                 $Bid->localitate = $request->localitate;
@@ -323,6 +326,8 @@ class BidController extends Controller
             $Client->email = $request->email;
             $Client->buletin_sn = $request->buletin_sn;
             $Client->buletin_idnp = $request->buletin_idnp;
+            $Client->buletin_date_till = strlen($request->buletin_date_till) === 10 ? Carbon::parse($request->buletin_date_till)->format('Y-m-d') : '';
+            $Client->buletin_office = $request->buletin_office;
             $Client->localitate = $request->localitate;
             $Client->street = $request->street;
             $Client->house = $request->house;
@@ -377,12 +382,12 @@ class BidController extends Controller
             $Bid->email = $request->email;
             $Bid->buletin_sn = $request->buletin_sn;
             $Bid->buletin_idnp = $request->buletin_idnp;
+            $Bid->buletin_date_till = strlen($request->buletin_date_till) === 10 ? Carbon::parse($request->buletin_date_till)->format('Y-m-d') : '';
+            $Bid->buletin_office = $request->buletin_office;
             $Bid->localitate = $request->localitate;
             $Bid->street = $request->street;
             $Bid->house = $request->house;
             $Bid->flat = $request->flat;
-            $Bid->buletin_date_till = $request->buletin_date_till;
-            $Bid->buletin_office = $request->buletin_office;
             $Bid->region = $request->region;
             $Bid->who_is_cont_pers1 = $request->who_is_cont_pers1;
             $Bid->first_name_cont_pers1 = $request->first_name_cont_pers1;

@@ -137,7 +137,7 @@ use Carbon\Carbon;
             transferata în contul intermediarului de credit
         </td>
         <td class="br bb pl-10">
-            - suma in MDL ______ lei
+            - suma in MDL {{$data['bid']['imprumut']}} lei
         </td>
     </tr>
     <tr>
@@ -145,7 +145,7 @@ use Carbon\Carbon;
             3.4 Termenul de rambursare
         </td>
         <td class="br bb pl-10">
-            - ________ luni
+            - {{$data['bid']['months']}} luni
         </td>
     </tr>
     <tr>
@@ -153,25 +153,25 @@ use Carbon\Carbon;
             3.5 Denumirea Creditului
         </td>
         <td class="br bb pl-10">
-            Retail Standart
+            {{$data['bid']['type_credit']['product']['name']}}
         </td>
     </tr>
     <tr>
         <td class="br bb bl pl-10">
             3.6 Costurile creditului
-            Suma MDL ( totala rambursabila) _______ lei
+            Suma MDL (totala rambursabila) {{$data['bid']['total']}} lei
         </td>
         <td class="br bb pl-10">
-            - rata dobînzii aferente: 0,00 % MDL, flotanta;
-            -comision de examinare a creditului ____% (___ lei) lunar din soldul initial,
-            -comision de administrare lunara ____% (____ lei) ; calculat incepînd cu data de _______________.
+            - rata dobînzii aferente: {{round((double)$data['bid']['type_credit']['dobinda'], 2)}} %, flotanta;<br>
+            - comision de examinare a creditului {{round((double)$data['bid']['type_credit']['comision'], 2)}}% lunar din soldul initial,<br>
+            - comision de administrare lunara {{round((double)$data['bid']['type_credit']['comision_admin'], 2)}}%; calculat incepînd cu data de {{Carbon::parse($data['bid']['bid_date'])->format('d.m.Y')}}.<br>
             - costul transferului la contul bancar sau eliberarii în numerar catre Partener - nu mai mult de 1,5% din suma transferata în contul intermediarului de credit.
         </td>
     </tr>
     <tr>
         <td class="br bb bl pl-10">
-            3.7 Formula de calcul al Dobînzii Anual Efective (DAE)
-            <strong>DAE - _____%</strong>
+            3.7 Formula de calcul al Dobînzii Anual Efective (DAE)<br>
+            <strong>DAE - {{$data['bid']['dae']}}%</strong>
         </td>
         <td class="br bb pl-10">
             <div class="dae-formula" style="border: none;"></div>
@@ -393,12 +393,12 @@ use Carbon\Carbon;
         </td>
         <td class="br bb pl-10">
             <span class="strong">
-            Client: ________________________<br>
-            a.n. __________________<br>
-            IDNP _________________<br>
-            Seria __________________<br>
-            Act de identitate: _________________<br>
-            Eliberat de: _____________________<br>
+            Client: <?=($data['bid']['last_name'] ?? '')?> <?=($data['bid']['first_name'] ?? '')?> <?=($data['bid']['patronymic'] ?? '')?><br>
+            a.n. {{Carbon::parse($data['bid']['birth_date'])->format('Y')}}<br>
+            IDNP {{$data['bid']['idnp']}}<br>
+            Seria {{$data['bid']['buletin_sn']}}<br>
+            Act de identitate: Buletin de identitate<br>
+            Eliberat de: {{$data['bid']['buletin_office']}}<br>
             Semnatura ___________________
             </span>
         </td>
