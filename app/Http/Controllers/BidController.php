@@ -244,21 +244,37 @@ class BidController extends Controller
      * @return JsonResponse
      * @throws \JsonException
      */
-    public function bidSaveClientData(int $id, Request $request): JsonResponse
+    public function bidSaveClientData(int $id, Request $request, BidRepository $bidRepository): JsonResponse
     {
 
         if ($id) {
-            $BidScoring = BidScoring::where('bid_id', '=', $id)->orderBy('id', 'desc')->first();
-            if (!$BidScoring) {
-                $BidScoring = new BidScoring();
-                $BidScoring->bid_id = $id;
+            $Bid = Bid::where('id', '=', $id)->first();
+            if ($Bid) {
+                $Bid->first_name = $request->first_name;
+                $Bid->last_name = $request->last_name;
+                $Bid->phone1 = $request->phone1;
+                $Bid->buletin_sn = $request->buletin_sn;
+                $Bid->buletin_idnp = $request->buletin_idnp;
+                $Bid->birth_date = Carbon::parse($request->birth_date)->format('Y-m-d');
+                $Bid->region = $request->region;
+                $Bid->localitate = $request->localitate;
+                $Bid->street = $request->street;
+                $Bid->house = $request->house;
+                $Bid->flat = $request->flat;
+                $Bid->who_is_cont_pers1 = $request->who_is_cont_pers1;
+                $Bid->phone_cont_pers1 = $request->phone_cont_pers1;
+                $Bid->first_name_cont_pers1 = $request->first_name_cont_pers1;
+                $Bid->last_name_cont_pers1 = $request->last_name_cont_pers1;
+                $Bid->who_is_cont_pers2 = $request->who_is_cont_pers2;
+                $Bid->phone_cont_pers2 = $request->phone_cont_pers2;
+                $Bid->first_name_cont_pers2 = $request->first_name_cont_pers2;
+                $Bid->last_name_cont_pers2 = $request->last_name_cont_pers2;
+                $Bid->save();
             }
-            $BidScoring->json_date = json_encode((array)$request->post(), JSON_THROW_ON_ERROR);
-            $BidScoring->save();
         }
         return response()->json([
             'success' => true,
-            'data' => []
+            'data' => $bidRepository->getById($id)
         ], 200);
     }
     /**

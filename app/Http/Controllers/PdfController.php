@@ -59,6 +59,8 @@ class PdfController extends Controller
             'bid' => $bid,
             'dealer' => $dealer,
         ];
+        $data['data']['bid']['address'] = $bidRepository->getAddress($bid);
+        $data['data']['dae-formula_base64'] = base64_encode(file_get_contents(public_path('img/dae-formula.jpg')));
 
         $data = self::setHeaderData($data);
 

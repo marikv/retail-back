@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\Bid;
 use App\Models\Bid as Model;
 use App\Models\User;
 use Carbon\Carbon;
@@ -35,6 +36,39 @@ class BidRepository extends AbstractCoreRepository
             ->with('bid_scorings')
             ->with('files')
             ->first();
+    }
+    /**
+     * @param Bid|null $Bid
+     * @return string
+     */
+    public function getAddress(Bid $Bid = null): string
+    {
+        $clientAddressArray = [];
+        if ($Bid) {
+            if ($Bid->region) {
+                if (in_array(strtolower($Bid->region), ['balti', 'bălți', 'balți', 'bălti', 'cisinau', 'chisinau', 'chișinău', 'chisinău', 'chișinau',])) {
+                    $clientAddressArray[] = 'm.' . $Bid->region;
+                } else {
+                    $clientAddressArray[] = 'r.' . $Bid->region;
+                }
+            }
+            if ($Bid->localitate) {
+                $clientAddressArray[] =  $Bid->localitate;
+            }
+            if ($Bid->street) {
+                $clientAddressArray[] =  $Bid->street;
+            }
+            if ($Bid->street) {
+                $clientAddressArray[] =  $Bid->street;
+            }
+            if ($Bid->house) {
+                $clientAddressArray[] =  $Bid->house;
+            }
+            if ($Bid->flat) {
+                $clientAddressArray[] =  $Bid->flat;
+            }
+        }
+        return implode(', ', $clientAddressArray);
     }
 
     /**

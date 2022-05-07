@@ -137,6 +137,18 @@
             background-position: center;
             background-image: url('data:image/png;base64, <?php echo $data['logo_base64'] ?? ''; ?>');
         }
+        .dae-formula {
+            height: 300px;
+            min-height: 300px;
+            max-height: 300px;
+            width: 300px;
+            min-width: 300px;
+            max-width: 300px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-image: url('data:image/png;base64, <?php echo $data['dae-formula_base64'] ?? ''; ?>');
+        }
         .stampila-semnatura {
             height: 235px;
             min-height: 235px;
