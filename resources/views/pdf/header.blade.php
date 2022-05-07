@@ -138,12 +138,12 @@
             background-image: url('data:image/png;base64, <?php echo $data['logo_base64'] ?? ''; ?>');
         }
         .dae-formula {
-            height: 300px;
-            min-height: 300px;
-            max-height: 300px;
-            width: 300px;
-            min-width: 300px;
-            max-width: 300px;
+            height: 180px;
+            min-height: 180px;
+            max-height: 180px;
+            width: 290px;
+            min-width: 290px;
+            max-width: 290px;
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;

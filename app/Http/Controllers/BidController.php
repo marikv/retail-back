@@ -253,6 +253,7 @@ class BidController extends Controller
                 $Bid->first_name = $request->first_name;
                 $Bid->last_name = $request->last_name;
                 $Bid->phone1 = $request->phone1;
+                $Bid->email = $request->email;
                 $Bid->buletin_sn = $request->buletin_sn;
                 $Bid->buletin_idnp = $request->buletin_idnp;
                 $Bid->birth_date = Carbon::parse($request->birth_date)->format('Y-m-d');
@@ -265,6 +266,7 @@ class BidController extends Controller
                 $Bid->phone_cont_pers1 = $request->phone_cont_pers1;
                 $Bid->first_name_cont_pers1 = $request->first_name_cont_pers1;
                 $Bid->last_name_cont_pers1 = $request->last_name_cont_pers1;
+                $Bid->produs = $request->produs;
                 $Bid->who_is_cont_pers2 = $request->who_is_cont_pers2;
                 $Bid->phone_cont_pers2 = $request->phone_cont_pers2;
                 $Bid->first_name_cont_pers2 = $request->first_name_cont_pers2;
@@ -318,6 +320,7 @@ class BidController extends Controller
             $Client->last_name = $request->last_name;
             $Client->birth_date = strlen($request->birth_date) === 10 ? Carbon::parse($request->birth_date)->format('Y-m-d') : '';
             $Client->phone1 = $request->phone1;
+            $Client->email = $request->email;
             $Client->buletin_sn = $request->buletin_sn;
             $Client->buletin_idnp = $request->buletin_idnp;
             $Client->localitate = $request->localitate;
@@ -371,6 +374,7 @@ class BidController extends Controller
             $Bid->last_name = $request->last_name;
             $Bid->birth_date = strlen($request->birth_date) === 10 ? Carbon::parse($request->birth_date)->format('Y-m-d') : '';
             $Bid->phone1 = $request->phone1;
+            $Bid->email = $request->email;
             $Bid->buletin_sn = $request->buletin_sn;
             $Bid->buletin_idnp = $request->buletin_idnp;
             $Bid->localitate = $request->localitate;
@@ -384,6 +388,7 @@ class BidController extends Controller
             $Bid->first_name_cont_pers1 = $request->first_name_cont_pers1;
             $Bid->last_name_cont_pers1 = $request->last_name_cont_pers1;
             $Bid->phone_cont_pers1 = $request->phone_cont_pers1;
+            $Bid->produs = $request->produs;
             $Bid->who_is_cont_pers2 = $request->who_is_cont_pers2;
             $Bid->first_name_cont_pers2 = $request->first_name_cont_pers2;
             $Bid->last_name_cont_pers2 = $request->last_name_cont_per21;

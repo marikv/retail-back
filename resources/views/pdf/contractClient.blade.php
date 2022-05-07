@@ -7,6 +7,7 @@ use Carbon\Carbon;
     body {
         margin: 60px 60px 120px 85px;
         font-size: 10px;
+        line-height: 1;
     }
     td {
         vertical-align: top;
@@ -89,24 +90,24 @@ use Carbon\Carbon;
             <span class="strong"><?=($data['bid']['last_name'] ?? '')?> <?=($data['bid']['first_name'] ?? '')?> <?=($data['bid']['patronymic'] ?? '')?></span><br>
             <?=($data['bid']['address'] ?? '')?><br>
             <?=($data['bid']['phone1'] ?? '')?><br>
-            <?=($data['bid']['email'] ?? '')?><br>
-            &nbsp;
+            <?=($data['bid']['email'] ?? '')?>
         </td>
     </tr>
     <tr>
         <td class="w-50 br bb bl pl-10">
-            2.1 Beneficiar (intermediar de credit) în temeiul Contractului de Colaborate Nr.___  din _____________
+            2.1 Beneficiar (intermediar de credit) în temeiul Contractului de Colaborate Nr.{{$data['dealer']['id']}} din {{ Carbon::parse($data['dealer']['contract_date'])->format('d.m.Y') }}
         </td>
         <td class="w-50 br bb pl-10">
-            „_____________________” SRL
-            c.f. __________________________
-            IBAN ______________________________
-            BC __________________ SA fil nr _________
-            BIC SWIFT: ______________________
-            TVA _________________________
-            MD-2001, mun. Chisinau, str._______________________
-            Email:_________________________
-            Director________________________
+            {{$data['dealer']['full_name']}}<br>
+            c.f. {{$data['dealer']['idno']}}<br>
+            IBAN {{$data['dealer']['bank_iban']}}<br>
+            {{$data['dealer']['bank_name']}}<br>
+            BIC SWIFT: {{$data['dealer']['bank_swift']}}<br>
+            TVA {{$data['dealer']['bank_tva']}}<br>
+            {{$data['dealer']['address_jju']}}<br>
+            Email: {{$data['dealer']['email']}}<br>
+            {{$data['dealer']['website']}}<br>
+            Director {{$data['dealer']['director_general']}}
         </td>
     </tr>
     <tr>
@@ -127,7 +128,7 @@ use Carbon\Carbon;
             3.2 Destinația creditului
         </td>
         <td class="br bb pl-10">
-            Creditul este oferit în scopul procurarii bunurilor și sau serviciilor  comercializate de beneficiar (___________________________________)
+            Creditul este oferit în scopul procurarii bunurilor și sau serviciilor  comercializate de beneficiar ({{$data['bid']['produs']}})
         </td>
     </tr>
     <tr>
@@ -173,7 +174,7 @@ use Carbon\Carbon;
             <strong>DAE - _____%</strong>
         </td>
         <td class="br bb pl-10">
-            <div class="dae-formula"></div>
+            <div class="dae-formula" style="border: none;"></div>
         </td>
     </tr>
     <tr>
@@ -181,12 +182,12 @@ use Carbon\Carbon;
             3.8 Modalitățile de achitare a Creditului
         </td>
         <td class="br bb pl-10">
-            <strong>- în numerar, la oficiile Creditorului;<br>
+            <span class="strong">- în numerar, la oficiile Creditorului;<br>
             - prin transfer, în contul bancar al Creditorului:<br>
             BC VICTORIABANK SA, sucursala 1, Bălți, c.b.VICBMD2X740<br>
             IBAN MD65VI022510100000028MDL<br>
             - terminalele Run Pay<br>
-                - platile online pe site-ul</strong> https://oplata.md  <strong>si</strong>  https://paynet.md<br>
+                - platile online pe site-ul</span> https://oplata.md  <strong>si</strong>  https://paynet.md<br>
             <strong>Nota:</strong> Sumele achitate în plus de Client, prin intermediul sistemului Run Pay, vor fi considerate ca avans și pot fi utilizate de client la achitarea costurilor creditului pentru împrumuturile viitoare. La fel, clientul poate ridica în numerar suma achitată în plus, la oricare din oficiile Creditorului timp de 3 ani din momentul încasării avansului.
         </td>
     </tr>
@@ -208,7 +209,7 @@ use Carbon\Carbon;
     </tr>
     <tr>
         <td class="br bb bl pl-10">
-            <strong> 4.2 Alte consecințe în caz de neexecutare</strong> -în cazul în care  Clientul întârzie în realizarea rambursării plaților scadente, Creditorul va efectua apeluri telefonice și va expedia sms-uri la unul din numerele de contact indicate de Client în Contractul de credit, pentru a-l notifica asupra întârzierii plăţii și pericolului calculului penalității de întârziere
+            <span class="strong"> 4.2 Alte consecințe în caz de neexecutare</span> -în cazul în care  Clientul întârzie în realizarea rambursării plaților scadente, Creditorul va efectua apeluri telefonice și va expedia sms-uri la unul din numerele de contact indicate de Client în Contractul de credit, pentru a-l notifica asupra întârzierii plăţii și pericolului calculului penalității de întârziere
         </td>
         <td class="br bb pl-10">
             Dacă Clientul nu va achita creditul şi/sau alte plăţi scadente stabilite în Contract  în stricta conformitate cu graficul de rambursare a plaților Creditorul are dreptul să calculeze și sa pretinda o suma fixă, care a fost negociată în prealabil de părţile contractate, în mărime de 200 lei la fiecare a 10-a zi de întîrziere, suplimentar la penalitatea de întârziere indicată la 4.1 din Contract pentru expedierea notificării către Client cu privire la întârzierea plăţii, indicând valoarea sumelor restante, avertizarea privind pericolul de a pretinde plata imediată a ratelor neajunse la scadență conform Contractului de credit sau privind pericolul rezoluțiunii anticipate a Contractului.
@@ -216,7 +217,7 @@ use Carbon\Carbon;
     </tr>
     <tr>
         <td class="br bb bl pl-10">
-            <strong> 4.3 Rezolutiune :</strong>
+            <span class="strong"> 4.3 Rezolutiune :</span>
                 Rezoluțiunea Contractului nu se răsfrânge asupra obligaţiilor pecuniare scadente şi cele viitoare ce reies din suma datorată şi nu afectează dreptul Creditorului de a calcula în continuare penalitatea de întârziere.
                 Clientul obţine statut de Debitor rau-  platnic în istoria sa creditară prezentă şi viitoare, şi împotriva acestuia va fi iniţiată procedura de urmărire silită pentru recuperarea plăţilor datorate conform Contractului de Credit precum şi pentru recuperarea prejudiciului cauzat şi a venitului ratat.
         </td>
@@ -244,7 +245,7 @@ use Carbon\Carbon;
     </tr>
     <tr>
         <td class="br bb bl pl-10">
-            <strong> 4.4 Ordinea de atribuire a plaților</strong>
+            <span class="strong"> 4.4 Ordinea de atribuire a plaților</span>
         </td>
         <td class="br bb pl-10">
             În cazul în care sumele plătite de către Client sunt insuficiente pentru acoperirea integrală a datoriei restante, atunci ordinea contabilă convenită pentru fiecare rambursare primită de Creditor este următoarea: din suma netă primită, mai întîi se calculează şi se deduc penalitățile (dacă este cazul), apoi alte taxe (dacă este cazul), apoi dobânda, apoi comisionul de examinare a cererii, achitarea căruia a fost convenită de a fi efectuată eșalonat, şi în cele din urmă suma creditului.
@@ -381,16 +382,17 @@ use Carbon\Carbon;
     </tr>
     <tr>
         <td class="br bb bl pl-10">
-            <strong>
+            <span class="strong">
                 Creditor: SCN „CREDIT BOX” SRL<br>
                 mun. Bălți, str. Ștefan cel Mare, 57<br>
                 c/f 1019602000472<br>
                 BC VICTORIABANK SA, sucursala 1, Bălți, c.b.VICBMD2X740<br>
                 IBAN MD65VI022510100000028MDL<br>
                 Reprezentantul creditorului _____________
-            </strong>
+            </span>
         </td>
         <td class="br bb pl-10">
+            <span class="strong">
             Client: ________________________<br>
             a.n. __________________<br>
             IDNP _________________<br>
@@ -398,6 +400,7 @@ use Carbon\Carbon;
             Act de identitate: _________________<br>
             Eliberat de: _____________________<br>
             Semnatura ___________________
+            </span>
         </td>
     </tr>
 </table>

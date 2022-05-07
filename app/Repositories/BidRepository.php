@@ -45,21 +45,40 @@ class BidRepository extends AbstractCoreRepository
     {
         $clientAddressArray = [];
         if ($Bid) {
+            $Bid->region = trim($Bid->region);
+            $Bid->region = str_replace('m.', '', $Bid->region);
+            $Bid->region = str_replace('r.', '', $Bid->region);
+            $Bid->region = str_replace('raion', '', $Bid->region);
+            $Bid->region = trim($Bid->region);
+            $Bid->localitate = trim($Bid->localitate);
+            $Bid->localitate = str_replace('m.', '', $Bid->localitate);
+            $Bid->localitate = str_replace('r.', '', $Bid->localitate);
+            $Bid->localitate = str_replace('raion', '', $Bid->localitate);
+            $Bid->localitate = trim($Bid->localitate);
+
+            $municipii = ['balti', 'bălți', 'balți', 'bălti', 'cisinau', 'chisinau', 'chișinău', 'chisinău', 'chișinau'];
+
+            if (in_array(strtolower($Bid->region), $municipii) && in_array(strtolower($Bid->localitate), $municipii)) {
+                $Bid->localitate = null;
+            }
+
             if ($Bid->region) {
-                if (in_array(strtolower($Bid->region), ['balti', 'bălți', 'balți', 'bălti', 'cisinau', 'chisinau', 'chișinău', 'chisinău', 'chișinau',])) {
-                    $clientAddressArray[] = 'm.' . $Bid->region;
+                if (in_array(strtolower($Bid->region), $municipii)) {
+                    $clientAddressArray[] = 'mun.' . ucfirst($Bid->region);
                 } else {
-                    $clientAddressArray[] = 'r.' . $Bid->region;
+                    $clientAddressArray[] = 'r.' . ucfirst($Bid->region);
                 }
             }
+
             if ($Bid->localitate) {
-                $clientAddressArray[] =  $Bid->localitate;
+                $clientAddressArray[] =  ucfirst($Bid->localitate);
             }
             if ($Bid->street) {
-                $clientAddressArray[] =  $Bid->street;
-            }
-            if ($Bid->street) {
-                $clientAddressArray[] =  $Bid->street;
+                $str = ['str ', 'strada', 'str.'];
+                foreach ($str as $s) {
+                    $Bid->street = str_replace($s, '', $Bid->street);
+                }
+                $clientAddressArray[] =  'str. '. ucfirst($Bid->street);
             }
             if ($Bid->house) {
                 $clientAddressArray[] =  $Bid->house;

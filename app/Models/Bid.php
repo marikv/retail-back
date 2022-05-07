@@ -67,6 +67,7 @@ use JetBrains\PhpStorm\ArrayShape;
  * @property string $first_name
  * @property string $last_name
  * @property string $phone1
+ * @property string $email
  * @property string $birth_date
  * @property string $buletin_sn
  * @property string $buletin_idnp
@@ -81,6 +82,7 @@ use JetBrains\PhpStorm\ArrayShape;
  * @property string $phone_cont_pers1
  * @property string $last_name_cont_pers1
  * @property string $first_name_cont_pers1
+ * @property string $produs
  * @property string $who_is_cont_pers2
  * @property string $phone_cont_pers2
  * @property string $last_name_cont_pers2

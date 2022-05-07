@@ -24,6 +24,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $first_name
  * @property string $last_name
  * @property string $phone1
+ * @property string $email
  * @property string $birth_date
  * @property string $buletin_sn
  * @property string $buletin_idnp
