@@ -163,7 +163,7 @@ use Carbon\Carbon;
     <div class="title-contract text-center">
         <span class="title2"><span class="strong">X. FORȚĂ MAJORĂ</span></span>
     </div>
-    <div>
+    <div style="margin-bottom: 30px;">
         10.1 Circumstanțele de forță majoră, așa cum sunt definite de sistemul juridic al Republicii Moldova, exonerează de răspundere partea care se referă la acestea în condițiile legii. Partea care invocă forța majoră va notifica celeilalte părți situația în termen de 15 zile de la apariția forței majore.
     </div>
 
