@@ -12,6 +12,7 @@ use App\Models\Log;
 use App\Models\TypeCredit;
 use App\Models\User;
 use App\Repositories\BidRepository;
+use App\Repositories\PaymentRepository;
 use App\Services\CalculatorService;
 use Carbon\Carbon;
 use Illuminate\Database\Query\Builder;
@@ -152,7 +153,7 @@ class BidController extends Controller
      * @param BidRepository $bidRepository
      * @return JsonResponse
      */
-    public function setBidStatus($id, Request $request, BidRepository $bidRepository): JsonResponse
+    public function setBidStatus($id, Request $request, BidRepository $bidRepository, PaymentRepository $paymentRepository): JsonResponse
     {
         if ($id) {
 
@@ -176,6 +177,7 @@ class BidController extends Controller
                 $Bid->signed_user_id = Auth::id();
                 $Bid->signed_date_time = date('Y-m-d H:i:s');
                 ChatMessage::sendNewMessage($Bid->user_id, 'Contract semnat', $Bid->id);
+                $paymentRepository->createPayments($Bid);
 
             } else if ((int)$Bid->status_id === Bid::BID_STATUS_IN_WORK && (int)$request->status_id === Bid::BID_STATUS_REFUSED) {
 

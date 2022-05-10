@@ -30,18 +30,6 @@ class ProductRepository extends AbstractCoreRepository
         return $this->model::findOrFail($id);
     }
 
-//
-//    /**
-//     * @param int $id
-//     * @return mixed
-//     */
-//    public function delete(int $id = 0): mixed
-//    {
-//        $model = $this->model::findOrFail($id);
-//        $model->deleted = true;
-//        return $model->save();
-//    }
-
     /**
      * @param string|null $filter
      * @param array|null $pagination
