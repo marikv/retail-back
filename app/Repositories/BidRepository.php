@@ -140,27 +140,17 @@ class BidRepository extends AbstractCoreRepository
                     ->where('bids.dealer_id', '=', $this->authUser->dealer_id);
             }
         }
+        if (!empty($filter)) {
+            $items = $items
+                ->where('clients.last_name', 'like', $filter . '%')
+                ->orWhere('clients.first_name', 'like', $filter . '%')
+                ->orWhere('clients.phone1', 'like', $filter . '%')
+                ->orWhere('clients.phone2', 'like', $filter . '%')
+                ->orWhere('clients.email', 'like', $filter . '%')
+            ;
+        }
 
         $items = $this->standardOrderBy($items, $pagination, 'id', 'desc');
         return $this->standardPagination($items, $pagination);
-    }
-
-    /**
-     * @param array $data
-     * @return mixed
-     */
-    public function create(array $data = [])
-    {
-        // TODO: Implement create() method.
-    }
-
-    /**
-     * @param int $id
-     * @param array $data
-     * @return mixed
-     */
-    public function update(int $id = 0, array $data = [])
-    {
-        // TODO: Implement update() method.
     }
 }

@@ -16,10 +16,16 @@ use Illuminate\Support\Facades\DB;
 class UserController extends Controller
 {
 
-    public function getDataById($id, Request $request, UserRepository $userRepository)
+    /**
+     * @param $id
+     * @param Request $request
+     * @param UserRepository $userRepository
+     * @return JsonResponse
+     */
+    public function getDataById($id, Request $request, UserRepository $userRepository): JsonResponse
     {
         if ($id) {
-            return response([
+            return response()->json([
                 'success' => true,
                 'data' => $userRepository->getById($id)
             ]);
@@ -31,7 +37,13 @@ class UserController extends Controller
         ], 200);
     }
 
-    public function addOrEdit($id, Request $request, UserRepository $userRepository)
+    /**
+     * @param $id
+     * @param Request $request
+     * @param UserRepository $userRepository
+     * @return JsonResponse
+     */
+    public function addOrEdit($id, Request $request, UserRepository $userRepository): JsonResponse
     {
         if ((int)$id > 0) {
             $User = User::findOrFail($id);
@@ -53,7 +65,12 @@ class UserController extends Controller
         ], 200);
     }
 
-    public function UsersList(Request $request, UserRepository $userRepository): JsonResponse
+    /**
+     * @param Request $request
+     * @param UserRepository $userRepository
+     * @return JsonResponse
+     */
+    public function usersList(Request $request, UserRepository $userRepository): JsonResponse
     {
         $filter = $request->filter;
         $pagination = $request->pagination;
@@ -67,9 +84,10 @@ class UserController extends Controller
     /**
      * @param $id
      * @param Request $request
+     * @param UserRepository $userRepository
      * @return JsonResponse
      */
-    public function deleteUser($id, Request $request)
+    public function deleteUser($id, Request $request, UserRepository $userRepository): JsonResponse
     {
         if (!$id) {
             return response()->json([
@@ -78,10 +96,7 @@ class UserController extends Controller
             ], 200);
         }
 
-        /* @var $User User */
-        $User = User::findOrFail($id);
-        $User->deleted = true;
-        $success = $User->save();
+        $success = $userRepository->delete($id);
 
         if ($success) {
             Log::addNewLog(

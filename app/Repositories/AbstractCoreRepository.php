@@ -53,35 +53,46 @@ abstract  class AbstractCoreRepository
     abstract public function getById(int $id = 0);
 
     /**
-     * @param array $data
-     * @return mixed
-     */
-    abstract public function create(array $data = []);
-
-    /**
-     * @param int $id
-     * @param array $data
-     * @return mixed
-     */
-    abstract public function update(int $id = 0, array $data = []);
-
-    /**
      * @param string|null $filter
      * @param array|null $pagination
      * @param array $options
      */
     abstract public function list(string $filter = null, array $pagination = null, array $options = []);
 
+    /**
+     * @param array $data
+     */
+    public function create(array $data = [])
+    {
+        $model = new (clone $this->model)();
+        foreach ($data as $k => $v) {
+            $model->{$k} = $v;
+        }
+        $model->save();
+        return $model;
+    }
 
     /**
      * @param int $id
-     * @return mixed
+     * @param array $data
      */
-    public function delete(int $id = 0): mixed
+    public function update(int $id = 0, array $data = [])
     {
-        $model = $this->startConditions()
-            ->where('id', '=', $id)
-            ->first();
+        $model = (clone $this->model)::findOrFail($id);
+        foreach ($data as $k => $v) {
+            $model->{$k} = $v;
+        }
+        $model->save();
+        return $model;
+    }
+
+    /**
+     * @param int $id
+     * @return bool
+     */
+    public function delete(int $id = 0): bool
+    {
+        $model = (clone $this->model)::findOrFail($id);
         $model->deleted = true;
         return $model->save();
     }

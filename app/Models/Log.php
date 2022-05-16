@@ -55,7 +55,7 @@ class Log extends Model
     public const MODULE_DEFAULT = 0;
     public const MODULE_DEALERS = 1;
     public const MODULE_USERS = 2;
-    public const MODULE_CASHES = 3;
+    public const MODULE_PAYMENTS = 3;
     public const MODULE_SETTINGS = 6;
     public const MODULE_CLIENTS = 7;
     public const MODULE_FILES = 8;
@@ -66,7 +66,7 @@ class Log extends Model
         self::MODULE_DEFAULT => '',
         self::MODULE_DEALERS => 'Dealeri',
         self::MODULE_USERS => 'Utilizatori',
-        self::MODULE_CASHES => 'Plăți',
+        self::MODULE_PAYMENTS => 'Plăți',
         self::MODULE_SETTINGS => 'Settings',
         self::MODULE_CLIENTS => 'Clienți',
         self::MODULE_FILES => 'Fișiere',

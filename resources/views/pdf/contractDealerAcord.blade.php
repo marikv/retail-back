@@ -152,13 +152,13 @@ use Carbon\Carbon;
                             <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">6, 8, 10, 12, 18, 24 luni</span></p>
                         </td>
                         <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
-                            <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">0%</span></p>
+                            <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">Variaza de la 1,93% pina la 1,95% lunar din soldul initial</span></p>
                         </td>
                         <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
                             <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">0%</span></p>
                         </td>
                         <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
-                            <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">Variaza de la 2,08% pina la 2,16% lunar din soldul initial</span></p>
+                            <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">0%</span></p>
                         </td>
                     </tr>
                     </tbody>
@@ -219,13 +219,13 @@ use Carbon\Carbon;
                                 <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">6, 8, 10, 12, 18, 24 luni</span></p>
                             </td>
                             <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
-                                <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">0%</span></p>
-                            </td>
-                            <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
-                                <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">0%</span></p>
-                            </td>
-                            <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
                                 <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">1,9% lunar din soldul initial</span></p>
+                            </td>
+                            <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
+                                <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">0%</span></p>
+                            </td>
+                            <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
+                                <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">0%</span></p>
                             </td>
                             <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
                                 <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">0%</span></p>
@@ -242,13 +242,13 @@ use Carbon\Carbon;
                                 <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">6, 8, 10, 12 luni</span></p>
                             </td>
                             <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
-                                <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">0%</span></p>
+                                <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">1% lunar din soldul initial</span></p>
                             </td>
                             <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
                                 <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">0%</span></p>
                             </td>
                             <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
-                                <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">1% lunar</span></p>
+                                <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">0%</span></p>
                             </td>
                             <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
                                 <p style="line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">6 luni- 6%,&nbsp; 8 luni-8%, </span></p>

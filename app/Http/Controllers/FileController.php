@@ -10,6 +10,7 @@ use App\Models\Log;
 use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -58,16 +59,16 @@ class FileController extends Controller
 
         if ($isImage) {
             $img = Image::make($path);
-            if ($img && $img->height() > 160) {
-                Image::make($path)->resize(null, 160, static function ($constraint) {
+            if ($img && $img->height() > 150) {
+                Image::make($path)->resize(null, 150, static function ($constraint) {
                     $constraint->aspectRatio();
                 })->save($path_mini, 90);
             } else {
                 Image::make($path)->save($path_mini, 90);
             }
             $img = Image::make($path_mini);
-            if ($img && $img->width() > 210) {
-                Image::make($path_mini)->resize(210, null, static function ($constraint) {
+            if ($img && $img->width() > 200) {
+                Image::make($path_mini)->resize(200, null, static function ($constraint) {
                     $constraint->aspectRatio();
                 })->save($path_mini, 90);
             } else {
@@ -100,7 +101,7 @@ class FileController extends Controller
         return $path;
     }
 
-    private function _upload(Request $request, $nameFnc)
+    private function _upload(Request $request, $nameFnc): Response|JsonResponse|Application|ResponseFactory
     {
         $fileModel = $this->_uploadAndReturnFileModel($request, $nameFnc);
         if ($fileModel) {
@@ -122,22 +123,22 @@ class FileController extends Controller
                 ],
             ]);
         }
-        return response([
+        return response()->json([
             'success' => true,
         ]);
     }
 
-    public function uploadFile(Request $request)
+    public function uploadFile(Request $request): Response|JsonResponse|Application|ResponseFactory
     {
         return $this->_upload($request, 'fileForUpload');
     }
 
-    public function uploadImage(Request $request)
+    public function uploadImage(Request $request): Response|JsonResponse|Application|ResponseFactory
     {
         return $this->_upload($request, 'image') ;
     }
 
-    public function deleteUserAvatar($id, Request $request)
+    public function deleteUserAvatar($id, Request $request): JsonResponse
     {
 
         $data = [];
@@ -165,10 +166,10 @@ class FileController extends Controller
                 $file_id
             );
         }
-        return response(['success' => $success, 'data' => $data]);
+        return response()->json(['success' => $success, 'data' => $data]);
     }
 
-    public function uploadUserAvatar($id, Request $request)
+    public function uploadUserAvatar($id, Request $request): JsonResponse
     {
         $data = [];
         $success = false;
@@ -200,10 +201,10 @@ class FileController extends Controller
             $success = true;
         }
 
-        return response(['success' => $success, 'data' => $data]);
+        return response()->json(['success' => $success, 'data' => $data]);
     }
 
-    public function getFiles(Request $request)
+    public function getFiles(Request $request): JsonResponse
     {
 
         $files = DB::table('files') ->select(
@@ -230,13 +231,13 @@ class FileController extends Controller
         $files = $files->paginate(999999999);
 
 
-        return response([
+        return response()->json([
             'success' => true,
             'data' => $files
         ]);
     }
 
-    public function deleteFile (Request $request)
+    public function deleteFile (Request $request): JsonResponse
     {
         $v = $request->validate([
             'id' => 'required'
@@ -248,19 +249,16 @@ class FileController extends Controller
 
         $Log_desc = $fileModel->id.' '.$fileModel->name.'. ';
 
-        $success = true;
-        if ($success) {
-            Log::addNewLog(
-                $request,
-                Log::MODULE_FILES,
-                Log::OPERATION_DELETE,
-                $id,
-                $Log_desc
-            );
-        }
+        Log::addNewLog(
+            $request,
+            Log::MODULE_FILES,
+            Log::OPERATION_DELETE,
+            $id,
+            $Log_desc
+        );
 
-        return  response([
-            'success' => $success
+        return  response()->json([
+            'success' => true
         ]);
     }
 
@@ -318,9 +316,9 @@ class FileController extends Controller
 
     /**
      * @param Request $request
-     * @return Application|ResponseFactory|Response
+     * @return JsonResponse
      */
-    public function uploadFileInBase64(Request $request)
+    public function uploadFileInBase64(Request $request): JsonResponse
     {
         try{
             if ($request->base64 && $request->size && $request->name) {
@@ -367,13 +365,13 @@ class FileController extends Controller
                 }catch (\Exception $e) {}
             }
         }catch (\Exception $e) {
-            return response([
+            return response()->json([
                 'success' => true,
                 'data' => $e->getMessage(),
             ]);
         }
 
-        return response([
+        return response()->json([
             'success' => true,
             'data' => '',
         ]);

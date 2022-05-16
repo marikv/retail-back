@@ -83,23 +83,4 @@ class ChatMessageRepository extends AbstractCoreRepository
 
         return $ChatMessages;
     }
-
-    /**
-     * @param array $data
-     * @return mixed
-     */
-    public function create(array $data = [])
-    {
-        // TODO: Implement create() method.
-    }
-
-    /**
-     * @param int $id
-     * @param array $data
-     * @return mixed
-     */
-    public function update(int $id = 0, array $data = [])
-    {
-        // TODO: Implement update() method.
-    }
 }

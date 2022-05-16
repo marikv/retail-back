@@ -42,10 +42,27 @@ class ClientRepository extends AbstractCoreRepository
         $items = DB::table('clients')
             ->select([
                 'clients.*',
+                DB::raw("DATE_FORMAT(clients.birth_date, '%d.%m.%Y') as birth_date2"),
+                DB::raw("DATE_FORMAT(clients.buletin_date_till, '%d.%m.%Y') as buletin_date_till2"),
                 DB::raw("DATE_FORMAT(clients.created_at, '%d.%m.%Y %H:%i') as created_at2"),
             ])
             ->whereNull('clients.deleted')
             ->distinct();
+
+        if (!empty($options['column']) && !empty($filter)) {
+            $items = $items->where('clients.'.$options['column'], '=', $filter);
+        }
+        elseif (!empty($filter)) {
+            $items = $items
+                ->where('clients.last_name', 'like', $filter . '%')
+                ->orWhere('clients.first_name', 'like', $filter . '%')
+                ->orWhere('clients.phone1', 'like', $filter . '%')
+                ->orWhere('clients.phone2', 'like', $filter . '%')
+                ->orWhere('clients.email', 'like', $filter . '%')
+                ->orWhere('clients.buletin_idnp', 'like', $filter . '%')
+                ->orWhere('clients.buletin_sn', 'like', $filter . '%')
+            ;
+        }
 
         $items = $this->standardOrderBy($items, $pagination, 'id', 'desc');
         return $this->standardPagination($items, $pagination);

@@ -11,6 +11,7 @@ use App\Models\Dealer;
 use App\Models\Log;
 use App\Models\TypeCredit;
 use App\Models\User;
+use App\Repositories\BidMonthRepository;
 use App\Repositories\BidRepository;
 use App\Repositories\PaymentRepository;
 use App\Services\CalculatorService;
@@ -177,6 +178,7 @@ class BidController extends Controller
                 $Bid->signed_user_id = Auth::id();
                 $Bid->signed_date_time = date('Y-m-d H:i:s');
                 ChatMessage::sendNewMessage($Bid->user_id, 'Contract semnat', $Bid->id);
+
                 $paymentRepository->createPayments($Bid);
 
             } else if ((int)$Bid->status_id === Bid::BID_STATUS_IN_WORK && (int)$request->status_id === Bid::BID_STATUS_REFUSED) {
@@ -303,7 +305,7 @@ class BidController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function addOrEdit(int $id, Request $request, BidRepository $bidRepository): JsonResponse
+    public function addOrEdit(int $id, Request $request, BidRepository $bidRepository, BidMonthRepository $bidMonthRepository): JsonResponse
     {
         try {
             $Client = null;
@@ -342,7 +344,6 @@ class BidController extends Controller
             } else {
                 $Bid = Bid::findOrFail($id);
             }
-            /* @var $Bid Bid */
 
             $Bid->user_id = Auth::id();
             $Bid->dealer_id = Auth::user()->role_id === User::USER_ROLE_DEALER ? Auth::user()->dealer_id : $request->dealer;
@@ -403,15 +404,15 @@ class BidController extends Controller
             $Bid->save();
 
             foreach ($request->calc_results['tabel'] as $row) {
-                $BidMonths = new BidMonth();
-                $BidMonths->bid_id = $Bid->id;
-                $BidMonths->date = Carbon::parse($row['data'])->format('Y-m-d');
-                $BidMonths->imprumut_per_luna = (float)$row['imprumtPerLuna'];
-                $BidMonths->dobinda_per_luna = (float)$row['dobindaPerLuna'];
-                $BidMonths->comision_per_luna = (float)$row['comisionPerLuna'];
-                $BidMonths->comision_admin_per_luna = (float)$row['comisionAdminPerLuna'];
-                $BidMonths->total_per_luna = (float)$row['totalPerLuna'];
-                $BidMonths->save();
+                $bidMonthRepository->create([
+                    'bid_id' => $Bid->id,
+                    'date' => Carbon::parse($row['data'])->format('Y-m-d'),
+                    'imprumut_per_luna' => (float)$row['imprumtPerLuna'],
+                    'dobinda_per_luna' => (float)$row['dobindaPerLuna'],
+                    'comision_per_luna' => (float)$row['comisionPerLuna'],
+                    'comision_admin_per_luna' => (float)$row['comisionAdminPerLuna'],
+                    'total_per_luna' => (float)$row['totalPerLuna']
+                ]);
             }
 
             $message = 'Cerere nouă';
