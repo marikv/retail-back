@@ -19,9 +19,12 @@ class ChatMessageController extends Controller
     {
         $bid_id = $request->bid_id;
         $message = $request->message;
-        $toUserId = null;
+        $toUserId = $request->user_id;
 
-        if ($bid_id) {
+        if ($toUserId) {
+
+        }
+        elseif ($bid_id) {
             $Bid = Bid::findOrFail($bid_id);
             if (Auth::user()->role_id === User::USER_ROLE_DEALER) {
                 $toUserId = $Bid->execute_user_id;
@@ -140,10 +143,25 @@ class ChatMessageController extends Controller
         $pagination = $request->pagination;
         $activeModule = $request->activeModule;
         $bid_id = $request->bid_id;
+        $user_id = $request->user_id;
 
         return response()->json([
             'success' => true,
-            'data' => $chatMessageRepository->list($filter, $pagination, ['bid_id' => $bid_id, 'activeModule' => $activeModule])
+            'data' => $chatMessageRepository->list($filter, $pagination, ['bid_id' => $bid_id, 'user_id' => $user_id, 'activeModule' => $activeModule])
+        ]);
+    }
+
+
+    public function chatGetFullList(Request $request, ChatMessageRepository $chatMessageRepository): JsonResponse
+    {
+        $filter = $request->filter;
+        $pagination = $request->pagination;
+        $activeModule = $request->activeModule;
+        $bid_id = $request->bid_id;
+
+        return response()->json([
+            'success' => true,
+            'data' => $chatMessageRepository->chatGetFullList($filter, $pagination, ['bid_id' => $bid_id, 'activeModule' => $activeModule])
         ]);
     }
 }

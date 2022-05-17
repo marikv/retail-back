@@ -94,6 +94,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/get-chat-messages', [ChatMessageController::class, 'getChatMessage']);
     Route::post('/set-chat-messages-read', [ChatMessageController::class, 'setChatMessagesRead']);
     Route::post('/checkNewMessages', [ChatMessageController::class, 'checkNewMessages']);
+    Route::post('/chat-get-full-list', [ChatMessageController::class, 'chatGetFullList']);
 
     Route::post('/autocomplete', [AutocompleteController::class, 'search']);
 

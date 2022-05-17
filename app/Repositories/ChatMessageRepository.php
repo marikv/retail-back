@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\ChatMessage;
 use App\Models\ChatMessage as Model;
 use App\Models\ChatMessageRead;
 use App\Models\User;
@@ -34,6 +35,71 @@ class ChatMessageRepository extends AbstractCoreRepository
      * @param string|null $filter
      * @param array|null $pagination
      * @param array $options
+     * @return array
+     */
+    public function chatGetFullList(string $filter = null, array $pagination = null, array $options = []): array
+    {
+        $authUser = $this->authUser;
+
+        $Users = DB::table('users')
+            ->select(['users.*'])
+            ->whereNull('users.deleted')
+            ->where('users.id', '!=', $authUser->id)
+            ->orderBy('users.name', 'asc');
+        if ($this->authUser->role_id === User::USER_ROLE_DEALER) {
+            $Users = $Users->where(function($Users) use ($authUser) {
+                $Users->where('users.dealer_id', '=', $this->authUser->dealer_id)
+                    ->orWhereIn('users.role_id', [User::USER_ROLE_ADMIN, User::USER_ROLE_EXECUTOR]);
+            });
+        }
+        $Users = $Users->get();
+
+        $itemsArray = [];
+        foreach ($Users as $k=>$v) {
+            $itemsArray[$k] = (array)$v;
+            $ChatMessage =  ChatMessage::whereNull('deleted')
+                ->whereNull('bid_id')
+                ->where(static function ($items) use ($v) {
+                    $items->where('to_user_id', '=', $v->id)
+                        ->orWhere('from_user_id', '=', $v->id);
+                })
+                ->orderBy('id', 'desc')
+                ->first();
+            $itemsArray[$k]['lastMessage'] = $ChatMessage;
+            $itemsArray[$k]['sortDate'] = $ChatMessage && $ChatMessage->created_at ? $ChatMessage->created_at : $v->created_at;
+        }
+
+        $Bids = DB::table('bids')
+            ->select(['bids.*'])
+            ->whereNull('bids.deleted')
+            ->where(function ($items) use ($authUser) {
+                $items->where('bids.user_id', '=', $authUser->id)
+                    ->orWhere('bids.signed_user_id', '=', $authUser->id)
+                    ->orWhere('bids.execute_user_id', '=', $authUser->id)
+                    ->orWhere('bids.refused_user_id', '=', $authUser->id)
+                    ->orWhere('bids.approved_user_id', '=', $authUser->id)
+                ;
+            })
+            ->orderBy('bids.id', 'desc')
+        //dd($Bids->toSql());
+            ->get();
+
+        foreach ($Bids as $k2=>$v) {
+            $itemsArray[$k + $k2 + 1] = (array)$v;
+            $ChatMessage =  ChatMessage::whereNull('deleted')
+                ->where('bid_id', '=', $v->id)
+                ->orderBy('id', 'desc')
+                ->first();
+            $itemsArray[$k + $k2 + 1]['lastMessage'] = $ChatMessage;
+            $itemsArray[$k + $k2 + 1]['sortDate'] = $ChatMessage && $ChatMessage->created_at ? $ChatMessage->created_at : $v->created_at;
+        }
+        return $itemsArray;
+    }
+
+    /**
+     * @param string|null $filter
+     * @param array|null $pagination
+     * @param array $options
      * @return LengthAwarePaginator
      */
     public function list(string $filter = null, array $pagination = null, array $options = []): LengthAwarePaginator
@@ -59,9 +125,23 @@ class ChatMessageRepository extends AbstractCoreRepository
                     ->where('chat_message_reads.user_id', '=', $authUser->id);
             })
             ->leftJoin('files', 'files.id', '=', 'chat_messages.file_id')
-            ->whereNull('chat_messages.deleted')
-            ->where('chat_messages.bid_id', '=', $options['bid_id'])
-            ->distinct();
+            ->whereNull('chat_messages.deleted');
+        if (!empty($options['user_id'])) {
+            $ChatMessages->where(static function ($items) use ($authUser, $options) {
+                $items->where(static function ($items) use ($authUser, $options) {
+                    $items->where('chat_messages.to_user_id', '=', $authUser->id)
+                        ->where('chat_messages.from_user_id', '=', $options['user_id']);
+                })->orWhere(static function ($items) use ($authUser, $options) {
+                    $items->where('chat_messages.from_user_id', '=', $authUser->id)
+                        ->where('chat_messages.to_user_id', '=', $options['user_id']);
+                });
+            });
+        } else if (!empty($options['bid_id'])) {
+            $ChatMessages = $ChatMessages->where('chat_messages.bid_id', '=', $options['bid_id']);
+        } else {
+            $ChatMessages = $ChatMessages->where('chat_messages.bid_id', '=', 999999999);//todo: not exist. empty sql result
+        }
+        $ChatMessages = $ChatMessages->distinct();
         // dd($ChatMessages->toSql());
         $ChatMessages = self::standardOrderByStatic($ChatMessages, $pagination, 'id', 'desc');
         $ChatMessages = self::standardPaginationStatic($ChatMessages, $pagination);
