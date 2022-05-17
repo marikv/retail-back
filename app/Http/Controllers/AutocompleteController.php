@@ -23,11 +23,11 @@ class AutocompleteController extends Controller
 
         if ($request->search === 'region') {
 
-            $select = $this->_search('clients', 'region');
+            $select = $this->_search('bids', 'region');
 
-        } else if ($request->search === 'city') {
+        } else if ($request->search === 'localitate') {
 
-            $select = $this->_search('clients', 'city');
+            $select = $this->_search('bids', 'localitate');
 
         } else if ($request->search === 'street') {
 
