@@ -25,7 +25,29 @@ class PaymentRepository extends AbstractCoreRepository
      */
     public function getById(int $id = 0): mixed
     {
-        return $this->model::findOrFail($id);
+        $items = DB::table('payments')
+            ->select([
+                'payments.*',
+                'dealers.logo',
+                'dealers.name as dealer_name',
+                'users.name as user_name',
+                'bids.last_name as client_last_name',
+                'bids.first_name as client_first_name',
+                'bids.phone1',
+                DB::raw("DATE_FORMAT(payments.created_at, '%d.%m.%Y %H:%i') as created_at2"),
+            ])
+            ->leftJoin('users', 'users.id', '=', 'payments.user_id')
+            ->leftJoin('bids', 'bids.id', '=', 'payments.bid_id')
+            ->leftJoin('dealers', 'dealers.id', '=', 'payments.dealer_id')
+            ->leftJoin('clients', 'clients.id', '=', 'payments.client_id')
+            ->whereNull('payments.deleted')
+            ->whereNull('dealers.deleted')
+            ->whereNull('bids.deleted')
+            ->distinct();
+        if ($this->authUser && $this->authUser->role_id === User::USER_ROLE_DEALER && $this->authUser->dealer_id) {
+            $items = $items->where('dealer_id', '=', $this->authUser->dealer_id);
+        }
+        return $items->first();
     }
 
     /**

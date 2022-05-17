@@ -51,7 +51,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::post('/payments-list', [PaymentController::class, 'paymentsList']);
     Route::post('/payment-add-or-edit/{id}', [PaymentController::class, 'addOrEdit']);
-    Route::get('/users/get-data-by-id/{id}', [PaymentController::class, 'getDataById']);
+    Route::get('/payments/get-data-by-id/{id}', [PaymentController::class, 'getDataById']);
     Route::delete('/payments/{id}', [PaymentController::class, 'deletePayment']);
 
     Route::post('/users-list', [UserController::class, 'usersList']);
