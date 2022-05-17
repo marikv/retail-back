@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AutocompleteController;
 use App\Http\Controllers\BidController;
 use App\Http\Controllers\ChatMessageController;
 use App\Http\Controllers\ClientController;
@@ -93,6 +94,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/get-chat-messages', [ChatMessageController::class, 'getChatMessage']);
     Route::post('/set-chat-messages-read', [ChatMessageController::class, 'setChatMessagesRead']);
     Route::post('/checkNewMessages', [ChatMessageController::class, 'checkNewMessages']);
+
+    Route::post('/autocomplete', [AutocompleteController::class, 'search']);
 
 
     Route::get('print/pre-contract/{id}', [PdfController::class, 'preContract']);
