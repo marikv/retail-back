@@ -74,8 +74,9 @@ class AutocompleteController extends Controller
         if (!empty($this->_q)) {
             $select = $select->where($col[0], 'LIKE', $this->_q.'%');
         }
-        $select = $select->groupBy($col[0])->distinct()->orderBy($col[0], 'asc'  );
+        $select = $select->groupBy($col[0])->distinct()->orderBy($col[0], 'asc'  )->limit(30);
         if (count($col) > 1) {
+            unset($col[0]);
             foreach ($col as $columnName) {
                 $select2 = DB::table($tableName)->select($columnName . ' as text')->whereNotNull($columnName);
                 if ($lookInDeletedRows) {
@@ -84,9 +85,10 @@ class AutocompleteController extends Controller
                 if (!empty($this->_q)) {
                     $select2 = $select2->where($columnName, 'LIKE', $this->_q.'%');
                 }
-                $select2 = $select2->groupBy($columnName)->distinct()->orderBy($columnName, 'asc'  );
+                $select2 = $select2->groupBy($columnName)->distinct()->orderBy($columnName, 'asc'  )->limit(30);
                 $select = $select->unionAll($select2);
             }
+            $select = $select->groupBy('text');
         }
         $select = $select->distinct()->paginate(30);
         return $select;
