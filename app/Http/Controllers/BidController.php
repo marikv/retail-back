@@ -8,6 +8,7 @@ use App\Models\BidScoring;
 use App\Models\ChatMessage;
 use App\Models\Client;
 use App\Models\Dealer;
+use App\Models\File;
 use App\Models\Log;
 use App\Models\TypeCredit;
 use App\Models\User;
@@ -402,6 +403,27 @@ class BidController extends Controller
             $Bid->last_name_cont_pers2 = $request->last_name_cont_per2;
             $Bid->phone_cont_pers2 = $request->phone_cont_pers2;
             $Bid->save();
+
+            if ($request->fileUploadedResponses && is_array($request->fileUploadedResponses) && count($request->fileUploadedResponses)) {
+                $FILE_TYPE_BULETIN_1 = false;
+                $FILE_TYPE_BULETIN_2 = false;
+                foreach ($request->fileUploadedResponses as $file) {
+                    if (isset($file['id'])) {
+                        $FileObj = File::where('id', '=', $file['id'])->first();
+                        if ($FileObj) {
+                            if (!$FileObj->type_id && !$FILE_TYPE_BULETIN_1) {
+                                $FileObj->type_id = File::FILE_TYPE_BULETIN_1;
+                                $FILE_TYPE_BULETIN_1 = true;
+                            } else if (!$FileObj->type_id && $FILE_TYPE_BULETIN_1 && !$FILE_TYPE_BULETIN_2) {
+                                $FileObj->type_id = File::FILE_TYPE_BULETIN_2;
+                                $FILE_TYPE_BULETIN_2 = true;
+                            }
+                            $FileObj->bid_id = $Bid->id;
+                            $FileObj->save();
+                        }
+                    }
+                }
+            }
 
             foreach ($request->calc_results['tabel'] as $row) {
                 $bidMonthRepository->create([

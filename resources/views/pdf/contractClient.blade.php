@@ -394,8 +394,8 @@ use Carbon\Carbon;
         <td class="br bb pl-10">
             <span class="strong">
             Client: <?=($data['bid']['last_name'] ?? '')?> <?=($data['bid']['first_name'] ?? '')?> <?=($data['bid']['patronymic'] ?? '')?><br>
-            a.n. {{Carbon::parse($data['bid']['birth_date'])->format('Y')}}<br>
-            IDNP {{$data['bid']['idnp']}}<br>
+            a.n. {{Carbon::parse($data['bid']['birth_date'])->format('d.m.Y')}}<br>
+            IDNP {{$data['bid']['buletin_idnp']}}<br>
             Seria {{$data['bid']['buletin_sn']}}<br>
             Act de identitate: Buletin de identitate<br>
             Eliberat de: {{$data['bid']['buletin_office']}}<br>
