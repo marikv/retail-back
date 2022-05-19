@@ -116,11 +116,19 @@ class ChatMessageController extends Controller
             }
         }
 
+        $newBids = 0;
+        if (Auth::user()->role_id !== User::USER_ROLE_DEALER) {
+            $newBids = Bid::whereNull('deleted')
+                ->where('status_id', '=', Bid::BID_STATUS_NEW)
+                ->count();
+        }
+
         return response()->json([
             'success' => true,
             'data' => [
                 'unreadMessages' => $ChatMessagesArray,
                 'bids' => $Bids,
+                'newBids' => $newBids,
             ],
         ]);
     }
