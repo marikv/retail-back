@@ -57,7 +57,20 @@ class ChatMessageController extends Controller
             ->get();
         $ChatMessagesArray = $ChatMessages->toArray();
         $Bids = null;
-
+        if (count($ChatMessagesArray)) {
+            $newArr = [];
+            foreach ($ChatMessagesArray as $ChatMessage) {
+                if (!empty($ChatMessage->bid_id)) {
+                    $Bid = Bid::whereNull('deleted')->where('id', '=', $ChatMessage->bid_id)->first();
+                    if (!$Bid) {
+                        continue;
+                    }
+                }
+                $newArr[] = $ChatMessage;
+            }
+            $ChatMessagesArray = $newArr;
+            unset($newArr);
+        }
         if ($activeModule === 'Calculator' || $activeModule === 'Bids') {
 
             // $Bids = BidController::getItems($request)->get();
