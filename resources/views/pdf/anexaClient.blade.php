@@ -165,7 +165,7 @@ use Carbon\Carbon;
     <tr>
         <td class="pl-10">
             <span class="strong">
-                Creditor: SCN „CREDIT BOX” SRL<br>
+                Creditor: OCN „CREDIT BOX” SRL<br>
                 mun. Bălți, str. Ștefan cel Mare, 57<br>
                 c/f 1019602000472<br>
                 BC VICTORIABANK SA, sucursala 1, Bălți, c.b.VICBMD2X740<br>
