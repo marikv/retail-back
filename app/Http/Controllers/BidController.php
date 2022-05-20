@@ -266,6 +266,7 @@ class BidController extends Controller
                 $Bid->buletin_office = $request->buletin_office;
                 $Bid->birth_date = Carbon::parse($request->birth_date)->format('Y-m-d');
 
+                $Bid->same_addresses = $request->same_addresses;
                 $Bid->region = $request->region;
                 $Bid->localitate = $request->localitate;
                 $Bid->street = $request->street;
@@ -340,6 +341,7 @@ class BidController extends Controller
             $Client->buletin_idnp = $request->buletin_idnp;
             $Client->buletin_date_till = strlen($request->buletin_date_till) === 10 ? Carbon::parse($request->buletin_date_till)->format('Y-m-d') : '';
             $Client->buletin_office = $request->buletin_office;
+            $Client->same_addresses = $request->same_addresses;
             $Client->localitate = $request->localitate;
             $Client->street = $request->street;
             $Client->house = $request->house;
@@ -399,11 +401,12 @@ class BidController extends Controller
             $Bid->buletin_idnp = $request->buletin_idnp;
             $Bid->buletin_date_till = strlen($request->buletin_date_till) === 10 ? Carbon::parse($request->buletin_date_till)->format('Y-m-d') : '';
             $Bid->buletin_office = $request->buletin_office;
+            $Bid->same_addresses = $request->same_addresses;
+            $Bid->region = $request->region;
             $Bid->localitate = $request->localitate;
             $Bid->street = $request->street;
             $Bid->house = $request->house;
             $Bid->flat = $request->flat;
-            $Bid->region = $request->region;
             $Bid->localitate_reg = $request->localitate_reg;
             $Bid->street_reg = $request->street_reg;
             $Bid->house_reg = $request->house_reg;

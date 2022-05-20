@@ -31,6 +31,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $buletin_date_till
  * @property string $buletin_office
  * @property string $region
+ * @property boolean|null $same_addresses
  * @property string $localitate
  * @property string $street
  * @property string $house

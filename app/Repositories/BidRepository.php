@@ -45,46 +45,46 @@ class BidRepository extends AbstractCoreRepository
     {
         $clientAddressArray = [];
         if ($Bid) {
-            $Bid->region = trim($Bid->region);
-            $Bid->region = str_replace('m.', '', $Bid->region);
-            $Bid->region = str_replace('r.', '', $Bid->region);
-            $Bid->region = str_replace('raion', '', $Bid->region);
-            $Bid->region = trim($Bid->region);
-            $Bid->localitate = trim($Bid->localitate);
-            $Bid->localitate = str_replace('m.', '', $Bid->localitate);
-            $Bid->localitate = str_replace('r.', '', $Bid->localitate);
-            $Bid->localitate = str_replace('raion', '', $Bid->localitate);
-            $Bid->localitate = trim($Bid->localitate);
+            $Bid->region_reg = trim($Bid->region_reg);
+            $Bid->region_reg = str_replace('m.', '', $Bid->region_reg);
+            $Bid->region_reg = str_replace('r.', '', $Bid->region_reg);
+            $Bid->region_reg = str_replace('raion', '', $Bid->region_reg);
+            $Bid->region_reg = trim($Bid->region_reg);
+            $Bid->localitate_reg = trim($Bid->localitate_reg);
+            $Bid->localitate_reg = str_replace('m.', '', $Bid->localitate_reg);
+            $Bid->localitate_reg = str_replace('r.', '', $Bid->localitate_reg);
+            $Bid->localitate_reg = str_replace('raion', '', $Bid->localitate_reg);
+            $Bid->localitate_reg = trim($Bid->localitate_reg);
 
             $municipii = ['balti', 'bălți', 'balți', 'bălti', 'cisinau', 'chisinau', 'chișinău', 'chisinău', 'chișinau'];
 
-            if (in_array(strtolower($Bid->region), $municipii) && in_array(strtolower($Bid->localitate), $municipii)) {
-                $Bid->localitate = null;
+            if (in_array(strtolower($Bid->region_reg), $municipii) && in_array(strtolower($Bid->localitate_reg), $municipii)) {
+                $Bid->localitate_reg = null;
             }
 
-            if ($Bid->region) {
-                if (in_array(strtolower($Bid->region), $municipii)) {
-                    $clientAddressArray[] = 'mun.' . ucfirst($Bid->region);
+            if ($Bid->region_reg) {
+                if (in_array(strtolower($Bid->region_reg), $municipii)) {
+                    $clientAddressArray[] = 'mun.' . ucfirst($Bid->region_reg);
                 } else {
-                    $clientAddressArray[] = 'r.' . ucfirst($Bid->region);
+                    $clientAddressArray[] = 'r.' . ucfirst($Bid->region_reg);
                 }
             }
 
-            if ($Bid->localitate) {
-                $clientAddressArray[] =  ucfirst($Bid->localitate);
+            if ($Bid->localitate_reg) {
+                $clientAddressArray[] =  ucfirst($Bid->localitate_reg);
             }
-            if ($Bid->street) {
+            if ($Bid->street_reg) {
                 $str = ['str ', 'strada', 'str.'];
                 foreach ($str as $s) {
-                    $Bid->street = str_replace($s, '', $Bid->street);
+                    $Bid->street_reg = str_replace($s, '', $Bid->street_reg);
                 }
-                $clientAddressArray[] =  'str. '. ucfirst($Bid->street);
+                $clientAddressArray[] =  'str. '. ucfirst($Bid->street_reg);
             }
-            if ($Bid->house) {
-                $clientAddressArray[] =  $Bid->house;
+            if ($Bid->house_reg) {
+                $clientAddressArray[] =  $Bid->house_reg;
             }
-            if ($Bid->flat) {
-                $clientAddressArray[] =  $Bid->flat;
+            if ($Bid->flat_reg) {
+                $clientAddressArray[] =  $Bid->flat_reg;
             }
         }
         return implode(', ', $clientAddressArray);
