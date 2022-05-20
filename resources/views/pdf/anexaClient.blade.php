@@ -101,7 +101,7 @@ use Carbon\Carbon;
             <span class="strong">
             {{($data['bid']['last_name'] ?? '')}} {{($data['bid']['first_name'] ?? '')}} {{($data['bid']['patronymic'] ?? '')}}<br>
             {{Carbon::parse($data['bid']['birth_date'])->format('d.m.Y')}}<br>
-            {{$data['bid']['idnp']}}<br>
+            {{$data['bid']['buletin_idnp']}}<br>
             {{$data['bid']['buletin_sn']}}<br>
             {{$data['bid']['buletin_office']}}<br>
             {{$data['bid']['address']}}<br>
