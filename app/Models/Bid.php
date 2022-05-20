@@ -78,6 +78,11 @@ use JetBrains\PhpStorm\ArrayShape;
  * @property string $street
  * @property string $house
  * @property string $flat
+ * @property string $region_reg
+ * @property string $localitate_reg
+ * @property string $street_reg
+ * @property string $house_reg
+ * @property string $flat_reg
  * @property string $who_is_cont_pers1
  * @property string $phone_cont_pers1
  * @property string $last_name_cont_pers1

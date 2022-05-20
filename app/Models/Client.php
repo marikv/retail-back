@@ -35,6 +35,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $street
  * @property string $house
  * @property string $flat
+ * @property string $region_reg
+ * @property string $localitate_reg
+ * @property string $street_reg
+ * @property string $house_reg
+ * @property string $flat_reg
  * @property string $description
  * @property boolean $deleted
  *

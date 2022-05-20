@@ -265,11 +265,18 @@ class BidController extends Controller
                 $Bid->buletin_date_till = strlen($request->buletin_date_till) === 10 ? Carbon::parse($request->buletin_date_till)->format('Y-m-d') : '';
                 $Bid->buletin_office = $request->buletin_office;
                 $Bid->birth_date = Carbon::parse($request->birth_date)->format('Y-m-d');
+
                 $Bid->region = $request->region;
                 $Bid->localitate = $request->localitate;
                 $Bid->street = $request->street;
                 $Bid->house = $request->house;
                 $Bid->flat = $request->flat;
+                $Bid->region_reg = $request->region_reg;
+                $Bid->localitate_reg = $request->localitate_reg;
+                $Bid->street_reg = $request->street_reg;
+                $Bid->house_reg = $request->house_reg;
+                $Bid->flat_reg = $request->flat_reg;
+
                 $Bid->who_is_cont_pers1 = $request->who_is_cont_pers1;
                 $Bid->phone_cont_pers1 = $request->phone_cont_pers1;
                 $Bid->first_name_cont_pers1 = $request->first_name_cont_pers1;
@@ -337,6 +344,10 @@ class BidController extends Controller
             $Client->street = $request->street;
             $Client->house = $request->house;
             $Client->flat = $request->flat;
+            $Client->localitate_reg = $request->localitate_reg;
+            $Client->street_reg = $request->street_reg;
+            $Client->house_reg = $request->house_reg;
+            $Client->flat_reg = $request->flat_reg;
             $Client->save();
 
             if (!$id) {
@@ -393,6 +404,11 @@ class BidController extends Controller
             $Bid->house = $request->house;
             $Bid->flat = $request->flat;
             $Bid->region = $request->region;
+            $Bid->localitate_reg = $request->localitate_reg;
+            $Bid->street_reg = $request->street_reg;
+            $Bid->house_reg = $request->house_reg;
+            $Bid->flat_reg = $request->flat_reg;
+            $Bid->region_reg = $request->region_reg;
             $Bid->who_is_cont_pers1 = $request->who_is_cont_pers1;
             $Bid->first_name_cont_pers1 = $request->first_name_cont_pers1;
             $Bid->last_name_cont_pers1 = $request->last_name_cont_pers1;
