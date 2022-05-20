@@ -400,7 +400,7 @@ class BidController extends Controller
             $Bid->produs = $request->produs;
             $Bid->who_is_cont_pers2 = $request->who_is_cont_pers2;
             $Bid->first_name_cont_pers2 = $request->first_name_cont_pers2;
-            $Bid->last_name_cont_pers2 = $request->last_name_cont_per2;
+            $Bid->last_name_cont_pers2 = $request->last_name_cont_pers2;
             $Bid->phone_cont_pers2 = $request->phone_cont_pers2;
             $Bid->save();
 
