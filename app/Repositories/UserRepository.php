@@ -51,6 +51,13 @@ class UserRepository extends AbstractCoreRepository
                 ->orWhere('users.email', 'like', $filter . '%')
             ;
         }
+        if ($this->authUser->role_id === Model::USER_ROLE_DEALER) {
+            $Users = $Users
+                ->where('users.role_id', '=', Model::USER_ROLE_DEALER)
+                ->where('users.dealer_id', '=', $this->authUser->dealer_id);
+        } else {
+            $Users = $Users->where('users.role_id', '!=', Model::USER_ROLE_DEALER);
+        }
 
         $Users = $this->standardOrderBy($Users, $pagination, 'id', 'desc');
         return $this->standardPagination($Users, $pagination);
