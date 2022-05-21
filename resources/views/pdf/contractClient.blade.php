@@ -21,6 +21,9 @@ use Carbon\Carbon;
         <tr>
             <td style="font-style:italic;text-align: center;vertical-align: top; width: 50%;padding-bottom: 7px;padding-top: 12px;font-size: 12px;">
                 Creditor ______________________
+                <div style="position: relative;" >
+                    <div style="position: absolute;z-index: 999999;top: -110px; left: 50px;" class="stampila-semnatura"></div>
+                </div>
             </td>
             <td style="font-style:italic;text-align: center;vertical-align: top; width: 50%;padding-bottom: 7px;padding-top: 12px;font-size: 12px;">
                 Client ______________________
@@ -162,7 +165,7 @@ use Carbon\Carbon;
             Suma MDL (totala rambursabila) {{$data['bid']['total']}} lei
         </td>
         <td class="br bb pl-10">
-            - rata dobînzii aferente: {{round((double)$data['bid']['type_credit']['dobinda'], 2)}} %, flotanta;<br>
+            - rata dobânzii aferente creditului: {{round((double)$data['bid']['bid_months'][0]['dobinda_per_luna'] / (double)$data['bid']['imprumut'] * 100, 2)}} %, lunar calculat din suma initiala a creditului, indicat in p.c 3.3,<br>
             - comision de examinare a creditului {{round((double)$data['bid']['type_credit']['comision'], 2)}}% lunar din soldul initial,<br>
             - comision de administrare lunara {{round((double)$data['bid']['type_credit']['comision_admin'], 2)}}%; calculat incepînd cu data de {{Carbon::parse($data['bid']['bid_date'])->format('d.m.Y')}}.<br>
             - costul transferului la contul bancar sau eliberarii în numerar catre Partener - nu mai mult de 1,5% din suma transferata în contul intermediarului de credit.
@@ -203,7 +206,7 @@ use Carbon\Carbon;
 
         </td>
         <td class="br bb pl-10">
-            - Cite 20 lei pe zi pentru fiecare zi de intirziere<br>
+            - Cite 1% din suma creditului restant, calculat pentru fiecare zi de întârziere;<br>
             Penalitatea de întârziere se calculează până la data stingerii complete a datoriei, aparte pentru fiecare rată lunară neachitata la scadenta, în conformitate cu graficul de rambursare a plaților.
         </td>
     </tr>
@@ -212,7 +215,8 @@ use Carbon\Carbon;
             <span class="strong"> 4.2 Alte consecințe în caz de neexecutare</span> -în cazul în care  Clientul întârzie în realizarea rambursării plaților scadente, Creditorul va efectua apeluri telefonice și va expedia sms-uri la unul din numerele de contact indicate de Client în Contractul de credit, pentru a-l notifica asupra întârzierii plăţii și pericolului calculului penalității de întârziere
         </td>
         <td class="br bb pl-10">
-            Dacă Clientul nu va achita creditul şi/sau alte plăţi scadente stabilite în Contract  în stricta conformitate cu graficul de rambursare a plaților Creditorul are dreptul să calculeze și sa pretinda o suma fixă, care a fost negociată în prealabil de părţile contractate, în mărime de 200 lei la fiecare a 10-a zi de întîrziere, suplimentar la penalitatea de întârziere indicată la 4.1 din Contract pentru expedierea notificării către Client cu privire la întârzierea plăţii, indicând valoarea sumelor restante, avertizarea privind pericolul de a pretinde plata imediată a ratelor neajunse la scadență conform Contractului de credit sau privind pericolul rezoluțiunii anticipate a Contractului.
+            Dacă Clientul nu va achita creditul şi/sau alte plăţi scadente stabilite în Contract  în stricta conformitate cu graficul de rambursare a plaților Creditorul are dreptul să calculeze și sa pretinda  penalități pentru expedierea notificărilor privind întârzierea plăților, în mărime de – 200 lei pentru
+            fiecare din primele trei notificări; suplimentar la penalitatea de întârziere indicată la p. 4.1 din Contract pentru expedierea notificării către Client cu privire la întârzierea plăţii, indicând valoarea sumelor restante, avertizarea privind pericolul de a pretinde plata imediată a ratelor neajunse la scadență conform Contractului de credit sau privind pericolul rezoluțiunii anticipate a Contractului.
         </td>
     </tr>
     <tr>
@@ -222,7 +226,7 @@ use Carbon\Carbon;
                 Clientul obţine statut de Debitor rau-  platnic în istoria sa creditară prezentă şi viitoare, şi împotriva acestuia va fi iniţiată procedura de urmărire silită pentru recuperarea plăţilor datorate conform Contractului de Credit precum şi pentru recuperarea prejudiciului cauzat şi a venitului ratat.
         </td>
         <td class="br bb pl-10">
-            Dacă Debitorul întârzie în realizarea rambursării Contractului de credit, o perioadă mai mare de 60 de zile calendaristice, calculându-se de la ziua scadentă a realizării rambursării stipulate prin Contractul de credit, Creditorul declară scadente și plătibile imediat toate plăţile conform Contractului de credit și are dreptul de a rezolvi în mod unilateral Contractul de credit calculând suplimentar o penalitate în mărime de 20% din valoarea creditului neachitat, pentru rezoluțiunea anticipată a contractului.
+            Dacă Debitorul întârzie în realizarea rambursării Contractului de credit, o perioadă mai mare de 90 de zile calendaristice, calculându-se de la ziua scadentă a realizării rambursării stipulate prin Contractul de credit, Creditorul declară scadente și plătibile imediat toate plăţile conform Contractului de credit și are dreptul de a rezolvi în mod unilateral Contractul de credit calculând suplimentar o penalitate în mărime de 20% din valoarea creditului neachitat, pentru rezoluțiunea anticipată a contractului.
             <br>
             - Creditorul va trimite o notificare, prin intermediul unei scrisori, despre rezoluțiunea anticipată, unilaterală, a Contractului de credit, şi obligaţia Clientului de a achita, în mod integral, în termen de 15 zile din momentul primirii notificării:
             <br>

@@ -12,6 +12,9 @@ use Carbon\Carbon;
         <tr>
             <td style="font-style:italic;text-align: center;vertical-align: top; width: 50%;padding-bottom: 7px;padding-top: 12px;font-size: 12px;">
                 Creditor ______________________
+                <div style="position: relative;" >
+                    <div style="position: absolute;z-index: 999999;top: -110px; left: 50px;" class="stampila-semnatura"></div>
+                </div>
             </td>
             <td style="font-style:italic;text-align: center;vertical-align: top; width: 50%;padding-bottom: 7px;padding-top: 12px;font-size: 12px;">
                 Beneficiar ______________________

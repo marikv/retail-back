@@ -39,11 +39,11 @@ class AutocompleteController extends Controller
 
         } else if ($request->search === 'first_name') {
 
-            $select = $this->_search('bids', ['first_name', 'first_name_cont_pers1', 'first_name_cont_pers2'], true);
+            $select = $this->_search('bids', ['first_name', 'first_name_cont_pers1', 'first_name_cont_pers2']);
 
         } else if ($request->search === 'last_name') {
 
-            $select = $this->_search('bids', ['last_name', 'last_name_cont_pers1', 'last_name_cont_pers2'], true);
+            $select = $this->_search('bids', ['last_name', 'last_name_cont_pers1', 'last_name_cont_pers2'],);
 
         } else if ($request->search === 'who_is_cont_pers') {
 

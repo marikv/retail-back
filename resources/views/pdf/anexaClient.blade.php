@@ -171,6 +171,9 @@ use Carbon\Carbon;
                 BC VICTORIABANK SA, sucursala 1, Bălți, c.b.VICBMD2X740<br>
                 IBAN MD65VI022510100000028MDL<br>
                 Reprezentantul creditorului _____________
+                    <div style="position: relative;" >
+                        <div style="position: absolute;z-index: 999999;top: -110px; left: 50px;" class="stampila-semnatura"></div>
+                    </div>
             </span>
         </td>
         <td class="pl-10">
