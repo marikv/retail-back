@@ -6,7 +6,6 @@ use App\Models\ChatMessage;
 use App\Models\ChatMessage as Model;
 use App\Models\ChatMessageRead;
 use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -40,33 +39,31 @@ class ChatMessageRepository extends AbstractCoreRepository
     public function chatGetFullList(string $filter = null, array $pagination = null, array $options = []): array
     {
         $authUser = $this->authUser;
-
-        $Users = DB::table('users')
-            ->select(['users.*'])
-            ->whereNull('users.deleted')
-            ->where('users.id', '!=', $authUser->id)
-            ->orderBy('users.name', 'asc');
-        if ($this->authUser->role_id === User::USER_ROLE_DEALER) {
-            $Users = $Users->where(function($Users) use ($authUser) {
-                $Users->where('users.dealer_id', '=', $this->authUser->dealer_id)
-                    ->orWhereIn('users.role_id', [User::USER_ROLE_ADMIN, User::USER_ROLE_EXECUTOR]);
-            });
-        }
-        $Users = $Users->get();
-
         $itemsArray = [];
-        foreach ($Users as $k=>$v) {
-            $itemsArray[$k] = (array)$v;
-            $ChatMessage =  ChatMessage::whereNull('deleted')
-                ->whereNull('bid_id')
-                ->where(static function ($items) use ($v) {
-                    $items->where('to_user_id', '=', $v->id)
-                        ->orWhere('from_user_id', '=', $v->id);
-                })
-                ->orderBy('id', 'desc')
-                ->first();
-            $itemsArray[$k]['lastMessage'] = $ChatMessage;
-            $itemsArray[$k]['sortDate'] = $ChatMessage && $ChatMessage->created_at ? $ChatMessage->created_at : $v->created_at;
+
+        if ($authUser->role_id !== User::USER_ROLE_DEALER) {
+
+            $Users = DB::table('users')
+                ->select(['users.*'])
+                ->whereNull('users.deleted')
+                ->where('users.id', '!=', $authUser->id)
+                ->whereIn('users.role_id', [User::USER_ROLE_ADMIN, User::USER_ROLE_EXECUTOR])
+                ->orderBy('users.name', 'asc')
+                ->get();
+
+            foreach ($Users as $k=>$v) {
+                $itemsArray[$k] = (array)$v;
+                $ChatMessage =  ChatMessage::whereNull('deleted')
+                    ->whereNull('bid_id')
+                    ->where(static function ($items) use ($v) {
+                        $items->where('to_user_id', '=', $v->id)
+                            ->orWhere('from_user_id', '=', $v->id);
+                    })
+                    ->orderBy('id', 'desc')
+                    ->first();
+                $itemsArray[$k]['lastMessage'] = $ChatMessage;
+                $itemsArray[$k]['sortDate'] = $ChatMessage && $ChatMessage->created_at ? $ChatMessage->created_at : $v->created_at;
+            }
         }
 
         $Bids = DB::table('bids')
@@ -81,7 +78,7 @@ class ChatMessageRepository extends AbstractCoreRepository
                 ;
             })
             ->orderBy('bids.id', 'desc')
-        //dd($Bids->toSql());
+            ->limit(50)
             ->get();
 
         foreach ($Bids as $k2=>$v) {

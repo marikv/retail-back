@@ -66,7 +66,7 @@ use Carbon\Carbon;
 @endforeach
 <style>
     @page { margin: 0; }
-    body { margin: 30px 20px 20px 60px; }
+    body { margin: 30px 30px 20px 60px; }
     body { line-height: 96%; }
 </style>
 
@@ -106,19 +106,19 @@ use Carbon\Carbon;
                 <table style="width: 100%; border-collapse: collapse; border: none;" border="1" cellspacing="0" cellpadding="0">
                     <tbody>
                     <tr style="height: 20.95pt;">
-                        <td style="width: 80px; border: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;" rowspan="2">
+                        <td style="width: 14.28%; border: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;" rowspan="2">
                             <p style="text-align: center; line-height: 100%;"><strong><span style="font-size: 8.0pt; line-height: 100%;">Suma creditului nebancar</span></strong></p>
                         </td>
-                        <td style="width: 80px; border: solid #000000 1px; border-left: none; padding: 0cm 5.4pt 0cm 5.4pt;" rowspan="2">
+                        <td style="width: 14.28%; border: solid #000000 1px; border-left: none; padding: 0cm 5.4pt 0cm 5.4pt;" rowspan="2">
                             <p style="text-align: center; line-height: 100%;"><strong><span style="font-size: 8.0pt; line-height: 100%;">Durata creditului nebancar</span></strong></p>
                         </td>
-                        <td style="width: 70px; border: solid #000000 1px; border-left: none; padding: 0cm 5.4pt 0cm 5.4pt;" rowspan="2">
+                        <td style="width: 14.28%; border: solid #000000 1px; border-left: none; padding: 0cm 5.4pt 0cm 5.4pt;" rowspan="2">
                             <p style="text-align: center; line-height: 100%;"><strong><span style="font-size: 8.0pt; line-height: 100%;">Dob&icirc;nda anuala</span></strong></p>
                         </td>
-                        <td style="width: 70px; border: solid #000000 1px; border-left: none; padding: 0cm 5.4pt 0cm 5.4pt;" rowspan="2">
+                        <td style="width: 14.28%; border: solid #000000 1px; border-left: none; padding: 0cm 5.4pt 0cm 5.4pt;" rowspan="2">
                             <p style="text-align: center; line-height: 100%;"><strong><span style="font-size: 8.0pt; line-height: 100%;">Avans de la client</span></strong></p>
                         </td>
-                        <td style="border: solid #000000 1px; border-left: none; padding: 0cm 5.4pt 0cm 5.4pt;">
+                        <td style="width: 42.84%; border: solid #000000 1px; border-left: none; padding: 0cm 5.4pt 0cm 5.4pt;">
                             <p style="text-align: center; line-height: 100%;"><strong><span style="font-size: 8.0pt; line-height: 100%;">Taxa aferenta contractului de credit nebancar</span></strong></p>
                         </td>
                     </tr>
@@ -186,19 +186,19 @@ use Carbon\Carbon;
                 <table  style="width: 100%; border-collapse: collapse; border: none;" border="1" cellspacing="0" cellpadding="0">
                     <tbody>
                     <tr style="height: 24.45pt;">
-                        <td style="width: 80px; border: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;" rowspan="2">
+                        <td style="width: 14.28%; border: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;" rowspan="2">
                             <p  style="text-align: center; line-height: 100%;"><strong><span style="font-size: 8.0pt; line-height: 100%;">Suma creditului nebancar</span></strong></p>
                         </td>
-                        <td style="width: 80px;border: solid #000000 1px; border-left: none; padding: 0cm 5.4pt 0cm 5.4pt;" rowspan="2">
+                        <td style="width: 14.28%; border: solid #000000 1px; border-left: none; padding: 0cm 5.4pt 0cm 5.4pt;" rowspan="2">
                             <p style="text-align: center; line-height: 100%;"><strong><span style="font-size: 8.0pt; line-height: 100%;">Durata creditului nebancar</span></strong></p>
                         </td>
-                        <td style="width: 70px;border: solid #000000 1px; border-left: none; padding: 0cm 5.4pt 0cm 5.4pt;" rowspan="2">
+                        <td style="width: 14.28%; border: solid #000000 1px; border-left: none; padding: 0cm 5.4pt 0cm 5.4pt;" rowspan="2">
                             <p style="text-align: center; line-height: 100%;"><strong><span style="font-size: 8.0pt; line-height: 100%;">Dob&icirc;nda anuala</span></strong></p>
                         </td>
-                        <td style="width: 70px;border: solid #000000 1px; border-left: none; padding: 0cm 5.4pt 0cm 5.4pt;" rowspan="2">
+                        <td style="width: 14.28%;border: solid #000000 1px; border-left: none; padding: 0cm 5.4pt 0cm 5.4pt;" rowspan="2">
                             <p style="text-align: center; line-height: 100%;"><strong><span style="font-size: 8.0pt; line-height: 100%;">Avans de la client</span></strong></p>
                         </td>
-                        <td style="border: solid #000000 1px; border-left: none; padding: 0cm 5.4pt 0cm 5.4pt;" colspan="2">
+                        <td style="width: 42.84%;border: solid #000000 1px; border-left: none; padding: 0cm 5.4pt 0cm 5.4pt;" colspan="2">
                             <p style="text-align: center; line-height: 100%;"><strong><span style="font-size: 8.0pt; line-height: 100%;">Taxa aferenta contractului de credit nebancar</span></strong></p>
                         </td>
                     </tr>

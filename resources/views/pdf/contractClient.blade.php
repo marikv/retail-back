@@ -5,7 +5,7 @@ use Carbon\Carbon;
 <style>
     @page { margin: 0; }
     body {
-        margin: 60px 60px 120px 85px;
+        margin: 60px 30px 160px 55px;
         font-size: 10px;
         line-height: 1;
     }
@@ -14,22 +14,55 @@ use Carbon\Carbon;
         padding-top: 3px;
         padding-bottom: 3px;
     }
+    #footer {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        height: 150px;
+        width: 100%;
+        background-color: transparent;
+        padding: 0;
+    }
+    .footer-text {
+        margin: 0 60px 20px 60px;
+        color: #74787e;
+    }
 </style>
 
 <div id="footer">
-    <table style="width: 100%; border: none;color: #626262" cellspacing="0" cellpadding="0">
+    <div class="footer-text">
+        &nbsp;&nbsp;&nbsp;Prin prezenta eu, {{($data['bid']['last_name'] ?? '')}} {{($data['bid']['first_name'] ?? '')}} {{($data['bid']['patronymic'] ?? '')}},
+        confirm faptul ca mi-a fost adusa la cunoștință informația cu privire la condițiile de creditare ale OCN „CREDIT BOX” SRL,
+        dar și faptul ca am dispus de suficient timp pentru a studia prevederile prezentului Contract cu scopul compararii acestuia cu alte oferte de creditare,
+        în vederea alegerii celei mai potrivite. Declar acordul ca aceasta informație sa-mi fie oferita direct în ziua încheierii Contractului.
+    </div>
+
+    <table style="width: 100%; border: none;color: #626262;" cellspacing="0" cellpadding="0">
         <tr>
-            <td style="font-style:italic;text-align: center;vertical-align: top; width: 50%;padding-bottom: 7px;padding-top: 12px;font-size: 12px;">
-                Creditor ______________________
-                <div style="position: relative;" >
-                    <div style="position: absolute;z-index: 999999;top: -110px; left: 50px;" class="stampila-semnatura"></div>
-                </div>
+            <td style="font-style:italic;text-align: left;vertical-align: top; width: 70%;padding-bottom: 7px;padding-top: 12px;padding-left:60px;font-size: 12px;">
+                Semnatura ______________________<br><br><br>
+                <div>Date cu caracter personal: Operator OCN „CREDIT BOX” SRL, 0003163 – 001</div>
             </td>
-            <td style="font-style:italic;text-align: center;vertical-align: top; width: 50%;padding-bottom: 7px;padding-top: 12px;font-size: 12px;">
-                Client ______________________
+            <td style="font-style:italic;text-align: right;vertical-align: top; width: 30%;padding-bottom: 7px;padding-top: 12px;padding-right:60px;font-size: 12px;">
+                Data  ____  ______________20____
             </td>
         </tr>
     </table>
+
+{{--    <table style="width: 100%; border: none;color: #626262" cellspacing="0" cellpadding="0">--}}
+{{--        <tr>--}}
+{{--            <td style="font-style:italic;text-align: center;vertical-align: top; width: 50%;padding-bottom: 7px;padding-top: 12px;font-size: 12px;">--}}
+{{--                Creditor ______________________--}}
+{{--                <div style="position: relative;" >--}}
+{{--                    <div style="position: absolute;z-index: 999999;top: -110px; left: 50px;" class="stampila-semnatura"></div>--}}
+{{--                </div>--}}
+{{--            </td>--}}
+{{--            <td style="font-style:italic;text-align: center;vertical-align: top; width: 50%;padding-bottom: 7px;padding-top: 12px;font-size: 12px;">--}}
+{{--                Client ______________________--}}
+{{--            </td>--}}
+{{--        </tr>--}}
+{{--    </table>--}}
 </div>
 
 
@@ -174,7 +207,7 @@ use Carbon\Carbon;
     <tr>
         <td class="br bb bl pl-10">
             3.7 Formula de calcul al Dobînzii Anual Efective (DAE)<br>
-            <strong>DAE - {{$data['bid']['dae']}}%</strong>
+            <div style="text-align: center;margin-top: 20px;"><strong>DAE - {{$data['bid']['dae']}}%</strong></div>
         </td>
         <td class="br bb pl-10">
             <div class="dae-formula" style="border: none;"></div>

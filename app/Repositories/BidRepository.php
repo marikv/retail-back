@@ -4,6 +4,10 @@ namespace App\Repositories;
 
 use App\Models\Bid;
 use App\Models\Bid as Model;
+use App\Models\BidMonth;
+use App\Models\BidScoring;
+use App\Models\ChatMessage;
+use App\Models\Payment;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -128,7 +132,7 @@ class BidRepository extends AbstractCoreRepository
                 ->where('bids.status_id', '!=', Model::BID_STATUS_SIGNED_CONTRACT)
                 ->where(function ($items) {
                     $items->where(function ($items) {
-                        $day = Carbon::parse(date('Y-m-d'))->modify('-2 days')->format('Y-m-d');
+                        $day = Carbon::parse(date('Y-m-d'))->modify('-7 days')->format('Y-m-d');
                         $items->where('bids.created_at', '>', $day . ' 00:00:00')
                             ->where('bids.status_id', '=', Model::BID_STATUS_REFUSED);
                     })
@@ -152,5 +156,34 @@ class BidRepository extends AbstractCoreRepository
 
         $items = $this->standardOrderBy($items, $pagination, 'id', 'desc');
         return $this->standardPagination($items, $pagination);
+    }
+
+    public function delete(int $id = 0): bool
+    {
+        $BidMonths = BidMonth::whereNull('deleted')
+            ->where('bid_id', '=', $id)
+            ->get();
+        $bidMonthRepository = new BidMonthRepository();
+        foreach ($BidMonths as $bidMonth) {
+            $bidMonthRepository->delete($bidMonth->id);
+        }
+
+        $Payments = Payment::whereNull('deleted')
+            ->where('bid_id', '=', $id)
+            ->get();
+        $PaymentRepository = new PaymentRepository();
+        foreach ($Payments as $Payment) {
+            $PaymentRepository->delete($Payment->id);
+        }
+
+        $ChatMessages = ChatMessage::whereNull('deleted')
+            ->where('bid_id', '=', $id)
+            ->get();
+        $ChatMessageRepository = new ChatMessageRepository();
+        foreach ($ChatMessages as $ChatMessage) {
+            $ChatMessageRepository->delete($ChatMessage->id);
+        }
+
+        return parent::delete($id);
     }
 }

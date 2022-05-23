@@ -481,17 +481,15 @@ class BidController extends Controller
     /**
      * @param $id
      * @param Request $request
+     * @param BidRepository $bidRepository
      * @return JsonResponse
      */
-    public function delete($id, Request $request): JsonResponse
+    public function delete($id, Request $request, BidRepository $bidRepository): JsonResponse
     {
-        /* @var $Bid Bid */
-        $Bid = Bid::findOrFail($id);
-        $Bid->deleted = true;
-        $Bid->save();
+        $bidRepository->delete($id);
 
         $message = 'Ștergere cerere';
-        Log::addNewLog($request, Log::MODULE_BIDS, Log::OPERATION_DELETE, $Bid->id, $message);
+        Log::addNewLog($request, Log::MODULE_BIDS, Log::OPERATION_DELETE, $id, $message);
 
         return  response()->json([
             'success' => true
