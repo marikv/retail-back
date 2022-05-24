@@ -79,6 +79,7 @@ class PaymentController extends Controller
         $contractNumber = $request->contractNumber;
         $paymentsInWaiting = $request->paymentsInWaiting;
         $bid_id = $request->bid_id;
+        $dealer_id = $request->dealer_id;
 
         return response()->json([
             'success' => true,
@@ -86,6 +87,7 @@ class PaymentController extends Controller
                 'contractNumber' => $contractNumber,
                 'paymentsInWaiting' => $paymentsInWaiting,
                 'bid_id' => $bid_id,
+                'dealer_id' => $dealer_id,
             ]),
         ]);
     }
