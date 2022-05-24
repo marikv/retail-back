@@ -248,8 +248,8 @@ use Carbon\Carbon;
             <span class="strong"> 4.2 Alte consecințe în caz de neexecutare</span> -în cazul în care  Clientul întârzie în realizarea rambursării plaților scadente, Creditorul va efectua apeluri telefonice și va expedia sms-uri la unul din numerele de contact indicate de Client în Contractul de credit, pentru a-l notifica asupra întârzierii plăţii și pericolului calculului penalității de întârziere
         </td>
         <td class="br bb pl-10">
-            Dacă Clientul nu va achita creditul şi/sau alte plăţi scadente stabilite în Contract  în stricta conformitate cu graficul de rambursare a plaților Creditorul are dreptul să calculeze și sa pretinda  penalități pentru expedierea notificărilor privind întârzierea plăților, în mărime de – 200 lei pentru
-            fiecare din primele trei notificări; suplimentar la penalitatea de întârziere indicată la p. 4.1 din Contract pentru expedierea notificării către Client cu privire la întârzierea plăţii, indicând valoarea sumelor restante, avertizarea privind pericolul de a pretinde plata imediată a ratelor neajunse la scadență conform Contractului de credit sau privind pericolul rezoluțiunii anticipate a Contractului.
+            Dacă Clientul nu va achita creditul şi/sau alte plăţi scadente stabilite în Contract  în stricta conformitate cu graficul de rambursare a plaților Creditorul are dreptul să calculeze și sa pretinda  alte costuri exprimate intr-o suma fixa
+            pentru expedierea notificării către Client cu privire la întârzierea plăţiilor, indicând valoarea sumelor restante, avertizarea privind pericolul de a pretinde plata imediată a ratelor neajunse la scadență conform Contractului de credit sau privind pericolul rezoluțiunii anticipate a Contractului, în mărime de – 200 lei pentru la fiecare a 20-a zi de întîrziere
         </td>
     </tr>
     <tr>
@@ -259,7 +259,7 @@ use Carbon\Carbon;
                 Clientul obţine statut de Debitor rau-  platnic în istoria sa creditară prezentă şi viitoare, şi împotriva acestuia va fi iniţiată procedura de urmărire silită pentru recuperarea plăţilor datorate conform Contractului de Credit precum şi pentru recuperarea prejudiciului cauzat şi a venitului ratat.
         </td>
         <td class="br bb pl-10">
-            Dacă Debitorul întârzie în realizarea rambursării Contractului de credit, o perioadă mai mare de 90 de zile calendaristice, calculându-se de la ziua scadentă a realizării rambursării stipulate prin Contractul de credit, Creditorul declară scadente și plătibile imediat toate plăţile conform Contractului de credit și are dreptul de a rezolvi în mod unilateral Contractul de credit calculând suplimentar o penalitate în mărime de 20% din valoarea creditului neachitat, pentru rezoluțiunea anticipată a contractului.
+            Dacă Debitorul întârzie în realizarea rambursării Contractului de credit, o perioadă mai mare de 60 de zile calendaristice, calculându-se de la ziua scadentă a realizării rambursării stipulate prin Contractul de credit, Creditorul declară scadente și plătibile imediat toate plăţile conform Contractului de credit și are dreptul de a rezolvi în mod unilateral Contractul de credit calculând suplimentar o penalitate în mărime de 20% din valoarea creditului neachitat, pentru rezoluțiunea anticipată a contractului.
             <br>
             - Creditorul va trimite o notificare, prin intermediul unei scrisori, despre rezoluțiunea anticipată, unilaterală, a Contractului de credit, şi obligaţia Clientului de a achita, în mod integral, în termen de 15 zile din momentul primirii notificării:
             <br>
@@ -273,7 +273,7 @@ use Carbon\Carbon;
             <br>
             - penalitatea de întârziere în condițiile p.4.1;
             <br>
-            - costuri pecuniare contractuale în legătură cu expedierea notificărilor în condițiile p. 4.2 ;
+            - alte costuri pecuniare contractuale în legătură cu expedierea notificărilor în condițiile p. 4.2 ;
             <br>
             - o penalitate contractuală în mărime de 20% din valoarea creditului neachitat pentru rezoluțiunea anticipată a Contractului de credit în condițiile p. 4.3 și un nou calcul al penalității calculată și neplătită pentru fiecare zi de întârziere aplicate la suma neplătită a creditului.
             <br>
