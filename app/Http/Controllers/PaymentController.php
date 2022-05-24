@@ -7,6 +7,7 @@ use App\Models\Payment;
 use App\Repositories\PaymentRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PaymentController extends Controller
 {
@@ -45,6 +46,19 @@ class PaymentController extends Controller
         } else {
             $Payment = new Payment();
         }
+        if ($request->paymentSumFact) {
+            if (!$Payment->payment_sum_fact) {
+                $Payment->date_time_fact = date('Y-m-d H:i:s');
+                $Payment->user_id_fact = Auth::id();
+
+                if ($Payment->bid_id) {
+                    $message = 'Achitare contract '.$Payment->bid_id.' suma '.$Payment->payment_sum_fact;
+                    Log::addNewLog($request, Log::MODULE_BIDS, Log::OPERATION_EDIT, $Payment->bid_id, $message);
+                }
+            }
+            $Payment->payment_sum_fact = $request->paymentSumFact;
+            $Payment->beznal = $request->beznal ? 1 : null;
+        }
         $Payment->save();
 
         return response()->json([
@@ -64,12 +78,14 @@ class PaymentController extends Controller
         $pagination = $request->pagination;
         $contractNumber = $request->contractNumber;
         $paymentsInWaiting = $request->paymentsInWaiting;
+        $bid_id = $request->bid_id;
 
         return response()->json([
             'success' => true,
             'data' => $paymentRepository->list($filter, $pagination, [
                 'contractNumber' => $contractNumber,
                 'paymentsInWaiting' => $paymentsInWaiting,
+                'bid_id' => $bid_id,
             ]),
         ]);
     }

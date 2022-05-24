@@ -31,6 +31,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property integer|null $bid_id
  * @property integer|null $dealer_id
  * @property integer|null $user_id
+ * @property integer|null $user_id_fact
  * @property integer|null $client_id
  * @property double|null $payment_sum
  * @property double|null $payment_sum_fact
@@ -52,6 +53,11 @@ class Payment extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function user_fact(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id_fact');
     }
 
     public function bid(): BelongsTo

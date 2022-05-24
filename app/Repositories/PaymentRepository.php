@@ -43,6 +43,7 @@ class PaymentRepository extends AbstractCoreRepository
             ->whereNull('payments.deleted')
             ->whereNull('dealers.deleted')
             ->whereNull('bids.deleted')
+            ->where('payments.id', '=', $id)
             ->distinct();
         if ($this->authUser && $this->authUser->role_id === User::USER_ROLE_DEALER && $this->authUser->dealer_id) {
             $items = $items->where('dealer_id', '=', $this->authUser->dealer_id);
@@ -79,6 +80,9 @@ class PaymentRepository extends AbstractCoreRepository
 
         if (!empty($options['contractNumber'])) {
             $items = $items->where('bid_id', '=', $options['contractNumber']);
+        }
+        if (!empty($options['bid_id'])) {
+            $items = $items->where('bid_id', '=', $options['bid_id']);
         }
 
         if ((int)$options['paymentsInWaiting'] === 1) {
