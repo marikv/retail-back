@@ -84,6 +84,9 @@ class PaymentRepository extends AbstractCoreRepository
         if (!empty($options['bid_id'])) {
             $items = $items->where('bid_id', '=', $options['bid_id']);
         }
+        if (!empty($options['dealer_id'])) {
+            $items = $items->where('dealer_id', '=', $options['dealer_id']);
+        }
 
         if ((int)$options['paymentsInWaiting'] === 1) {
             $items = $items->whereNotNull('payments.date_time_fact');
