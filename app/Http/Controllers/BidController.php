@@ -165,20 +165,20 @@ class BidController extends Controller
 
                 $Bid->execute_user_id = Auth::id();
                 $Bid->execute_date_time = date('Y-m-d H:i:s');
-                ChatMessage::sendNewMessage($Bid->user_id, 'Cerere în lucru', $Bid->id);
+                ChatMessage::sendNewMessage($Bid->user_id, 'Cerere în lucru №'.$Bid->id, $Bid->id);
 
             } else if ((int)$Bid->status_id === Bid::BID_STATUS_IN_WORK && (int)$request->status_id === Bid::BID_STATUS_APPROVED) {
 
                 $Bid->sum_max_permis = $request->sum_max_permis;
                 $Bid->approved_user_id = Auth::id();
                 $Bid->approved_date_time = date('Y-m-d H:i:s');
-                ChatMessage::sendNewMessage($Bid->user_id, 'Cerere aprobată', $Bid->id);
+                ChatMessage::sendNewMessage($Bid->user_id, 'Cerere aprobată №'.$Bid->id, $Bid->id);
 
             } else if ((int)$Bid->status_id === Bid::BID_STATUS_APPROVED && (int)$request->status_id === Bid::BID_STATUS_SIGNED_CONTRACT) {
 
                 $Bid->signed_user_id = Auth::id();
                 $Bid->signed_date_time = date('Y-m-d H:i:s');
-                ChatMessage::sendNewMessage($Bid->user_id, 'Contract semnat', $Bid->id);
+                ChatMessage::sendNewMessage($Bid->user_id, 'Contract semnat №'.$Bid->id, $Bid->id);
 
                 $paymentRepository->createPayments($Bid);
 
@@ -186,7 +186,7 @@ class BidController extends Controller
 
                 $Bid->refused_user_id = Auth::id();
                 $Bid->refused_date_time = date('Y-m-d H:i:s');
-                ChatMessage::sendNewMessage($Bid->user_id, 'Cerere refuzată', $Bid->id);
+                ChatMessage::sendNewMessage($Bid->user_id, 'Cerere refuzată №'.$Bid->id, $Bid->id);
 
             } else if ((int)$Bid->status_id === (int)$request->status_id && (int)$request->status_id === Bid::BID_STATUS_IN_WORK) {
 
@@ -201,9 +201,11 @@ class BidController extends Controller
                 ], 200);
             }
 
+            $message = 'Statusul cererii a fost schimbat din '. (Bid::BID_STATUS_NAMES[(int)$Bid->status_id] ?? '')
+                .' în '. (Bid::BID_STATUS_NAMES[(int)$request->status_id] ?? '');
+
             $Bid->status_id = $request->status_id;
 
-            $message = 'Statusul cererii a fost schimbat în '.Bid::BID_STATUS_NAMES[(int)$Bid->status_id];
             Log::addNewLog($request, Log::MODULE_BIDS, Log::OPERATION_EDIT, $Bid->id, $message);
 
             $Bid->save();

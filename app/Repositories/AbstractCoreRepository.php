@@ -61,6 +61,7 @@ abstract  class AbstractCoreRepository
 
     /**
      * @param array $data
+     * @return mixed
      */
     public function create(array $data = [])
     {
@@ -75,6 +76,7 @@ abstract  class AbstractCoreRepository
     /**
      * @param int $id
      * @param array $data
+     * @return mixed
      */
     public function update(int $id = 0, array $data = [])
     {

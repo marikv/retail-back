@@ -63,10 +63,14 @@ class PaymentController extends Controller
         $filter = $request->filter;
         $pagination = $request->pagination;
         $contractNumber = $request->contractNumber;
+        $paymentsInWaiting = $request->paymentsInWaiting;
 
         return response()->json([
             'success' => true,
-            'data' => $paymentRepository->list($filter, $pagination, ['contractNumber' => $contractNumber])
+            'data' => $paymentRepository->list($filter, $pagination, [
+                'contractNumber' => $contractNumber,
+                'paymentsInWaiting' => $paymentsInWaiting,
+            ]),
         ]);
     }
 
