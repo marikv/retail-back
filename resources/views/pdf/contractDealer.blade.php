@@ -53,7 +53,7 @@ use Carbon\Carbon;
 
 
     <div>
-        1.1 „ CREDITOR” - OCN „CREDIT BOX” SRL, c/f 1019602000472, adresa juridica: mun. Balți, str. Ștefancel Mare, 57  care, în conformitate cu legislația în vigoare, acordă cu titlu professional și desfașoara activitați de creditare nebancara.
+        1.1 „ CREDITOR” - OCN „CREDIT BOX” SRL, c/f 1019602000472, adresa juridica: mun. Balți, str. Ștefan cel Mare, 57  care, în conformitate cu legislația în vigoare, acordă cu titlu professional și desfașoara activitați de creditare nebancara.
         <br>1.2 „BENEFICIAR” - persoană juridică care își desfășoară activitățile în conformitate cu legislația aplicabilă și vinde sau prestează servicii pentru vânzarea de bunuri;
         <br>1.3 „BUNURI ALE BENEFICIARULUI” sau „BUNURI” - bunuri vândute de Beneficiar prin magazine, reprezentanțe sau puncte de vânzare (bunuri de uz casnic, echipamente digitale, alte bunuri).
         <br>1.4 CONTRACT DE CREDIT LEGAT– contract de credit care, din punct de vedere obiectiv, constituie o unitate comercială/economic şi serveşte exclusive finanţării unui contract ce are ca obiect furnizarea unor bunuri sau prestarea unui serviciu;

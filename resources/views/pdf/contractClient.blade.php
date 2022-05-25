@@ -104,7 +104,7 @@ use Carbon\Carbon;
         </td>
         <td class="w-50 br bb pl-10">
             <span class="strong">OCN „CREDIT BOX” SRL</span><br>
-            mun. Bălți, str. Ștefan cel Mare,57<br>
+            mun. Bălți, str. Ștefan cel Mare, 57<br>
             023185858<br>
             creditboxmd@gmail.com<br>
             &nbsp;
