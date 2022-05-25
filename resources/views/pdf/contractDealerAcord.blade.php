@@ -135,32 +135,35 @@ use Carbon\Carbon;
                             <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">6, 8, 10, 12, 18, 24 luni</span></p>
                         </td>
                         <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
-                            <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">0%</span></p>
-                        </td>
-                        <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
-                            <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">0%</span></p>
-                        </td>
-                        <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
-                            <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">Variaza de la 2,08% pina la 2,16% lunar din soldul initial</span></p>
-                        </td>
-                    </tr>
-                    <tr style="height: 12.65pt;">
-                        <td style="border: solid #000000 1px; border-top: none; padding: 0cm 5.4pt 5pt 5.4pt;">
-                            <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">500-25000<br>Neoficial angajat</span></p>
-                        </td>
-                        <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
-                            <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">6, 8, 10, 12, 18, 24 luni</span></p>
-                        </td>
-                        <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
                             <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">Variaza de la 1,93% pina la 1,95% lunar din soldul initial</span></p>
                         </td>
                         <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
                             <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">0%</span></p>
                         </td>
                         <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">
-                            <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">0%</span></p>
+                            <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; ">
+                                <span style="font-size: 8.0pt; line-height: 100%;">0%</span>
+{{--                                <span style="font-size: 8.0pt; line-height: 100%;">Variaza de la 2,08% pina la 2,16% lunar din soldul initial</span>--}}
+                            </p>
                         </td>
                     </tr>
+{{--                    <tr style="height: 12.65pt;">--}}
+{{--                        <td style="border: solid #000000 1px; border-top: none; padding: 0cm 5.4pt 5pt 5.4pt;">--}}
+{{--                            <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">500-25000<br>Neoficial angajat</span></p>--}}
+{{--                        </td>--}}
+{{--                        <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">--}}
+{{--                            <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">6, 8, 10, 12, 18, 24 luni</span></p>--}}
+{{--                        </td>--}}
+{{--                        <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">--}}
+{{--                            <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">Variaza de la 1,93% pina la 1,95% lunar din soldul initial</span></p>--}}
+{{--                        </td>--}}
+{{--                        <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">--}}
+{{--                            <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">0%</span></p>--}}
+{{--                        </td>--}}
+{{--                        <td style="border-top: none; border-left: none; border-bottom: solid #000000 1px; border-right: solid #000000 1px; padding: 0cm 5.4pt 0cm 5.4pt;">--}}
+{{--                            <p style="text-align: center; line-height: 100%; margin: 0cm 0cm 0.0001pt; font-size: 9pt; "><span style="font-size: 8.0pt; line-height: 100%;">0%</span></p>--}}
+{{--                        </td>--}}
+{{--                    </tr>--}}
                     </tbody>
                 </table>
             @endif
@@ -311,7 +314,8 @@ use Carbon\Carbon;
                 eliberat de catre Creditor Clientului cu asistarea Beneficiarului.
             </li>
             <li>
-                Plata discountului devine exigibila de îndata ce Creditorul a transferat suma creditului în baza contractului de credit nebancar încheiat prin intermediul/cu asistarea Beneficiarului.
+                Plata discountului devine exigibila de îndata ce Creditorul a transferat suma creditului în baza contractului
+                de credit nebancar încheiat prin intermediul/cu asistarea Beneficiarului.
             </li>
             <li>
                 Plata discountului va fi făcuta lunar, prin transfer în contul Beneficiarului, nu mai târziu de data de 15 a lunii următoare celei de referinţă.
