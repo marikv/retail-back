@@ -40,7 +40,7 @@ class ChatMessageRepository extends AbstractCoreRepository
     {
         $authUser = $this->authUser;
         $itemsArray = [];
-
+        $k = 0;
         if ($authUser->role_id !== User::USER_ROLE_DEALER) {
 
             $Users = DB::table('users')
@@ -90,7 +90,7 @@ class ChatMessageRepository extends AbstractCoreRepository
             $itemsArray[$k + $k2 + 1]['lastMessage'] = $ChatMessage;
             $itemsArray[$k + $k2 + 1]['sortDate'] = $ChatMessage && $ChatMessage->created_at ? $ChatMessage->created_at : $v->created_at;
         }
-        return $itemsArray;
+        return [... array_values($itemsArray)];
     }
 
     /**
