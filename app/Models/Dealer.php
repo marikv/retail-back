@@ -34,7 +34,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $bank_cb
  * @property string $bank_iban
  * @property string $bank_swift
- * @property double $bank_tva
+ * @property string $bank_tva
  * @property string $bank_valuta
  * @property int $deleted
  * @property string $created_at

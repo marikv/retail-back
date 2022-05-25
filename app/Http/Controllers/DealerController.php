@@ -97,7 +97,7 @@ class DealerController extends Controller
         $Dealer->bank_cb = $request->bank_cb;
         $Dealer->bank_iban = $request->bank_iban;
         $Dealer->bank_swift = $request->bank_swift;
-        $Dealer->bank_tva = $request->bank_tva ? (double)$request->bank_tva : null;
+        $Dealer->bank_tva = $request->bank_tva;
         $Dealer->bank_valuta = $request->bank_valuta;
         $Dealer->contract_date = Carbon::parse($request->contract_date)->format('Y-m-d');
         $Dealer->save();
