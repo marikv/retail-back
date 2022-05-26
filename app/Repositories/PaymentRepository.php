@@ -79,13 +79,13 @@ class PaymentRepository extends AbstractCoreRepository
             ->distinct();
 
         if (!empty($options['contractNumber'])) {
-            $items = $items->where('bid_id', '=', $options['contractNumber']);
+            $items = $items->where('payments.bid_id', '=', $options['contractNumber']);
         }
         if (!empty($options['bid_id'])) {
-            $items = $items->where('bid_id', '=', $options['bid_id']);
+            $items = $items->where('payments.bid_id', '=', $options['bid_id']);
         }
         if (!empty($options['dealer_id'])) {
-            $items = $items->where('dealer_id', '=', $options['dealer_id']);
+            $items = $items->where('payments.dealer_id', '=', $options['dealer_id']);
         }
 
         if ((int)$options['paymentsInWaiting'] === 1) {
@@ -98,7 +98,7 @@ class PaymentRepository extends AbstractCoreRepository
             $items = $items->where('dealers.name', 'like', $filter.'%');
         }
         if ($this->authUser && $this->authUser->role_id === User::USER_ROLE_DEALER && $this->authUser->dealer_id) {
-            $items = $items->where('dealer_id', '=', $this->authUser->dealer_id);
+            $items = $items->where('payments.dealer_id', '=', $this->authUser->dealer_id);
         }
 
         $items = $this->standardOrderBy($items, $pagination, 'id', 'desc');
