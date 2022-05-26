@@ -16,6 +16,7 @@ use App\Repositories\BidMonthRepository;
 use App\Repositories\BidRepository;
 use App\Repositories\PaymentRepository;
 use App\Services\CalculatorService;
+use App\Services\TelegramBot;
 use Carbon\Carbon;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Http\JsonResponse;
@@ -153,6 +154,7 @@ class BidController extends Controller
      * @param $id
      * @param Request $request
      * @param BidRepository $bidRepository
+     * @param PaymentRepository $paymentRepository
      * @return JsonResponse
      */
     public function setBidStatus($id, Request $request, BidRepository $bidRepository, PaymentRepository $paymentRepository): JsonResponse
@@ -167,12 +169,16 @@ class BidController extends Controller
                 $Bid->execute_date_time = date('Y-m-d H:i:s');
                 ChatMessage::sendNewMessage($Bid->user_id, 'Cerere în lucru №'.$Bid->id, $Bid->id);
 
+                TelegramBot::sendMessage('Cerere în lucru №'.$Bid->id.' user '. Auth::user()->name, $request);
+
             } else if ((int)$Bid->status_id === Bid::BID_STATUS_IN_WORK && (int)$request->status_id === Bid::BID_STATUS_APPROVED) {
 
                 $Bid->sum_max_permis = $request->sum_max_permis;
                 $Bid->approved_user_id = Auth::id();
                 $Bid->approved_date_time = date('Y-m-d H:i:s');
                 ChatMessage::sendNewMessage($Bid->user_id, 'Cerere aprobată №'.$Bid->id, $Bid->id);
+
+                TelegramBot::sendMessage('Cerere aprobată №'.$Bid->id, $request);
 
             } else if ((int)$Bid->status_id === Bid::BID_STATUS_APPROVED && (int)$request->status_id === Bid::BID_STATUS_SIGNED_CONTRACT) {
 
@@ -187,6 +193,8 @@ class BidController extends Controller
                 $Bid->refused_user_id = Auth::id();
                 $Bid->refused_date_time = date('Y-m-d H:i:s');
                 ChatMessage::sendNewMessage($Bid->user_id, 'Cerere refuzată №'.$Bid->id, $Bid->id);
+
+                TelegramBot::sendMessage('Cerere refuzată №'.$Bid->id, $request);
 
             } else if ((int)$Bid->status_id === (int)$request->status_id && (int)$request->status_id === Bid::BID_STATUS_IN_WORK) {
 
@@ -230,7 +238,6 @@ class BidController extends Controller
      */
     public function addOrEditScoring(int $id, Request $request): JsonResponse
     {
-
         if ($id) {
             $BidScoring = BidScoring::where('bid_id', '=', $id)->orderBy('id', 'desc')->first();
             if (!$BidScoring) {
@@ -297,6 +304,7 @@ class BidController extends Controller
             'data' => $bidRepository->getById($id)
         ], 200);
     }
+
     /**
      * @param int $id
      * @param Request $request
@@ -311,9 +319,12 @@ class BidController extends Controller
             'data' => $BidScoring
         ], 200);
     }
+
     /**
      * @param int $id
      * @param Request $request
+     * @param BidRepository $bidRepository
+     * @param BidMonthRepository $bidMonthRepository
      * @return JsonResponse
      */
     public function addOrEdit(int $id, Request $request, BidRepository $bidRepository, BidMonthRepository $bidMonthRepository): JsonResponse
@@ -461,6 +472,7 @@ class BidController extends Controller
             $message = 'Cerere nouă';
             // ChatMessage::sendNewMessage(null, 'Cerere nouă', $Bid->id);
             Log::addNewLog($request, Log::MODULE_BIDS, Log::OPERATION_ADD, $Bid->id, $message);
+            TelegramBot::sendMessage('Cerere noua №'.$Bid->id, $request);
 
             return response()->json([
                 'success' => true,
