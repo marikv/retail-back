@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Dealer;
 use App\Models\DealerProduct;
+use App\Models\DealerTypeCredit;
 use App\Models\Log;
 use App\Models\Product;
 use App\Models\TypeCredit;
@@ -28,12 +29,26 @@ class DealerController extends Controller
     public function dealerProducts(int $id, Request $request): JsonResponse
     {
         $DealerProducts = null;
+        $DealerTypeCredits = [];
 
         if ($id > 0) {
             $DealerProducts = DealerProduct::where('dealer_id', '=', $id)
                 ->whereNull('deleted')
                 ->orderBy('id', 'desc')
                 ->get();
+
+            $TypeCredits = TypeCredit::whereNull('deleted')
+                ->orderBy('name', 'desc')
+                ->get();
+            /* @var $TypeCredit TypeCredit */
+            foreach ($TypeCredits as $k => $TypeCredit) {
+                $DealerTypeCredits[$k] = $TypeCredit->toArray();
+                $DealerTypeCredits[$k]['DealerTypeCredits'] = DealerTypeCredit::where('dealer_id', '=', $id)
+                    ->whereNull('deleted')
+                    ->where('type_credit_id', '=', $TypeCredit->id)
+                    ->orderBy('id', 'desc')
+                    ->first();
+            }
         }
         $Products = Product::whereNull('deleted')
             ->orderBy('id', 'desc')
@@ -45,7 +60,99 @@ class DealerController extends Controller
             'data' => [
                 'DealerProducts' => $DealerProducts,
                 'Products' => $Products,
+                'DealerTypeCredits' => $DealerTypeCredits
             ]
+        ], 200);
+    }
+
+    /**
+     * @param int $id
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function addOrEditDealerTypeCredit(int $id, Request $request): JsonResponse
+    {
+        if ($id) {
+            $DealerTyepCredit = DealerTypeCredit::findOrFail($id);
+        } else {
+            $DealerTyepCredit = DealerTypeCredit::whereNull('deleted')
+                ->where('dealer_id', '=', $request->dealer_id)
+                ->where('type_credit_id', '=', $request->type_credit_id)
+                ->first();
+            if (!$DealerTyepCredit) {
+                $DealerTyepCredit = new DealerTypeCredit();
+            }
+            $DealerTyepCredit->dealer_id = $request->dealer_id;
+            $DealerTyepCredit->type_credit_id = $request->type_credit_id;
+        }
+        $DealerTyepCredit->percent_bonus_magazin = $request->percent_bonus_magazin;
+        $DealerTyepCredit->percent_comision_magazin = $request->percent_comision_magazin;
+        $DealerTyepCredit->save();
+
+        return response()->json([
+            'success' => true,
+            'data' => []
+        ], 200);
+    }
+
+    /**
+     * @param int $id
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function editDealerProducts(int $id, Request $request): JsonResponse
+    {
+        $productIdsArray = $request->products;
+
+        $DealerProducts = DealerProduct::where('dealer_id', '=', $id)->whereNull('deleted')->get();
+
+        if ($productIdsArray) {
+            $productIdsCurrentInDb = [];
+
+            if ($DealerProducts) {
+                /* @var $DealerProduct DealerProduct */
+
+                foreach ($DealerProducts as $DealerProduct) {
+                    $productIdsCurrentInDb[] = (int)$DealerProduct->product_id;
+                }
+            }
+
+            foreach ($productIdsArray as $product_id) {
+                if (in_array((int)$product_id, $productIdsCurrentInDb, true)) {
+                    continue;
+                }
+
+                $DealerProduct = DealerProduct::where('dealer_id', '=', $id)
+                    ->where('product_id', '=', $product_id)
+                    ->whereNotNull('deleted')
+                    ->first();
+                if (!$DealerProduct) {
+                    $DealerProduct = new DealerProduct();
+                    $DealerProduct->dealer_id = $id;
+                    $DealerProduct->product_id = $product_id;
+                }
+                $DealerProduct->deleted = null;
+                $DealerProduct->save();
+            }
+
+            foreach ($productIdsCurrentInDb as $productIdCurrentInDb) {
+                if (!in_array((int)$productIdCurrentInDb, $productIdsArray, true)) {
+                    $DealerProduct = DealerProduct::where('dealer_id', '=', $id)
+                        ->where('product_id', '=', $productIdCurrentInDb)
+                        ->whereNull('deleted')
+                        ->first();
+                    if ($DealerProduct) {
+                        $DealerProduct->deleted = true;
+                        $DealerProduct->save();
+                    }
+                }
+            }
+        }
+
+
+        return response()->json([
+            'success' => true,
+            'data' => []
         ], 200);
     }
 
@@ -101,19 +208,6 @@ class DealerController extends Controller
         $Dealer->bank_valuta = $request->bank_valuta;
         $Dealer->contract_date = Carbon::parse($request->contract_date)->format('Y-m-d');
         $Dealer->save();
-
-        DealerProduct::where('dealer_id', '=', $Dealer->id)
-            ->whereNull('deleted')
-            ->update(['deleted' => 1]);
-        if ($request->products) {
-           foreach ($request->products as $product_id) {
-               $DealerProduct = new DealerProduct();
-               $DealerProduct->dealer_id = $Dealer->id;
-               $DealerProduct->product_id = $product_id;
-               $DealerProduct->deleted = null;
-               $DealerProduct->save();
-           }
-        }
 
         return response()->json([
             'success' => true,

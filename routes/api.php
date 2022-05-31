@@ -47,6 +47,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/dealers/get-data-by-id/{id}', [DealerController::class, 'getDataById']);
     Route::delete('/dealers/{id}', [DealerController::class, 'deleteDealer']);
     Route::get('/dealer-products/{id}', [DealerController::class, 'dealerProducts']);
+    Route::post('/edit-dealer-products/{id}', [DealerController::class, 'editDealerProducts']);
+    Route::post('/dealer-type-credits/{id}', [DealerController::class, 'addOrEditDealerTypeCredit']);
 
     Route::post('/clients-list', [ClientController::class, 'clientsList']);
 

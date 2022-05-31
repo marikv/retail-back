@@ -29,6 +29,8 @@ class DealerRepository extends AbstractCoreRepository
             ->with('dealer_products')
             ->with('dealer_products.product')
             ->with('dealer_products.product.type_credits')
+            ->with('dealer_type_credits')
+            ->with('dealer_type_credits.type_credit')
             ->first()
             ->toArray();
     }

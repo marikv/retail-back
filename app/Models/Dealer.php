@@ -52,4 +52,12 @@ class Dealer extends Model
     {
         return $this->hasMany(DealerProduct::class)->whereNull('deleted');
     }
+
+    /**
+     * @return HasMany
+     */
+    public function dealer_type_credits(): HasMany
+    {
+        return $this->hasMany(DealerTypeCredit::class);
+    }
 }

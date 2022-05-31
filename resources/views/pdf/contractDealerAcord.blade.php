@@ -3,6 +3,10 @@ use Carbon\Carbon;
 ?>
 @include('pdf.header', $data)
 @php
+    $productIdRetailStandart = 1;
+    $productIdRetailAvante = 2;
+    $productIdRetail1 = 3;
+    $productIdRetail0 = 4;
     $hasStandardProduct = false;
     $hasAvanteProduct = false;
     $has1percentProduct = false;
@@ -13,6 +17,7 @@ use Carbon\Carbon;
     $tvaRetail1 = 0;
     $tvaRetail0 = 0;
 @endphp
+
 @foreach ($data['dealer']['dealer_products'] as $dealer_product)
     @if (isset($dealer_product['product']['type_credits'][0]))
         @foreach ($dealer_product['product']['type_credits'] as $type_credit)
@@ -21,49 +26,72 @@ use Carbon\Carbon;
                     $tva = $type_credit['percent_bonus_magazin'];
                 @endphp
             @endif
-            @if ($dealer_product['product_id'] === 1)
+            @if ($dealer_product['product_id'] === $productIdRetailStandart)
                 @php
                     $tvaRetailStandard = $type_credit['percent_bonus_magazin'];
                 @endphp
             @endif
-            @if ($dealer_product['product_id'] === 2)
+            @if ($dealer_product['product_id'] === $productIdRetailAvante)
                 @php
                     $tvaRetailAvante = $type_credit['percent_bonus_magazin'];
                 @endphp
             @endif
-            @if ($dealer_product['product_id'] === 3)
+            @if ($dealer_product['product_id'] === $productIdRetail1)
                 @php
                     $tvaRetail1 = $type_credit['percent_bonus_magazin'];
                 @endphp
             @endif
-            @if ($dealer_product['product_id'] === 4)
+            @if ($dealer_product['product_id'] === $productIdRetail0)
                 @php
                     $tvaRetail0 = $type_credit['percent_bonus_magazin'];
                 @endphp
             @endif
         @endforeach
     @endif
-    @if ($dealer_product['product_id'] === 1)
+    @if ($dealer_product['product_id'] === $productIdRetailStandart)
         @php
             $hasStandardProduct = true;
         @endphp
     @endif
-    @if ($dealer_product['product_id'] === 2)
+    @if ($dealer_product['product_id'] === $productIdRetailAvante)
         @php
             $hasAvanteProduct = true;
         @endphp
     @endif
-    @if ($dealer_product['product_id'] === 3)
+    @if ($dealer_product['product_id'] === $productIdRetail1)
         @php
             $has1percentProduct = true;
         @endphp
     @endif
-    @if ($dealer_product['product_id'] === 4)
+    @if ($dealer_product['product_id'] === $productIdRetail0)
         @php
             $has0percentProduct = true;
         @endphp
     @endif
 @endforeach
+
+@if (isset($data['dealer']['dealer_type_credits']))
+    @foreach ($data['dealer']['dealer_type_credits'] as $dealer_type_credit)
+        @if ($dealer_type_credit['type_credit']['product_id'] === $productIdRetailStandart)
+            @php
+                $tvaRetailStandard = $dealer_type_credit['percent_bonus_magazin'];
+            @endphp
+        @elseif ($dealer_type_credit['type_credit']['product_id'] === $productIdRetailAvante)
+            @php
+                $tvaRetailAvante = $dealer_type_credit['percent_bonus_magazin'];
+            @endphp
+        @elseif ($dealer_type_credit['type_credit']['product_id'] === $productIdRetail1)
+            @php
+                $tvaRetail1 = $dealer_type_credit['percent_bonus_magazin'];
+            @endphp
+        @elseif ($dealer_type_credit['type_credit']['product_id'] === $productIdRetail0)
+            @php
+                $tvaRetail0 = $dealer_type_credit['percent_bonus_magazin'];
+            @endphp
+        @endif
+    @endforeach
+@endif
+
 <style>
     @page { margin: 0; }
     body { margin: 30px 30px 20px 60px; }
@@ -291,25 +319,16 @@ use Carbon\Carbon;
                 În scopul stimulării promovării serviciiilor de creditare nebancara ale Creditorului clienților Beneficiarului,
                 Creditorul va achita Benerficiarului
                 @if ($tvaRetailStandard > 0)
-                    un discount care reprezinta <strong>{{$tvaRetailStandard}}% (cu TVA)</strong> din valoarea <strong>creditului Retail Standart</strong>
-                @endif
-                @if ($tvaRetailStandard > 0 && ($tvaRetailAvante > 0 || $tvaRetail1 > 0 || $tvaRetail0 > 0))
-                    și
+                    un discount care reprezinta <strong>{{$tvaRetailStandard}}% (cu TVA)</strong> din valoarea <strong>creditului Retail Standart</strong>,
                 @endif
                 @if ($tvaRetailAvante > 0)
-                    un discount care reprezinta <strong>{{$tvaRetailAvante}}% (cu TVA)</strong> din valoarea <strong>creditului Retail Avante</strong>
-                @endif
-                @if (($tvaRetailStandard > 0 || $tvaRetailAvante > 0) && ($tvaRetail1 > 0 || $tvaRetail0 > 0))
-                    și
+                    un discount care reprezinta <strong>{{$tvaRetailAvante}}% (cu TVA)</strong> din valoarea <strong>creditului Retail Avante</strong>,
                 @endif
                 @if ($tvaRetail1 > 0)
-                    un discount care reprezinta <strong>{{$tvaRetail1}}% (cu TVA)</strong> din valoarea <strong>creditului Retail 1%</strong>
-                @endif
-                @if (($tvaRetailStandard > 0 || $tvaRetailAvante > 0 || $tvaRetail1) && $tvaRetail0 > 0)
-                    și
+                    un discount care reprezinta <strong>{{$tvaRetail1}}% (cu TVA)</strong> din valoarea <strong>creditului Retail 1%</strong>,
                 @endif
                 @if ($tvaRetail0 > 0)
-                    un discount care reprezinta <strong>{{$tvaRetail0}}% (cu TVA)</strong> din valoarea <strong>creditului Retail 0%</strong>
+                    un discount care reprezinta <strong>{{$tvaRetail0}}% (cu TVA)</strong> din valoarea <strong>creditului Retail 0%</strong>,
                 @endif
                 eliberat de catre Creditor Clientului cu asistarea Beneficiarului.
             </li>
