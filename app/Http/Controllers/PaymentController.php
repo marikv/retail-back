@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Log;
 use App\Models\Payment;
 use App\Repositories\PaymentRepository;
+use App\Services\Integration;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 
 class PaymentController extends Controller
 {
@@ -38,6 +40,7 @@ class PaymentController extends Controller
      * @param Request $request
      * @param PaymentRepository $paymentRepository
      * @return JsonResponse
+     * @throws \JsonException
      */
     public function addOrEdit($id, Request $request, PaymentRepository $paymentRepository): JsonResponse
     {
@@ -46,16 +49,21 @@ class PaymentController extends Controller
         } else {
             $Payment = new Payment();
         }
-        if ($request->paymentSumFact) {
-            if (!$Payment->payment_sum_fact) {
-                $Payment->date_time_fact = date('Y-m-d H:i:s');
-                $Payment->user_id_fact = Auth::id();
+        if ($request->paymentSumFact && !$Payment->payment_sum_fact) {
+            $Payment->payment_sum_fact = $request->paymentSumFact;
+            $Payment->beznal = $request->beznal ? 1 : null;
+            $Payment->date_time_fact = date('Y-m-d H:i:s');
+            $Payment->user_id_fact = Auth::id();
+            $Payment->pko_number = null;
 
-                if ($Payment->bid_id) {
-                    $message = 'Achitare contract '.$Payment->bid_id.' suma '.$Payment->payment_sum_fact;
-                    Log::addNewLog($request, Log::MODULE_BIDS, Log::OPERATION_EDIT, $Payment->bid_id, $message);
-                }
+            if ($Payment->bid_id) {
+                $message = 'Achitare contract '.$Payment->bid_id.' suma '.$Payment->payment_sum_fact;
+                Log::addNewLog($request, Log::MODULE_BIDS, Log::OPERATION_EDIT, $Payment->bid_id, $message);
             }
+            $Payment->save();
+
+            // Integration::exportPaymentToCash($Payment);
+        } else if ($request->paymentSumFact) {
             $Payment->payment_sum_fact = $request->paymentSumFact;
             $Payment->beznal = $request->beznal ? 1 : null;
         }
@@ -63,7 +71,9 @@ class PaymentController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $paymentRepository->getById($Payment->id)
+            'data' => [
+                'payment' => $paymentRepository->getById($Payment->id),
+            ],
         ], 200);
     }
 

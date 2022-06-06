@@ -23,6 +23,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property integer $id
  * @property integer $type
  * @property integer|null $pko_number
+ * @property integer|null $cash_id
+ * @property string $cash_api_response
  * @property string $date_time
  * @property string $date_time_fact
  * @property boolean|null $beznal
@@ -69,4 +71,29 @@ class Payment extends Model
     {
         return $this->belongsTo(Client::class);
     }
+
+//    public static function generatePkoNumber(int $type = 1, int $cash_name_id = null, $beznal = null)
+//    {
+//        if ((int)$beznal === 1) {
+//            return null;
+//        }
+//        $currentYear = date('Y');
+//
+//        $maxNumberValue =  self::whereNull('deleted')
+//            ->where('type', '=', $type)
+//            ->where('date_time', '>=', $currentYear . '-01-01 00:00:00');
+//        if ($cash_name_id > 0) {
+//            $maxNumberValue = $maxNumberValue->where('cash_name_id', '=', $cash_name_id);
+//        }
+//        if ($beznal) {
+//            $maxNumberValue = $maxNumberValue->whereNotNull('beznal');
+//        } else {
+//            $maxNumberValue = $maxNumberValue->whereNull('beznal');
+//        }
+//        $maxNumberValue = $maxNumberValue->max('pko_number');
+//        $maxNumberValue = $maxNumberValue ? (int)$maxNumberValue : 0;
+//
+//        ++$maxNumberValue;
+//        return $maxNumberValue;
+//    }
 }

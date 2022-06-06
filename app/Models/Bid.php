@@ -33,6 +33,8 @@ use JetBrains\PhpStorm\ArrayShape;
  * @property string $approved_date_time
  * @property integer $signed_user_id
  * @property string $signed_date_time
+ * @property integer $payed_user_id
+ * @property string $payed_date_time
  * @property integer $refused_user_id
  * @property string $refused_date_time
  * @property integer $client_id
@@ -105,14 +107,16 @@ class Bid extends Model
     public const BID_STATUS_IN_WORK = 1;
     public const BID_STATUS_APPROVED = 2;
     public const BID_STATUS_REFUSED = 3;
-    public const BID_STATUS_SIGNED_CONTRACT = 4;
+    public const BID_STATUS_CONTRACT_SIGNED = 4;
+    public const BID_STATUS_CONTRACT_PAYED = 5;
 
     public const BID_STATUS_NAMES = [
         self::BID_STATUS_NEW => 'Cerere nouă',
         self::BID_STATUS_IN_WORK => 'Cerere în lucru',
         self::BID_STATUS_APPROVED => 'Cerere aprobată',
         self::BID_STATUS_REFUSED => 'Cerere refuzată',
-        self::BID_STATUS_SIGNED_CONTRACT => 'Contract semnat',
+        self::BID_STATUS_CONTRACT_SIGNED => 'Contract semnat',
+        self::BID_STATUS_CONTRACT_PAYED => 'Contract închis',
     ];
 
     /**

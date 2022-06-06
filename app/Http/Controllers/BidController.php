@@ -36,10 +36,14 @@ class BidController extends Controller
         $filter = $request->filter;
         $pagination = $request->pagination;
         $activeModule = $request->activeModule;
+        $dealer_id = $request->dealer_id;
 
         return response()->json([
             'success' => true,
-            'data' => $bidRepository->list($filter, $pagination, ['activeModule' => $activeModule])
+            'data' => $bidRepository->list($filter, $pagination, [
+                'activeModule' => $activeModule,
+                'dealer_id' => $dealer_id,
+            ])
         ]);
     }
 
@@ -170,7 +174,6 @@ class BidController extends Controller
                 ChatMessage::sendNewMessage($Bid->user_id, 'Cerere în lucru №'.$Bid->id, $Bid->id);
 
                 TelegramBot::sendMessage('Cerere în lucru №'.$Bid->id.' user '. Auth::user()->name, $request);
-
             } else if ((int)$Bid->status_id === Bid::BID_STATUS_IN_WORK && (int)$request->status_id === Bid::BID_STATUS_APPROVED) {
 
                 $Bid->sum_max_permis = $request->sum_max_permis;
@@ -179,15 +182,6 @@ class BidController extends Controller
                 ChatMessage::sendNewMessage($Bid->user_id, 'Cerere aprobată №'.$Bid->id, $Bid->id);
 
                 TelegramBot::sendMessage('Cerere aprobată №'.$Bid->id, $request);
-
-            } else if ((int)$Bid->status_id === Bid::BID_STATUS_APPROVED && (int)$request->status_id === Bid::BID_STATUS_SIGNED_CONTRACT) {
-
-                $Bid->signed_user_id = Auth::id();
-                $Bid->signed_date_time = date('Y-m-d H:i:s');
-                ChatMessage::sendNewMessage($Bid->user_id, 'Contract semnat №'.$Bid->id, $Bid->id);
-
-                $paymentRepository->createPayments($Bid);
-
             } else if ((int)$Bid->status_id === Bid::BID_STATUS_IN_WORK && (int)$request->status_id === Bid::BID_STATUS_REFUSED) {
 
                 $Bid->refused_user_id = Auth::id();
@@ -195,7 +189,6 @@ class BidController extends Controller
                 ChatMessage::sendNewMessage($Bid->user_id, 'Cerere refuzată №'.$Bid->id, $Bid->id);
 
                 TelegramBot::sendMessage('Cerere refuzată №'.$Bid->id, $request);
-
             } else if ((int)$Bid->status_id === (int)$request->status_id && (int)$request->status_id === Bid::BID_STATUS_IN_WORK) {
 
                 $Bid = Bid::findOrFail($id)->with('execute_user');
@@ -207,16 +200,26 @@ class BidController extends Controller
                         'closeBid' => true,
                     ]
                 ], 200);
+            } else if ((int)$Bid->status_id === Bid::BID_STATUS_APPROVED && (int)$request->status_id === Bid::BID_STATUS_CONTRACT_SIGNED) {
+
+                $Bid->signed_user_id = Auth::id();
+                $Bid->signed_date_time = date('Y-m-d H:i:s');
+                ChatMessage::sendNewMessage($Bid->user_id, 'Contract semnat №'.$Bid->id, $Bid->id);
+
+                $paymentRepository->createPayments($Bid);
+            } else if ((int)$Bid->status_id === Bid::BID_STATUS_CONTRACT_SIGNED && (int)$request->status_id === Bid::BID_STATUS_CONTRACT_PAYED) {
+
+                $Bid->payed_user_id = Auth::id();
+                $Bid->payed_date_time = date('Y-m-d H:i:s');
+                ChatMessage::sendNewMessage($Bid->user_id, 'Contract achitat №'.$Bid->id, $Bid->id);
             }
 
-            $message = 'Statusul cererii a fost schimbat din '. (Bid::BID_STATUS_NAMES[(int)$Bid->status_id] ?? '')
-                .' în '. (Bid::BID_STATUS_NAMES[(int)$request->status_id] ?? '');
+            $message = 'Statusul a fost schimbat din ' . (Bid::BID_STATUS_NAMES[(int)$Bid->status_id] ?? '')  . ' în ' . (Bid::BID_STATUS_NAMES[(int)$request->status_id] ?? '');
 
             $Bid->status_id = $request->status_id;
+            $Bid->save();
 
             Log::addNewLog($request, Log::MODULE_BIDS, Log::OPERATION_EDIT, $Bid->id, $message);
-
-            $Bid->save();
 
             return response()->json([
                 'success' => true,

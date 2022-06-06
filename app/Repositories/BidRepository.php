@@ -5,13 +5,11 @@ namespace App\Repositories;
 use App\Models\Bid;
 use App\Models\Bid as Model;
 use App\Models\BidMonth;
-use App\Models\BidScoring;
 use App\Models\ChatMessage;
 use App\Models\Payment;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class BidRepository extends AbstractCoreRepository
@@ -103,6 +101,7 @@ class BidRepository extends AbstractCoreRepository
     public function list(string $filter = null, array $pagination = null, array $options = []): LengthAwarePaginator
     {
         $activeModule = $options['activeModule'] ?? '';
+        $dealer_id = $options['dealer_id'] ?? null;
 
         $items = DB::table('bids')
             ->select([
@@ -122,14 +121,18 @@ class BidRepository extends AbstractCoreRepository
             ->whereNull('bids.deleted')
             ->distinct();
 
+        if ($dealer_id) {
+            $items = $items->where('bids.dealer_id', '=', $dealer_id);
+        }
+
         if ($activeModule === 'Contracts') {
-            $items = $items->where('bids.status_id', '=', Model::BID_STATUS_SIGNED_CONTRACT);
+            $items = $items->whereIn('bids.status_id', [Model::BID_STATUS_CONTRACT_SIGNED, Model::BID_STATUS_CONTRACT_PAYED]);
             if ($this->authUser->role_id === User::USER_ROLE_DEALER) {
                 $items = $items->where('bids.dealer_id', '=', $this->authUser->dealer_id);
             }
         } else {
             $items = $items
-                ->where('bids.status_id', '!=', Model::BID_STATUS_SIGNED_CONTRACT)
+                ->whereNotIn('bids.status_id',  [Model::BID_STATUS_CONTRACT_SIGNED, Model::BID_STATUS_CONTRACT_PAYED])
                 ->where(function ($items) {
                     $items->where(function ($items) {
                         $day = Carbon::parse(date('Y-m-d'))->modify('-7 days')->format('Y-m-d');
